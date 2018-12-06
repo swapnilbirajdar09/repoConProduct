@@ -1,0 +1,43 @@
+.page_title{
+	background: #fff;
+    padding: 7px 10px;
+}
+
+.theme_bg{
+	background-color: #2A3F54;
+	color: #ECF0F1;
+}
+
+.theme_text{
+	color: #2A3F54;
+}
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+.alert-fixed {
+    position:fixed; 
+    top: 0px; 
+    right: 0px; 
+    margin: 10px;
+    /*width: 100px;*/
+    z-index:9999; 
+    float: right;
+    border-radius:0px
+}
