@@ -1,16 +1,16 @@
-function save_section(section) {
+function registerUser() {
     $.ajax({
         type: "POST",
-        url: BASE_URL + "user/user_profile/update",
+        url: BASE_URL + "user/userregister/registerUser",
         cache: false,
         data: $('#userRegister').serialize(),
         beforeSend: function () {
-            // For Safety Disabling Section Elements for Slow Internet Connections
             $('#register').prop('disabled', true);
         },
         success: function (response) {
             // console.log(response);return false;
             var data = JSON.parse(response);
+            alert(data);
             // Re_Enabling the Elements
             $('#register').prop('disabled', false);
             // response message
@@ -34,9 +34,6 @@ function save_section(section) {
                 case 'validation':
                     $('#ajax_validation_alert').show();
                     $('.ajax_validation_alert').html(data.message);
-                    $("input[name='" + data.field + "']").focus();
-                    $("input[id='" + data.field + "']").focus();
-                    $("select[name='" + data.field + "']").focus();
                     setTimeout(function () {
                         $('.alert_message').fadeOut('fast');
                     }, 8000); // <-- time in milliseconds
