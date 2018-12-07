@@ -8,7 +8,7 @@ class Userregister extends CI_Controller {
     public function __construct() {
         parent::__construct();
         // load common model
-        $this->load->model('product_model/product_model');
+//        $this->load->model('product_model/product_model');
     }
 
     // main index function
