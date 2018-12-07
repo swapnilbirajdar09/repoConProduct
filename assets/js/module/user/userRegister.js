@@ -1,23 +1,18 @@
-function save_section(section)
-{
+function save_section(section) {
     $.ajax({
         type: "POST",
-        url: BASE_URL + "user/user_profile/update_" + section,
+        url: BASE_URL + "user/user_profile/update",
         cache: false,
-        data: $('#form_' + section).serialize(),
+        data: $('#userRegister').serialize(),
         beforeSend: function () {
             // For Safety Disabling Section Elements for Slow Internet Connections
-            $('#section_' + section).find('.form-control').prop('readonly', true);
-            $('#section_' + section).find('.btn').prop('disabled', true);
+            $('#register').prop('disabled', true);
         },
         success: function (response) {
             // console.log(response);return false;
             var data = JSON.parse(response);
-
             // Re_Enabling the Elements
-            $('#section_' + section).find('.form-control').prop('readonly', false);
-            $('#section_' + section).find('.btn').prop('disabled', false);
-
+            $('#register').prop('disabled', false);
             // response message
             switch (data.status) {
                 case 'success':
@@ -47,11 +42,10 @@ function save_section(section)
                     }, 8000); // <-- time in milliseconds
                     break;
             }
-
         },
         error: function (response) {
             // Re_Enabling the Elements
-            $('#section_' + section).find('.btn').prop('disabled', false);
+            $('#register').prop('disabled', false);
             $('#ajax_danger_alert').show();
             $('.ajax_danger_alert').html(' Something went wrong! Try refreshing page and Save again.');
             setTimeout(function () {
