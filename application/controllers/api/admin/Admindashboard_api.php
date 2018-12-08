@@ -10,7 +10,7 @@ class Admindashboard_api extends REST_Controller {
         parent::__construct();
         $this->load->model('admin/Admin_model');
     }
-     //----------fun for login Details------------------------//
+     //----------fun all company Details------------------------//
     public function getAllCompanies_get() {
         $result = $this->Admin_model->getAllCompanies();
         return $this->response($result);

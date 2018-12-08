@@ -61,9 +61,19 @@
                 </thead>
                 <tbody>                    
                     <?php
+                    print_r($companies);
                     if ($companies != '' && $companies['status'] == '200') {
                         $count = 1;
+                        $package = '';
                         foreach ($companies['status_message'] as $key) {
+                            switch ($key['Package_purchased']) {
+                                case '0':
+                                    $package = 'Free';
+                                case '1';
+                                    $package = '1 Year';
+                                case '6':
+                                    $package = '6 Months';
+                            }
                             ?>
                             <tr>
                                 <td class="text-center"><?php echo $count ?></td>
@@ -71,9 +81,9 @@
                                 <td class="text-center"><?php echo $key['email'] ?></td>
                                 <td class="text-center"><?php echo $key['company_name'] ?></td>
                                 <td class="text-center"><?php echo $key['company_id'] ?></td>
-                                <td class="text-center"><?php echo $key['full_name'] ?></td>
-                                <td class="text-center"><?php echo $key['full_name'] ?></td>
-                                <td class="text-center"><?php echo $key['full_name'] ?></td>
+                                <td class="text-center"><?php echo $package ?></td>
+                                <td class="text-center"><?php echo $key['expiry_date'] ?></td>
+                                <td class="text-center"></td>
                             </tr>
                             <?php
                             $count++;

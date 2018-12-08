@@ -29,7 +29,7 @@ class Admin_dashboard extends CI_Controller {
         $response_json = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response_json, true);
-        return $response;
+        print_r($response_json);
     }
 
 }
