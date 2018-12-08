@@ -42,7 +42,7 @@
         <div id="err_message"></div>
         <div class="row x_title">
             <div class="w3-padding">
-                <h3><i class="fa fa-cubes"></i> All Member List</h3>
+                <h3><i class="fa fa-cubes"></i> All Companies </h3>
             </div>
         </div>
         <div class="container x_title" style=" margin-top: 5px;">
@@ -61,18 +61,20 @@
                 </thead>
                 <tbody>                    
                     <?php
-                    print_r($companies);
+                    //print_r($companies);
                     if ($companies != '' && $companies['status'] == '200') {
                         $count = 1;
                         $package = '';
                         foreach ($companies['status_message'] as $key) {
                             switch ($key['Package_purchased']) {
-                                case '0':
+                                case 0:
                                     $package = 'Free';
-                                case '1';
+                                case 1;
                                     $package = '1 Year';
-                                case '6':
+                                case 6:
                                     $package = '6 Months';
+                                default :
+                                    $package = 'Free';
                             }
                             ?>
                             <tr>

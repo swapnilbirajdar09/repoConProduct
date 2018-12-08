@@ -20,7 +20,7 @@ class Admin_dashboard extends CI_Controller {
 
     public function getAllCompanies() {
         $path = base_url();
-        $url = $path . 'api/user/Admindashboard_api/getAllCompanies';
+        $url = $path . 'api/admin/Admindashboard_api/getAllCompanies';
         //create a new cURL resource
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPGET, true);
@@ -29,7 +29,7 @@ class Admin_dashboard extends CI_Controller {
         $response_json = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response_json, true);
-        print_r($response_json);
+        return $response;
     }
 
 }

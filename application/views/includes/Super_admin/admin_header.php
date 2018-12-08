@@ -23,15 +23,13 @@
         <link href="<?php echo base_url(); ?>assets/build/css/custom.min.css" rel="stylesheet">
         <link href="<?php echo base_url(); ?>assets/build/css/w3.css" rel="stylesheet">
         <link href="<?php echo base_url(); ?>assets/build/css/style.css" rel="stylesheet">
-        <link href="<?php echo base_url(); ?>assets/build/css/dhtmlxcalendar.css" rel="stylesheet">
         <link href="<?php echo base_url(); ?>assets/alert/jquery-confirm.css" rel="stylesheet">
+        <link href="<?php echo base_url(); ?>assets/build/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
         <!-- angular-->
         <script src="<?php echo base_url(); ?>assets/js/angular.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/angular-sanitize.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/jquery.min.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/const.js"></script>
-        <script src="<?php echo base_url(); ?>assets/js/dhtmlxcalendar.js"></script>
-        <script src="<?php echo base_url(); ?>assets/js/dhtmlxcalendar_deprecated.js"></script>
     </head>
 </head>
 
@@ -88,7 +86,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Welcome <b><?php //echo $session_name;  ?> User </b>
+                                    Welcome <b><?php //echo $session_name;   ?> User </b>
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
