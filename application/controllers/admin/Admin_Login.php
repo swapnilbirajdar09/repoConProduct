@@ -15,14 +15,14 @@ class Admin_Login extends CI_Controller {
     // main index function
     public function index() {
         //start session		
-        // $admin_name = $this->session->userdata('admin_name');
-        // if ($admin_name != '') {
-        //     $sessionArr = explode('|', $admin_name);
+         $admin_name = $this->session->userdata('admin_name');
+         if ($admin_name != '') {
+            $sessionArr = explode('|', $admin_name);
         //     //check session variable set or not, otherwise logout
-        //     if (($sessionArr[0] == 'SWANROCKSPlates')) {
-        //         redirect('admin/dashboard');
-        //     }
-        // }
+             if (($sessionArr[0] == 'SWANROCKSPlates')) {
+                redirect('admin/admin_dashboard');
+            }
+        }
         //$this->load->view('includes/header');
         $this->load->view('pages/admin/admin_login');
         //$this->load->view('includes/footer');
@@ -58,6 +58,7 @@ class Admin_Login extends CI_Controller {
         } else {
             // success scope
             //----create session array--------//
+
             $session_data = array(
                 'admin_name' => $request['username']
             );
@@ -68,5 +69,15 @@ class Admin_Login extends CI_Controller {
             //echo '<p class="w3-green w3-padding-small">Login successfull! Welcome Admin.</p>';
         }
         //print_r($result);
+    }
+
+      public function logoutAdmin() {
+        //start session		
+        $admin_name = $this->session->userdata('admin_name');
+
+        //if logout success then destroy session and unset session variables
+        $this->session->unset_userdata(array('admin_name'));
+        $this->session->sess_destroy();
+        redirect('admin/admin_login');
     }
 }

@@ -1,11 +1,11 @@
 <?php
 ////start session     
-//$admin_name = $this->session->userdata('admin_name');
-//$session_name = '';
-//if ($admin_name != '') {
-//    $sessionArr = explode('|', $admin_name);
-//    $session_name = $sessionArr[1];
-//}
+$admin_name = $this->session->userdata('admin_name');
+$session_name = '';
+if ($admin_name != '') {
+   //$sessionArr = explode('|', $admin_name);
+   $session_name = $admin_name;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,7 +69,7 @@
                         <a href="<?php echo base_url(); ?>settings/Settings" data-toggle="tooltip" data-placement="top" title="Settings" style="width: 50%;">
                             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                         </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="<?php echo base_url(); ?>login/logoutAdmin" style="width: 50%;">
+                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="<?php echo base_url(); ?>admin/Admin_login/logoutAdmin" style="width: 50%;">
                             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                         </a>
                     </div>
@@ -86,7 +86,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Welcome <b><?php //echo $session_name;   ?> User </b>
+                                    Welcome <b><?php echo $session_name;   ?>  </b>
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -95,7 +95,7 @@
                                             <span class="glyphicon glyphicon-cog" aria-hidden="true"> SETTINGS</span>
                                         </a>
                                     </li>
-                                    <li><a href="<?php echo base_url(); ?>login/logoutAdmin"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                    <li><a href="<?php echo base_url(); ?>admin/admin_login/logoutAdmin"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                                 </ul>
                             </li>
 
