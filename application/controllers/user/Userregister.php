@@ -13,6 +13,7 @@ class Userregister extends CI_Controller {
     // main index function
     public function index() {
         $data['country'] = Userregister::getAllCountries();
+        print_r($data);die();
         $this->load->view('includes/header');
         $this->load->view('pages/user/user_register', $data);
         $this->load->view('includes/footer');
@@ -44,7 +45,7 @@ class Userregister extends CI_Controller {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPGET, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, array());
         curl_setopt($ch, CURLOPT_USERPWD, $username . ':' . $password);
         $response_json = curl_exec($ch);
         //close cURL resource
