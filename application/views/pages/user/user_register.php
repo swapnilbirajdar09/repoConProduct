@@ -15,7 +15,7 @@
                         <h3><i class="fa fa-plus"></i> Register User </h3>
                     </div>
                 </div>             
-                <form id="userRegister" name="userRegister">
+                <form id="userRegister" name="userRegister" method="post">
                     <div class="w3-col l12 page_title">
 
                         <!-- Alert for Validating Ajax Profile Edit Section -->
@@ -46,46 +46,47 @@
                         <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="customer_name">Full Name <b class="w3-text-red w3-medium">*</b> </label>
-                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Enter customer name" required>
+                                <input type="text" class="form-control" id="user_fullname" name="user_fullname" placeholder="Enter User name" required>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="prod_type">Email <b class="w3-text-red w3-medium">*</b> </label>
-                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Enter customer name" required>
+                                <input type="email" class="form-control" id="user_email" name="user_email" placeholder="Enter User Email" required>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom" >
                             <div class="form-group w3-col l12">
                                 <label for="stock_plant">Mobile No <b class="w3-text-red w3-medium">*</b> </label>
-                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Enter customer name" required>
+                                <input type="number" maxlength="10" min="0" class="form-control" id="user_mobile" name="user_mobile" placeholder="Enter User Mobile No" required>
                             </div>                          
                         </div>                        
                         <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="product_name">Company Name <b class="w3-text-red w3-medium">*</b> </label>
-                                <input type="text" class="form-control" id="product_name" ng-model="product_name" name="product_name" placeholder="Enter product name" required>
+                                <input type="text" class="form-control" id="company_name" ng-model="company_name" name="company_name" placeholder="Enter product name" required>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
+                        <div class="col-md-12 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="divrawing_no">Address <b class="w3-text-red w3-medium">*</b> </label>
-                                <input type="text" class="form-control" id="drawing_no" ng-model="drawing_no" name="drawing_no" placeholder="Enter drawing number">
+                                <textarea class="form-control" id="user_address" ng-model="user_address" name="user_address" placeholder="Enter User Address"></textarea>
+<!--                                <input type="text" class="form-control" id="user_address" ng-model="user_address" name="user_address" placeholder="Enter drawing number">-->
                             </div>
                         </div>
-                        <?php //print_r($country);?>
+                        <?php //print_r($country['status_message'][0]);?>
                         <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="revision_no">Country <b class="w3-text-red w3-medium">*</b> </label>
                                 <select name="country" id="country" class="form-control selectpicker" onchange="getCountryState();" data-placeholder="Choose country" tabindex="2" data-hide-disabled="true">
                                     <option value="0">Choose country</option>
-                                    <?php for ($i = 0; $i < count($country); $i++) { ?>
-                                        <option value="<?php echo $country[$i]['name'] . '/' . $country[$i]['id']; ?>" <?php
-                                        if ($userDetails[0]['user_country'] == $country[$i]['name']) {
-                                            echo 'selected';
-                                        }
+                                    <?php for ($i = 0; $i < count($country['status_message']); $i++) { ?>
+                                        <option value="<?php echo $country['status_message'][$i]['name'] . '/' . $country['status_message'][$i]['id']; ?>" <?php
+//                                        if ($userDetails[0]['user_country'] == $country[$i]['name']) {
+//                                            echo 'selected';
+//                                        }
                                         ?>>
-                                                    <?php echo $country[$i]['name']; ?>
+                                                    <?php echo $country['status_message'][$i]['name']; ?>
                                         </option>
                                     <?php } ?>
                                 </select>
@@ -102,7 +103,7 @@
                         <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="revision_no">City <b class="w3-text-red w3-medium">*</b> </label>
-                                <select id="city" name="native_place" class="form-control form-control selectpicker" tabindex="2" data-hide-disabled="true">
+                                <select id="city" name="city" class="form-control form-control selectpicker" tabindex="2" data-hide-disabled="true">
                                     <option value="">Choose a State first</option>
                                 </select>
                             </div>
@@ -110,13 +111,18 @@
                         <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="revision_no">Postal Code <b class="w3-text-red w3-medium">*</b> </label>
-                                <input type="text" class="form-control" id="revision_no" ng-model="revision_no" name="revision_no" placeholder="Enter revision number">
+                                <input type="number" class="form-control" id="postal_code" ng-model="postal_code" name="postal_code" placeholder="Enter Postal Code">
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="revision_no">Package Choosed <b class="w3-text-red w3-medium">*</b> </label>
-                                <input type="text" class="form-control" id="revision_no" ng-model="revision_no" name="revision_no" placeholder="Enter revision number">
+<!--                                <input type="text" class="form-control" id="revision_no" ng-model="revision_no" name="revision_no" placeholder="Enter revision number">-->
+                                <select id="package" name="package" class="form-control form-control selectpicker" data-hide-disabled="true">
+                                    <option value="0">Free</option>
+                                    <option value="6">6 Months</option>
+                                    <option value="1">Year</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -124,23 +130,25 @@
                         <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="customer_name">Username <b class="w3-text-red w3-medium">*</b> :</label>
-                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Enter customer name" required>
+                                <input type="text" class="form-control" id="user_username" name="user_username" placeholder="Enter username" required>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="customer_name">Password <b class="w3-text-red w3-medium">*</b> :</label>
-                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Enter customer name" required>
+                                <input type="text" class="form-control" id="user_password" name="user_password" placeholder="Enter password " required>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="prod_type">Confirm Password <b class="w3-text-red w3-medium">*</b> :</label>
-                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Enter customer name" required>
+                                <input type="text" class="form-control" onkeyup="checkPassword();" id="confPassword" name="confPassword" placeholder="Enter confirm password" required>
                             </div>
                         </div>
+                        <div class="w3-col l12 w3-margin-left w3-padding-small" id="message"></div>
+
                         <div class="w3-col l12 form-group w3-center w3-padding-top">
-                            <button id="register" class=" w3-button w3-margin-top theme_bg" type="button" ng-click="registerCompany()"> Register </button>
+                            <button id="register" class=" w3-button w3-margin-top theme_bg" type="button" onclick="registerUser();" > Register </button>
                         </div>
                     </div>
                 </form>
@@ -148,14 +156,81 @@
         </div>
     </div>
 </div>
-<script src="<?php echo base_url(); ?>assets/js/module/user/userRegister.js"></script>
+<!--<script src="<?php echo base_url(); ?>assets/js/module/user/userRegister.js"></script>-->
 <script type="text/javascript">
+                                function registerUser() {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "<?php echo base_url(); ?>user/userregister/registerUser",
+                                        cache: false,
+                                        data: $('#userRegister').serialize(),
+                                        beforeSend: function () {
+                                            //$('#register').prop('disabled', true);
+                                        },
+                                        success: function (response) {
+                                             //console.log(response);
+                                            var data = JSON.parse(response);
+                                            //alert(response);
+                                            // Re_Enabling the Elements
+                                            //$('#register').prop('disabled', false);
+                                            // response message
+                                            switch (data.status) {
+                                                case 'success':
+                                                    $('#ajax_success_alert').show();
+                                                    $('.ajax_success_alert').html(data.message);
+                                                    setTimeout(function () {
+                                                        window.location.reload();
+                                                    }, 1500); // <-- time in milliseconds 
+                                                    break;
+
+                                                case 'error':
+                                                    $('#ajax_danger_alert').show();
+                                                    $('.ajax_danger_alert').html(data.message);
+                                                    setTimeout(function () {
+                                                        $('.alert_message').fadeOut('fast');
+                                                    }, 10000); // <-- time in milliseconds
+                                                    break;
+
+//                    case 'validation':
+                                                default:
+                                                    $('#ajax_validation_alert').show();
+                                                    $('.ajax_validation_alert').html('Something went wrong! Try refreshing page and Save again.');
+                                                    setTimeout(function () {
+                                                        $('.alert_message').fadeOut('fast');
+                                                    }, 8000); // <-- time in milliseconds
+                                                    break;
+                                            }
+                                        },
+                                        error: function (response) {
+                                            // Re_Enabling the Elements
+                                            $('#register').prop('disabled', false);
+                                            $('#ajax_danger_alert').show();
+                                            $('.ajax_danger_alert').html(' Something went wrong! Try refreshing page and Save again.');
+                                            setTimeout(function () {
+                                                $('.alert_message').fadeOut('fast');
+                                            }, 4000); // <-- time in milliseconds  
+                                        }
+                                    });
+                                }
+
+
+
+                                function checkPassword() {
+                                    if ($('#user_password').val() == $('#confPassword').val()) {
+                                        $('#register').prop("disabled", false);
+                                        $('#message').html('');
+
+                                    } else {
+                                        $('#message').html('<label>Password Not Matching</label>').css('color', 'red');
+                                        $('#register').prop("disabled", true);
+                                    }
+                                }
 // get state by country
                                 function getCountryState() {
                                     var country = $("#country").val();
                                     $.ajax({
                                         type: "GET",
-                                        url: BASE_URL + "user/search/advance_search/getCountryState",
+                                        url: BASE_URL + "user/userregister/getCountryState",
                                         data: {
                                             country: country
                                         },
@@ -164,10 +239,8 @@
                                             var stateData = '';
                                             stateData = JSON.parse(data);
                                             var i;
-
                                             var state = $('#state');
                                             state.find('option:not(:first-child)').remove();
-
                                             for (i = 0; i < stateData.length; i++) {
                                                 $('#state').append('<option value="' + stateData[i].name + '/' + stateData[i].id + '">' + stateData[i].name + '</option>');
                                             }
@@ -179,16 +252,16 @@
                                     var state = $("#state").val();
                                     $.ajax({
                                         type: "GET",
-                                        url: BASE_URL + "user/search/advance_search/getStateCity",
+                                        url: BASE_URL + "user/userregister/getStateCity",
                                         data: {
                                             state: state
                                         },
                                         cache: false,
                                         success: function (data) {
+                                            
                                             var cityData = '';
                                             cityData = JSON.parse(data);
                                             var i;
-
                                             var city = $('#city');
                                             city.find('option:not(:first-child)').remove();
 
