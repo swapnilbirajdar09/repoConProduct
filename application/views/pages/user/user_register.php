@@ -145,7 +145,7 @@
                                 <input type="text" class="form-control" onkeyup="checkPassword();" id="confPassword" name="confPassword" placeholder="Enter confirm password" required>
                             </div>
                         </div>
-                        <div class="w3-col l12 w3-margin-left w3-padding-small" id="message"></div>
+                        <div class="w3-col l12 w3-margin-left w3-padding-small w3-center" id="message"></div>
 
                         <div class="w3-col l12 form-group w3-center w3-padding-top">
                             <button id="register" class=" w3-button w3-margin-top theme_bg" type="button" onclick="registerUser();" > Register </button>

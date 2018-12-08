@@ -25,8 +25,9 @@ class Register_model extends CI_Model {
         $sql = "INSERT INTO company_tab(full_name,username,email,"
                 . "mobile_no,company_name,address,city,state,country,"
                 . "postal_code,package_purchased,password,expiry_date,added_date)"
-                . "VALUES('$user_fullname','$user_username','$user_email',"
-                . "'$user_mobile','$company_name','$user_address','$country','$state','$city',"
+                . "VALUES('" . addslashes($user_fullname)."','" . addslashes($user_username)."','$user_email',"
+                . "'$user_mobile','" . addslashes($company_name)."','" . addslashes($user_address)."',"
+                . "'$country','$state','$city',"
                 . "'$postal_code','$package','$user_password','$expiry_date',NOW())";
         if ($this->db->query($sql)) {
             return TRUE;
