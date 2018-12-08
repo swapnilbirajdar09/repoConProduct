@@ -36,12 +36,20 @@ class Userregister extends CI_Controller {
         if ($response) {
             $response = array(
                 'status' => 'success',
-                'message' => '<b>Success:</b> You Have Successfully Registered.!'
+                'message' => '<div class="alert alert-success alert-dismissible" role="alert" style="margin-bottom:5px">
+                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><b>Success:</b> You Have Successfully Registered..!</strong> 
+            </div>'
+                //'<b>Success:</b> You Have Successfully Registered.!'
             );
         } else {
             $response = array(
                 'status' => 'error',
-                'message' => '<b>Error:</b> You Have Not Registered Successfully!'
+                'message' => '<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px">
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><b>Error:</b> You Have Not Registered Successfully!</strong> 
+            </div>'
+                //'<b>Error:</b> You Have Not Registered Successfully!'
             );
         }
         echo json_encode($response);
