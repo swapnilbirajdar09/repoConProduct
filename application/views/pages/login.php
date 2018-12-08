@@ -62,7 +62,7 @@
                                 <br />
 
                                 <div>
-                                    <!-- <h1><i class="fa fa-circle-o w3-orange w3-padding-tiny w3-text-white" style="text-shadow: 2px 2px #ff0000;"></i> Swan Industries</h1> -->
+                                   
                                     <p>©2018 All Rights Reserved | Powered by <a target="_blank" href="https://bizmo-tech.com">Bizmo Technologies</a></p>
                                 </div>
                             </div>
@@ -122,14 +122,15 @@
                         // POST form data to controller
                         $http({
                             method: 'POST',
-                            url: '<?php echo base_url(); ?>login/checkLogin',
+                            url: BASE_URL + 'login/adminlogin',
                             headers: {'Content-Type': 'application/json'},
                             data: JSON.stringify({username: $scope.username, password: $scope.password})
                         }).then(function (data) {
-                            if (data.data == '200') {
+                        	//alert(data);
+                            if (data.data == 200) {
                                 //alert('got');
                                 $scope.message = '<p class="w3-green w3-padding-small">Login Successfull! Welcome Admin.</p>';
-                                $window.location.href = BASE_URL + 'admin/dashboard';
+                              //  $window.location.href = BASE_URL + 'admin/dashboard';
                             } else {
                                 $scope.message = data.data;
                             }
