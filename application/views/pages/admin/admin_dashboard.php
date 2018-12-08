@@ -66,15 +66,14 @@
                         $count = 1;
                         $package = '';
                         foreach ($companies['status_message'] as $key) {
-                            switch ($key['Package_purchased']) {
-                                case 0:
-                                    $package = 'Free';
-                                case 1;
-                                    $package = '1 Year';
-                                case 6:
-                                    $package = '6 Months';
-                                default :
-                                    $package = 'Free';
+                            if ($key['Package_purchased'] == 0) {
+                                $package = 'Free';
+                            } elseif ($key['Package_purchased'] == 1) {
+                                $package = '1 Year';
+                            } elseif ($key['Package_purchased'] == 6) {
+                                $package = '6 Months';
+                            } else {
+                                $package = 'Free';
                             }
                             ?>
                             <tr>
@@ -83,7 +82,7 @@
                                 <td class="text-center"><?php echo $key['email'] ?></td>
                                 <td class="text-center"><?php echo $key['company_name'] ?></td>
                                 <td class="text-center"><?php echo $key['company_id'] ?></td>
-                                <td class="text-center"><?php echo $package ?></td>
+                                <td class="text-center"><?php echo $package; ?></td>
                                 <td class="text-center"><?php echo $key['expiry_date'] ?></td>
                                 <td class="text-center"></td>
                             </tr>

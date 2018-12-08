@@ -15,7 +15,7 @@ class Register_model extends CI_Model {
                 $expiry_date = date('Y-m-d', strtotime('+' . 3 . ' months'));
                 break;
             case '6':
-                $expiry_date = date('Y-m-d', strtotime('+' . $package . ' years'));
+                $expiry_date = date('Y-m-d', strtotime('+' . $package . ' months'));
                 break;
             case '1':
                 $expiry_date = date('Y-m-d', strtotime('+' . $package . ' years'));

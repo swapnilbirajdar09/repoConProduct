@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Prantokon - App Landing Html Template</title>
+        <title>Prantokon</title>
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" type="text/css" href="assets/assets/css/bootstrap.min.css" media="all" />
         <!-- Slick nav CSS -->
