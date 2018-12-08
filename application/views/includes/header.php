@@ -1,11 +1,11 @@
 <?php
 ////start session     
-//$admin_name = $this->session->userdata('admin_name');
-//$session_name = '';
-//if ($admin_name != '') {
+$admin_name = $this->session->userdata('usersession_name');
+$session_name = '';
+if ($admin_name != '') {
 //    $sessionArr = explode('|', $admin_name);
-//    $session_name = $sessionArr[1];
-//}
+    $session_name = $admin_name ;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,7 +86,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Welcome <b><?php //echo $session_name; ?> User </b>
+                                    Welcome <b><?php echo $session_name; ?>  </b>
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">

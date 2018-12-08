@@ -15,14 +15,14 @@ class Login extends CI_Controller {
     // main index function
     public function index() {
         //start session		
-        // $admin_name = $this->session->userdata('admin_name');
-        // if ($admin_name != '') {
-        //     $sessionArr = explode('|', $admin_name);
+         $admin_name = $this->session->userdata('admin_name');
+         if ($admin_name != '') {
+             $sessionArr = explode('|', $admin_name);
         //     //check session variable set or not, otherwise logout
-        //     if (($sessionArr[0] == 'SWANROCKSPlates')) {
-        //         redirect('admin/dashboard');
-        //     }
-        // }
+             if (($sessionArr[0] == 'SWANROCKSPlates')) {
+                 redirect('user_dashboard');
+             }
+         }
         //$this->load->view('includes/header');
         $this->load->view('pages/login');
         //$this->load->view('includes/footer');
@@ -48,7 +48,7 @@ class Login extends CI_Controller {
         $response_json = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response_json, true);
-       // print_r($response_json);die();
+      //  print_r($response);die();
         // call to model function to authenticate user
        // $result = $this->Login_model->adminlogin($request['username'], $request['password']);
         // print valid message
@@ -59,7 +59,8 @@ class Login extends CI_Controller {
             // success scope
             //----create session array--------//
             $session_data = array(
-                'admin_name' => $request['username']
+                'usersession_name' => $response['admin_name'],
+                'company_id' => $response['company_id']
             );
             //start session of user if login success
             $this->session->set_userdata($session_data);
@@ -68,5 +69,16 @@ class Login extends CI_Controller {
             //echo '<p class="w3-green w3-padding-small">Login successfull! Welcome Admin.</p>';
         }
         //print_r($result);
+    }
+
+        public function logoutAdmin() {
+        //start session		
+        $admin_name = $this->session->userdata('usersession_name');
+
+
+        //if logout success then destroy session and unset session variables
+        $this->session->unset_userdata(array('usersession_name','company_id'));
+        $this->session->sess_destroy();
+        redirect('login');
     }
 }

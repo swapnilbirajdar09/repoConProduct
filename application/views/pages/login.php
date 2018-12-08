@@ -130,7 +130,7 @@
                             if (data.data == 200) {
                                 //alert('got');
                                 $scope.message = '<p class="w3-green w3-padding-small">Login Successfull! Welcome Admin.</p>';
-                              //  $window.location.href = BASE_URL + 'admin/dashboard';
+                              $window.location.href = BASE_URL + 'user_dashboard';
                             } else {
                                 $scope.message = data.data;
                             }
