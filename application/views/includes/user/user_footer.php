@@ -85,14 +85,14 @@
 <div class="switcher-area" id="switch-style">
     <div class="display-table">
         <div class="display-tablecell">
-            <a class="switch-button" id="toggle-switcher"><i class="icofont icofont-wheel"></i></a>
+<!--            <a class="switch-button" id="toggle-switcher"><i class="icofont icofont-wheel"></i></a>-->
             <div class="switched-options">
-                <div class="config-title">Home variation:</div>
-                <ul>
+<!--                <div class="config-title">Home variation:</div>-->
+<!--                <ul>
                     <li><a href="index.html">Home - Fixed Text</a></li>
-                    <li><a href="index-slider.html">Home - Slider Effect</a></li>
-                    <li class="active"><a href="index-video.html">Home - Video Background</a></li>
-                </ul>
+                    <li><a href="index-slider.html">Home - Slider Effect</a></li>-->
+<!--                    <li class="active"><a href="index-video.html">Home - Video Background</a></li>
+                </ul>-->
 <!--                <div class="config-title">Other Pages</div>-->
 <!--                <ul>
                     <li><a href="blog.html">Blog</a></li>
