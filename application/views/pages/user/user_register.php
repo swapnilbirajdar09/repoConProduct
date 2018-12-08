@@ -167,7 +167,7 @@
             var data = JSON.parse(response);
             //alert(response);
             // Re_Enabling the Elements
-            //$('#register').prop('disabled', false);
+            $('#register').prop('disabled', false);
             // response message
             switch (data.status) {
             case 'success':

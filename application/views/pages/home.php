@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-lg-7">
                 <div class="hero-area-content">
-                    <h1>It’s all about Promoting your Business</h1>
+                    <h1>Itï¿½s all about Promoting your Business</h1>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo </p>
                     <a href="#" class="appao-btn">Google Play</a>
                     <a href="#" class="appao-btn">App Store</a>
@@ -14,7 +14,7 @@
             </div>
             <div class="col-lg-5">
                 <div class="hand-mockup text-lg-left text-center">
-                    <img src="assets/img/hand-mockup.png" alt="Hand Mockup" />
+                    <img src="assets/assets/img/hand-mockup.png" alt="Hand Mockup" />
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="single-feature-box text-center">
-                    <img src="assets/img/feature.png" alt="feature">
+                    <img src="assets/assets/img/feature.png" alt="feature">
                 </div>
             </div>
             <div class="col-lg-4">
@@ -173,14 +173,14 @@
             </div>
             <div class="col-lg-6">
                 <div class="single-showcase-box">
-                    <img src="assets/img/showcase.png" alt="showcase">
+                    <img src="assets/assets/img/showcase.png" alt="showcase">
                 </div>
             </div>
         </div>
         <div class="row flexbox-center">
             <div class="col-lg-6">
                 <div class="single-showcase-box">
-                    <img src="assets/img/showcase2.png" alt="showcase">
+                    <img src="assets/assets/img/showcase2.png" alt="showcase">
                 </div>
             </div>
             <div class="col-lg-6">
@@ -221,19 +221,19 @@
             <div class="col-lg-12">
                 <div class="screenshot-wrap">
                     <div class="single-screenshot">
-                        <img src="assets/img/screenshot/screenshot1.jpg" alt="screenshot" />
+                        <img src="assets/assets/img/screenshot/screenshot1.jpg" alt="screenshot" />
                     </div>
                     <div class="single-screenshot">
-                        <img src="assets/img/screenshot/screenshot2.jpg" alt="screenshot" />
+                        <img src="assets/assets/img/screenshot/screenshot2.jpg" alt="screenshot" />
                     </div>
                     <div class="single-screenshot">
-                        <img src="assets/img/screenshot/screenshot3.jpg" alt="screenshot" />
+                        <img src="assets/assets/img/screenshot/screenshot3.jpg" alt="screenshot" />
                     </div>
                     <div class="single-screenshot">
-                        <img src="assets/img/screenshot/screenshot4.jpg" alt="screenshot" />
+                        <img src="assets/assets/img/screenshot/screenshot4.jpg" alt="screenshot" />
                     </div>
                     <div class="single-screenshot">
-                        <img src="assets/img/screenshot/screenshot5.jpg" alt="screenshot" />
+                        <img src="assets/assets/img/screenshot/screenshot5.jpg" alt="screenshot" />
                     </div>
                 </div>
             </div>
@@ -255,12 +255,12 @@
             <div class="col-lg-4">
                 <div class="single-pricing-box">
                     <div class="pricing-top">
-                        <h4>Basic</h4>
+                        <h4>Free</h4>
                         <p>Suitable for Freelancer</p>
                     </div>
                     <div class="price">
-                        <h1><span>$</span>99</h1>
-                        <p>Basic</p>
+                        <h1><span>$</span>0</h1>
+                        <p>Free</p>
                     </div>
                     <div class="price-details">
                         <ul>
@@ -271,7 +271,7 @@
                             <li>Email Read Receipent</li>
                             <li>2 User Free</li>
                         </ul>
-                        <a class="appao-btn" href="#">Order Now</a>
+                        <a class="appao-btn" href="#"> Register Free</a>
                     </div>
                 </div>
             </div>
@@ -282,7 +282,7 @@
                         <p>Suitable for Freelancer</p>
                     </div>
                     <div class="price">
-                        <h1><span>$</span>199</h1>
+                        <h1><span>$</span>5000</h1>
                         <p>Basic</p>
                     </div>
                     <div class="price-details">
@@ -305,7 +305,7 @@
                         <p>Suitable for Freelancer</p>
                     </div>
                     <div class="price">
-                        <h1><span>$</span>299</h1>
+                        <h1><span>$</span>15000</h1>
                         <p>Basic</p>
                     </div>
                     <div class="price-details">
@@ -340,7 +340,7 @@
                 <div class="testimonial-wrap">
                     <div class="single-testimonial-box">
                         <div class="author-img">
-                            <img src="assets/img/author/author1.jpg" alt="author" />
+                            <img src="assets/assets/img/author/author1.jpg" alt="author" />
                         </div>
                         <h5>Mary Balogh</h5>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi  aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in </p>
@@ -354,7 +354,7 @@
                     </div>
                     <div class="single-testimonial-box">
                         <div class="author-img">
-                            <img src="assets/img/author/author2.jpg" alt="author" />
+                            <img src="assets/assets/img/author/author2.jpg" alt="author" />
                         </div>
                         <h5>Mary Balogh</h5>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi  aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in </p>
@@ -368,7 +368,7 @@
                     </div>
                     <div class="single-testimonial-box">
                         <div class="author-img">
-                            <img src="assets/img/author/author2.jpg" alt="author" />
+                            <img src="assets/assets/img/author/author2.jpg" alt="author" />
                         </div>
                         <h5>Mary Balogh</h5>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi  aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in </p>
@@ -384,12 +384,12 @@
                 <div class="testimonial-thumb">
                     <div class="thumb-prev">
                         <div class="author-img">
-                            <img src="assets/img/author/author2.jpg" alt="author" />
+                            <img src="assets/assets/img/author/author2.jpg" alt="author" />
                         </div>
                     </div>
                     <div class="thumb-next">
                         <div class="author-img">
-                            <img src="assets/img/author/author2.jpg" alt="author" />
+                            <img src="assets/assets/img/author/author2.jpg" alt="author" />
                         </div>
                     </div>
                 </div>
@@ -447,7 +447,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="single-team-member">
                     <div class="team-member-img">
-                        <img src="assets/img/team/team1.jpg" alt="team">
+                        <img src="assets/assets/img/team/team1.jpg" alt="team">
                         <div class="team-member-icon">
                             <div class="display-table">
                                 <div class="display-tablecell">
@@ -468,7 +468,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="single-team-member">
                     <div class="team-member-img">
-                        <img src="assets/img/team/team2.jpg" alt="team">
+                        <img src="assets/assets/img/team/team2.jpg" alt="team">
                         <div class="team-member-icon">
                             <div class="display-table">
                                 <div class="display-tablecell">
@@ -489,7 +489,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="single-team-member">
                     <div class="team-member-img">
-                        <img src="assets/img/team/team3.jpg" alt="team">
+                        <img src="assets/assets/img/team/team3.jpg" alt="team">
                         <div class="team-member-icon">
                             <div class="display-table">
                                 <div class="display-tablecell">
@@ -510,7 +510,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="single-team-member">
                     <div class="team-member-img">
-                        <img src="assets/img/team/team4.jpg" alt="team">
+                        <img src="assets/assets/img/team/team4.jpg" alt="team">
                         <div class="team-member-icon">
                             <div class="display-table">
                                 <div class="display-tablecell">
@@ -584,7 +584,7 @@
     </div>
 </section><!-- download section end -->
 <!-- blog section start -->
-<section class="blog-area ptb-90" id="blog">
+<!--<section class="blog-area ptb-90" id="blog">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -598,7 +598,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="single-post">
                     <div class="post-thumbnail">
-                        <a href="blog.html"><img src="assets/img/blog/blog1.jpg" alt="blog"></a>
+                        <a href="blog.html"><img src="assets/assets/img/blog/blog1.jpg" alt="blog"></a>
                     </div>
                     <div class="post-details">
                         <div class="post-author">
@@ -614,7 +614,7 @@
             <div class="col-lg-4 col-md-6">
                 <div class="single-post">
                     <div class="post-thumbnail">
-                        <a href="blog.html"><img src="assets/img/blog/blog2.jpg" alt="blog"></a>
+                        <a href="blog.html"><img src="assets/assets/img/blog/blog2.jpg" alt="blog"></a>
                     </div>
                     <div class="post-details">
                         <div class="post-author">
@@ -630,7 +630,7 @@
             <div class="col-lg-4 d-md-none d-lg-block">
                 <div class="single-post">
                     <div class="post-thumbnail">
-                        <a href="blog.html"><img src="assets/img/blog/blog3.jpg" alt="blog"></a>
+                        <a href="blog.html"><img src="assets/assets/img/blog/blog3.jpg" alt="blog"></a>
                     </div>
                     <div class="post-details">
                         <div class="post-author">
@@ -645,7 +645,8 @@
             </div>
         </div>
     </div>
-</section><!-- blog section end -->
+</section> blog section end -->
 <!-- google map area start -->
+<br>
 <div class="google-map"></div>
 <!-- google map area end -->
