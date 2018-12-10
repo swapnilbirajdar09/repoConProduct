@@ -4,7 +4,7 @@ $admin_name = $this->session->userdata('usersession_name');
 $session_name = '';
 if ($admin_name != '') {
 //    $sessionArr = explode('|', $admin_name);
-    $session_name = $admin_name ;
+    $session_name = $admin_name;
 }
 ?>
 <!DOCTYPE html>
@@ -49,6 +49,8 @@ if ($admin_name != '') {
                         <div class="menu_section">
                             <!-- <h3>General</h3> -->
                             <ul class="nav side-menu">
+                                <li><a href="<?php echo base_url(); ?>user/roles"><i class="fa fa-user"></i> Create Role </a></li>
+                                <li><a href="<?php echo base_url(); ?>user_dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
 <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
                                 <li><a><i class="fa fa-cubes"></i> Raw Material Section <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
@@ -56,7 +58,7 @@ if ($admin_name != '') {
                                         <li><a href="<?php echo base_url(); ?>materials/allmaterial">View All Materials</a></li>
                                     </ul>
                                 </li>-->
-                                
+
                                 <li><a href="<?php echo base_url(); ?>"><i class="fa fa-cog"></i>Settings</a></li>
                             </ul>
                         </div>

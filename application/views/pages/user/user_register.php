@@ -99,7 +99,7 @@
                             <div class="form-group">
                                 <label for="revision_no">City <b class="w3-text-red w3-medium">*</b> </label>
                                 <select id="city" name="city" class="form-control form-control selectpicker" tabindex="2" data-hide-disabled="true">
-                                    <option value="">Choose a State first</option>
+                                    <option value="0">Choose a State first</option>
                                 </select>
                             </div>
                         </div>
@@ -143,7 +143,7 @@
                         <div class="w3-col l12 w3-margin-left w3-padding-small w3-center" id="message"></div>
 
                         <div class="w3-col l12 form-group w3-center w3-padding-top">
-                            <button id="register" class=" w3-button w3-margin-top theme_bg" type="button" onclick="registerUser();" > Register </button>
+                            <button id="register" class=" w3-button w3-margin-top theme_bg" type="submit" > Register </button>
                         </div>
                     </div>
                 </form>
@@ -153,114 +153,116 @@
 </div>
 <!--<script src="<?php echo base_url(); ?>assets/js/module/user/userRegister.js"></script>-->
 <script type="text/javascript">
-    function registerUser() {
-    $.ajax({
-    type: "POST",
-            url: "<?php echo base_url(); ?>user/userregister/registerUser",
-            cache: false,
-            data: $('#userRegister').serialize(),
-            beforeSend: function () {
-            //$('#register').prop('disabled', true);
-            },
-            success: function (response) {
-            //console.log(response);
-            var data = JSON.parse(response);
-            //alert(response);
-            // Re_Enabling the Elements
-            $('#register').prop('disabled', false);
-            // response message
-            switch (data.status) {
-            case 'success':
-                    //$('#ajax_success_alert').show();
-                    $('#message').html(data.message);
-            setTimeout(function () {
-            window.location.reload();
-            }, 1500); // <-- time in milliseconds 
-            break;
-            case 'error':
-                    //$('#ajax_danger_alert').show();
-                    $('#message').html(data.message);
-            setTimeout(function () {
-            $('.alert_message').fadeOut('fast');
-            }, 10000); // <-- time in milliseconds
-            break;
+    $(function () {
+        $("#userRegister").submit(function () {
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url(); ?>user/userregister/registerUser",
+                cache: false,
+                data: $('#userRegister').serialize(),
+                beforeSend: function () {
+                    $('#register').prop('disabled', true);
+                },
+                success: function (response) {
+                    //console.log(response);
+                    var data = JSON.parse(response);
+                    //alert(response);
+                    // Re_Enabling the Elements
+                    $('#register').prop('disabled', false);
+                    // response message
+                    switch (data.status) {
+                        case 'success':
+                            //$('#ajax_success_alert').show();
+                            $('#message').html(data.message);
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 1500); // <-- time in milliseconds 
+                            break;
+                        case 'error':
+                            //$('#ajax_danger_alert').show();
+                            $('#message').html(data.message);
+                            setTimeout(function () {
+                                $('.alert_message').fadeOut('fast');
+                            }, 10000); // <-- time in milliseconds
+                            break;
 //                    case 'validation':
-            default:
-                    //$('#ajax_validation_alert').show();
-                    $('#message').html('<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.!</strong></div>');
-            setTimeout(function () {
-            $('.alert_message').fadeOut('fast');
-            }, 8000); // <-- time in milliseconds
-            break;
-            }
-            },
-            error: function (response) {
-            // Re_Enabling the Elements
-            $('#register').prop('disabled', false);
-            $('#ajax_danger_alert').show();
-            $('.ajax_danger_alert').html(' Something went wrong! Try refreshing page and Save again.');
-            setTimeout(function () {
-            $('.alert_message').fadeOut('fast');
-            }, 4000); // <-- time in milliseconds  
-            }
+                        default:
+                            //$('#ajax_validation_alert').show();
+                            $('#message').html('<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.!</strong></div>');
+                            setTimeout(function () {
+                                $('.alert_message').fadeOut('fast');
+                            }, 8000); // <-- time in milliseconds
+                            break;
+                    }
+                },
+                error: function (response) {
+                    // Re_Enabling the Elements
+                    $('#register').prop('disabled', false);
+                    $('#ajax_danger_alert').show();
+                    $('.ajax_danger_alert').html(' Something went wrong! Try refreshing page and Save again.');
+                    setTimeout(function () {
+                        $('.alert_message').fadeOut('fast');
+                    }, 4000); // <-- time in milliseconds  
+                }
+            });
+        });
     });
-    }
 
 
 
     function checkPassword() {
-    if ($('#user_password').val() == $('#confPassword').val()) {
-    $('#register').prop("disabled", false);
-    $('#message').html('');
-    } else {
-    $('#message').html('<label>Password Not Matching</label>').css('color', 'red');
-    $('#register').prop("disabled", true);
-    }
+        if ($('#user_password').val() == $('#confPassword').val()) {
+            $('#register').prop("disabled", false);
+            $('#message').html('');
+        } else {
+            $('#message').html('<label>Password Not Matching</label>').css('color', 'red');
+            $('#register').prop("disabled", true);
+        }
     }
 // get state by country
     function getCountryState() {
-    var country = $("#country").val();
-    $.ajax({
-    type: "GET",
+        var country = $("#country").val();
+        $.ajax({
+            type: "GET",
             url: BASE_URL + "user/userregister/getCountryState",
             data: {
-            country: country
+                country: country
             },
             cache: false,
             success: function (data) {
-            var stateData = '';
-            stateData = JSON.parse(data);
-            var i;
-            var state = $('#state');
-            state.find('option:not(:first-child)').remove();
-            for (i = 0; i < stateData.length; i++) {
-            $('#state').append('<option value="' + stateData[i].name + '/' + stateData[i].id + '">' + stateData[i].name + '</option>');
+                var stateData = '';
+                stateData = JSON.parse(data);
+                var i;
+                var state = $('#state');
+                state.find('option:not(:first-child)').remove();
+                for (i = 0; i < stateData.length; i++) {
+                    $('#state').append('<option value="' + stateData[i].name + '/' + stateData[i].id + '">' + stateData[i].name + '</option>');
+                }
             }
-            }
-    });
+        });
     }
 // ---------- get city by state
     function getStateCity() {
-    var state = $("#state").val();
-    $.ajax({
-    type: "GET",
+        var state = $("#state").val();
+        $.ajax({
+            type: "GET",
             url: BASE_URL + "user/userregister/getStateCity",
             data: {
-            state: state
+                state: state
             },
             cache: false,
             success: function (data) {
 
-            var cityData = '';
-            cityData = JSON.parse(data);
-            var i;
-            var city = $('#city');
-            city.find('option:not(:first-child)').remove();
-            for (i = 0; i < cityData.length; i++) {
-            $('#city').append('<option value="' + cityData[i].name + '">' + cityData[i].name + '</option>');
+                var cityData = '';
+                cityData = JSON.parse(data);
+                var i;
+                var city = $('#city');
+                city.find('option:not(:first-child)').remove();
+                for (i = 0; i < cityData.length; i++) {
+                    $('#city').append('<option value="' + cityData[i].name + '">' + cityData[i].name + '</option>');
+                }
             }
-            }
-    });
+        });
     }
 </script>
 

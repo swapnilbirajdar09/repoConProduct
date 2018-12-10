@@ -18,7 +18,7 @@ class Registeruser_api extends REST_Controller {
         return $this->response($result);
     }
 
-    //----------------fun for get all countries details----------------------//
+    //----------------fun for get all state details----------------------//
     public function getCountryState_get() {
         //print_r($_GET);die();
         extract($_GET);
@@ -26,7 +26,7 @@ class Registeruser_api extends REST_Controller {
         return $this->response($result);
     }
     
-    //----------------fun for get all countries details----------------------//
+    //----------------fun for get all city details----------------------//
     public function getStateCity_get() {
         //print_r($_GET);die();
         extract($_GET);

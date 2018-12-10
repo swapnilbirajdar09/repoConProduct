@@ -161,7 +161,7 @@
                 cache: false,
                 data: $('#userRegister').serialize(),
                 beforeSend: function () {
-                    //$('#register').prop('disabled', true);
+                    $('#register').prop('disabled', true);
                 },
                 success: function (response) {
                     //console.log(response);
