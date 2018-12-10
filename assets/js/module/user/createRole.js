@@ -14,7 +14,6 @@ function deleteRole(role_id) {
                     cache: false,
                     success: function (data) {
                         var data = JSON.parse(data);
-                        alert(data.status);
                         switch (data.status) {
                             case 'success':
                                 $('#message').html(data.message);
