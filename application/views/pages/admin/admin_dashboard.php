@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="container x_title" style=" margin-top: 5px;">
-            <table id="datatable" class="table">
+            <table id="datatable" class="table table-bordered">
                 <thead>
                     <tr class="theme_bg">
                         <th class="w3-center"><span>Sr.No</span></th>

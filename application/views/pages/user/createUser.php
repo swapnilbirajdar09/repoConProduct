@@ -75,7 +75,7 @@
                                     } else {
                                         for ($i = 0; $i < count($roles['status_message']); $i++) {
                                             ?>
-                                            <option value="<?php echo $roles['status_message'][$i]['role_id'].'/'.$roles['status_message'][$i]['role_name']; ?>">
+                                            <option value="<?php echo $roles['status_message'][$i]['role_id'] . '/' . $roles['status_message'][$i]['role_name']; ?>">
                                                 <?php echo $roles['status_message'][$i]['role_name']; ?>
                                             </option>
                                             <?php
@@ -118,8 +118,8 @@
                 success: function (response) {
                     //console.log(response);
                     var data = JSON.parse(response);
-//                    console.log(response);
-//                    return false;
+                    // console.log(response);
+                    //return false;
                     // Re_Enabling the Elements
                     $('#createUser').prop('disabled', false);
                     // response message
