@@ -13,7 +13,6 @@ class Userregister extends CI_Controller {
     // main index function
     public function index() {
         $data['country'] = Userregister::getAllCountries();
-
         //print_r($data);        die();
         $this->load->view('includes/header');
         $this->load->view('pages/user/user_register', $data);
