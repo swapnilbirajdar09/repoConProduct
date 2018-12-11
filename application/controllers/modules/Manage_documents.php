@@ -14,8 +14,6 @@ class Manage_documents extends CI_Controller {
     public function index() {
         $data['allDocument_types']=Manage_documents::getDocumentTypes();
         $data['lastRevision_no']=Manage_documents::getlastRevision();
-        $data['assocUsers']=Manage_documents::getUserAssoc();
-        $data['assocRoles']=Manage_documents::getRolesAssoc();
         $data['allDocuments']=Manage_documents::getAllDocuments();
         // print_r($data);
 
@@ -42,16 +40,7 @@ class Manage_documents extends CI_Controller {
             echo json_encode($response);
             die();
         }
-        if(!isset($roleAssoc)){
-            $response=array(
-                'status'    =>  'validation',
-                'message'   =>  '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Please share the document with at least one <b>Role</b> !</div>',
-                'field'   =>  'roleAssoc'
-            );
-            echo json_encode($response);
-            die();
-        }
-        $data['roleAssoc']=json_encode($roleAssoc);
+        
         $imageArr = array();    
         for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
             $count=$i+1;

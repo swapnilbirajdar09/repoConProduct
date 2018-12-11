@@ -509,14 +509,7 @@ var Dropzone = function (_Emitter) {
                         }, 8000); // <-- time in milliseconds
                     return false;
                 }
-                if($("#roleAssoc input:checkbox:checked").length<0){
-                    $('#response_msg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Please share the document with at least one <b>Role</b> !</div>');
-                    $("#roleAssoc").focus();
-                    setTimeout(function() {
-                        $('.alert').fadeOut('fast');
-                        }, 8000); // <-- time in milliseconds
-                    return false;
-                }
+                
                 myDropzone.processQueue();
 
             });

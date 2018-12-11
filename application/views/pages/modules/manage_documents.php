@@ -25,13 +25,13 @@
           </div>
           <div class="container x_content">
             <form id="document_uploadForm">
-              <div class="w3-col l7">
+              <div class="w3-col l12">
                 <div class="w3-col l12">
-                  <div class="col-md-6 col-xs-12 w3-margin-bottom">
+                  <div class="col-md-4 col-xs-12 w3-margin-bottom">
                     <label>Document Title: </label>
                     <input type="text" class="w3-input" name="document_title" id="document_title" placeholder="Enter Document title" style="border-bottom-color: #CCCCCC" required>
                   </div>
-                  <div class="col-md-6 col-xs-12 w3-margin-bottom">
+                  <div class="col-md-4 col-xs-12 w3-margin-bottom">
                     <label>Document Type: </label>
                     <select class="w3-input" name="document_type" id="document_type" style="border-bottom-color: #CCCCCC">
                       <option value="0" class="w3-light-grey">Choose document type</option>
@@ -46,15 +46,12 @@
                       ?>
                     </select>
                   </div>
-                </div>
-                <div class="w3-col l12">
-                  <div class="col-md-6 col-xs-12 w3-margin-bottom">
+                  <div class="col-md-4 col-xs-12 w3-margin-bottom">
                     <label>Revision Number(#): </label>
                     <input type="number" class="w3-input" name="revision_number" id="revision_number" placeholder="Enter Revision number" min="1" style="border-bottom-color: #CCCCCC" required>
-                  </div>
-                  <div class="col-md-6 w3-margin-bottom w3-small" >
-                    <i><span>Last Document Revision Number: </span>
-                      <label>
+                    <div class="w3-col l12 w3-margin-top w3-small" >
+                    <i><span>Last Document Revision Number : </span>
+                      <label class="w3-medium">
                         <?php 
                         if($lastRevision_no){
                           echo '#'.$lastRevision_no;
@@ -67,27 +64,6 @@
                     </i>
 
                   </div>
-                </div>
-              </div>
-              <div class="w3-col l5 w3-padding-right w3-padding-left">
-                <div class="col-md-12 col-xs-12 w3-round w3-border" style="height: 200px">
-                  <h5><b>Share Document with: </b></h5>
-                  <div class="w3-col l12 col-xs-12">
-                    <?php 
-                    if($assocRoles){
-                      foreach ($assocRoles as $key) {
-                        ?>
-                        <div class="col-md-4 col-xs-12">
-                          <div class="checkbox" style="margin:5px">
-                            <label>
-                              <input type="checkbox" name="roleAssoc[]" value="<?php echo $key['role_id']; ?>"> <?php echo $key['role_name']; ?>
-                            </label>
-                          </div>
-                        </div>
-                        <?php
-                      }
-                    }
-                    ?>
                   </div>
                 </div>
               </div>
@@ -153,15 +129,65 @@
                             <button data-toggle="dropdown" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
                             </button>
                             <ul role="menu" class="dropdown-menu pull-right">
-                              <li><a title="view files" href="<?php echo base_url(); ?>admin/manage_portfolio/portfolio/<?php echo $doc['document_id']; ?>">View Files</a>
+                              <li><a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#DocModal_<?php echo $doc['document_id']; ?>" onclick="openHelp('DocModal_<?php echo $doc['document_id']; ?>')">View Files</a>
                               </li>
-                              <li><a ng-click="removePortfolio(<?php echo $doc['document_id']; ?>)" title="delete document">Delete Document</a>
+                              <li><a title="view files" href="<?php echo base_url(); ?>modules/manage_documents/edit_document/<?php echo base64_encode($doc['document_id']); ?>">Edit Files</a>
+                              </li>
+                              <li><a onclick="removePortfolio('<?php echo base64_encode($doc['document_id']); ?>')" title="Delete document">Delete Document</a>
                               </li>
 
                             </ul>
                           </div>
                         </td>
                       </tr>
+
+                      <!-- Modal to edit product -->
+                      <div class="modal fade bs-example-modal-lg" id="DocModal_<?php echo $doc['document_id']; ?>" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-md ">
+                          <!-- Modal content starts -->
+                          <div class="modal-content">
+
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                              </button>
+                              <h3 class="modal-title w3-center"><?php echo $doc['document_title']; ?> <span class="badge w3-grey w3-text-white w3-small"><?php echo $doc['document_type']; ?></span></h3>
+                            </div>
+                            <!-- Modal body starts -->
+                            <div class="modal-body">
+                              <!-- Modal container starts -->
+                              <div class="container"> 
+                                <div class="col-lg-12">
+                                  <div class="w3-col l12 w3-padding">
+                                    <span class="pull-left"><b>Revision No.:</b> #<?php echo $doc['revision_no']; ?></span>
+                                    <span class="pull-right"><b>Uploaded By:</b> <?php echo $doc['created_by']; ?>, <?php echo $dtime->format("d M y H:i:s"); ?></span>
+                                  </div>
+                                  <?php 
+                                  $image_arr=json_decode($doc['document_file']);
+                                  ?>                                
+                                  <div class="w3-col l12 w3-padding">
+                                    <?php 
+                                    foreach ($image_arr as $file) {
+                                      $arr=explode('/', $file);
+                                      $filename=$arr[3];
+                                      ?>
+                                      <div class="w3-padding-small" style="display: inline;">
+                                      <a class="w3-text-grey btn w3-round w3-border"  target="_self" href="<?php echo base_url().$file; ?>" title="Download file" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;"><b><i class="fa fa-download"></i></b> <?php echo $filename; ?></a>
+                                    </div>
+                                      <?php
+                                    }
+                                    ?>
+                                  </div>
+                                  
+                                </div>
+                              </div>
+                              <!-- Modal container ends -->
+                            </div>
+                            <!-- Modal Body ends -->
+                          </div>
+                          <!-- Modal contenet ends -->
+                        </div>
+                      </div>
+                      <!-- Modal ends here -->
                       <?php
                     } 
                   }
@@ -185,4 +211,6 @@
     </div>
   </div>
 </div>
+<script src="<?php echo base_url();?>assets/js/module/user/document.js"></script>
+
         <!-- /page content

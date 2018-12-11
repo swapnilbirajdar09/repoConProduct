@@ -71,7 +71,6 @@ class Document_model extends CI_Model {
             'document_type' => $document_type,
             'project_id' => $project_id,
             'revision_no' => $revision_number,
-            'shared_with' => $roleAssoc,
             'document_file' => $images,
             'created_by' => $author,
             'created_date' => date('Y-m-d H:i:s')
