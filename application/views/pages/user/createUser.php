@@ -1,5 +1,4 @@
 <title>Construction Manager | Register User</title>
-
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="row">
@@ -51,21 +50,21 @@
                             </div>                          
                         </div> 
 
-                        <div class="col-md-4 col-sm-12 col-xs-12 w3-margin-bottom">
+                        <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="prod_type">Email <b class="w3-text-red w3-medium">*</b> </label>
                                 <input type="email" class="form-control" id="userEmail" name="userEmail" placeholder="Enter User Email" required>
                             </div>
                         </div>
-
-                        <div class="col-md-4 col-sm-12 col-xs-12 w3-margin-bottom">
+                        <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
-                                <label for="product_name">Password <b class="w3-text-red w3-medium">*</b> </label>
-                                <input type="text" class="form-control" id="userPassword" ng-model="userPassword" name="userPassword" placeholder="Enter User Password" required>
+                                <label for="product_name">Mobile No <b class="w3-text-red w3-medium">*</b> </label>
+                                <input type="number" min="0" class="form-control" id="user_mobile" ng-model="user_mobile" name="user_mobile" placeholder="Enter User Mobile Number" required>
                             </div>
                         </div>
 
-                        <div class="col-md-4 col-sm-12 col-xs-12 w3-margin-bottom">
+                        <?php //print_r($roles);?>
+                        <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="revision_no">Roles <b class="w3-text-red w3-medium">*</b> </label>
                                 <select name="roles" id="roles" class="form-control selectpicker" data-placeholder="Choose User" data-hide-disabled="true">
@@ -76,7 +75,7 @@
                                     } else {
                                         for ($i = 0; $i < count($roles['status_message']); $i++) {
                                             ?>
-                                            <option value="<?php echo $roles['status_message'][$i]['role_id']; ?>">
+                                            <option value="<?php echo $roles['status_message'][$i]['role_id'].'/'.$roles['status_message'][$i]['role_name']; ?>">
                                                 <?php echo $roles['status_message'][$i]['role_name']; ?>
                                             </option>
                                             <?php
@@ -86,8 +85,16 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
+                            <div class="form-group">
+                                <label for="product_name">Password <b class="w3-text-red w3-medium">*</b> </label>
+                                <input type="text" class="form-control" id="userPassword" ng-model="userPassword" name="userPassword" placeholder="Enter User Password" required>
+                            </div>
+                        </div>
+
                         <div class="w3-col l12 form-group w3-center w3-padding-top">
-                            <button id="createUser" class=" w3-button w3-margin-top theme_bg" type="submit" > Create User  </button>
+                            <button id="createUser" class="w3-button w3-margin-top theme_bg" type="submit" > Create User  </button>
                         </div>
                     </div>
                 </form>
@@ -98,7 +105,8 @@
 <!--<script src="<?php echo base_url(); ?>assets/js/module/user/userRegister.js"></script>-->
 <script type="text/javascript">
     $(function () {
-        $("#createNewUser").submit(function () {
+        $("#createNewUser").submit(function (e) {
+            e.preventDefault();
             $.ajax({
                 type: "POST",
                 url: "<?php echo base_url(); ?>user/createuser/createNewUser",
@@ -110,6 +118,8 @@
                 success: function (response) {
                     //console.log(response);
                     var data = JSON.parse(response);
+//                    console.log(response);
+//                    return false;
                     // Re_Enabling the Elements
                     $('#createUser').prop('disabled', false);
                     // response message
@@ -130,8 +140,8 @@
                 },
                 error: function (response) {
                     // Re_Enabling the Elements
-                    $('#register').prop('disabled', false);
-                    $('#message').html('<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></div>window.setTimeout(function() {	$(".alert").fadeTo(500, 0).slideUp(500, function(){$(this).remove(); });}, 5000);');
+                    $('#createUser').prop('disabled', false);
+                    $('#message').html('<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></div>window.setTimeout(function() {	$(".alert").fadeTo(500, 0).slideUp(500, function(){$(this).remove(); });}, 5000);');
                     setTimeout(function () {
                         $('.alert_message').fadeOut('fast');
                     }, 4000); // <-- time in milliseconds  

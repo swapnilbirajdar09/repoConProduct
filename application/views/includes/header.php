@@ -25,6 +25,8 @@ if ($admin_name != '') {
         <link href="<?php echo base_url(); ?>assets/build/css/style.css" rel="stylesheet">
         <link href="<?php echo base_url(); ?>assets/build/css/dhtmlxcalendar.css" rel="stylesheet">
         <link href="<?php echo base_url(); ?>assets/alert/jquery-confirm.css" rel="stylesheet">
+        <link href="<?php echo base_url(); ?>assets/build/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+
         <!-- angular-->
         <script src="<?php echo base_url(); ?>assets/js/angular.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/angular-sanitize.js"></script>

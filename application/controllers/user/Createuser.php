@@ -39,21 +39,16 @@ class Createuser extends CI_Controller {
     public function createNewUser() {
         extract($_POST);
         $data = $_POST;
-
         if ($roles == '0') {
             $response = array(
                 'status' => 'validation',
                 'message' => '<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px">
                       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong><b>Error:</b> Please Select Valid Role Name!</strong> 
-            </div>'
-                    //'<b>Error:</b> You Have Not Registered Successfully!'
-            );
+            </div>');
             echo $response;
             die();
         }
-
-
         // $project_id = $this->session->userdata('project_id');
         $data['project_id'] = '2';
         $path = base_url();
@@ -67,8 +62,7 @@ class Createuser extends CI_Controller {
         $response = json_decode($response_json, true);
         //print_r($response_json);die();
         if ($response) {
-            $response = array(
-                'status' => 'success',
+            $response = array('status' => 'success',
                 'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Success!</strong> User Created successfully.
@@ -82,8 +76,7 @@ class Createuser extends CI_Controller {
 			}, 1000);
 			</script>');
         } else {
-            $response = array(
-                'status' => 'error',
+            $response = array('status' => 'error',
                 'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Failure!</strong> Something Went Wrong. User Not Created Successfully.
@@ -98,5 +91,4 @@ class Createuser extends CI_Controller {
         }
         echo json_encode($response);
     }
-
 }
