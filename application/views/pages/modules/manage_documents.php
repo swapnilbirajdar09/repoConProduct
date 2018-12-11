@@ -50,20 +50,20 @@
                     <label>Revision Number(#): </label>
                     <input type="number" class="w3-input" name="revision_number" id="revision_number" placeholder="Enter Revision number" min="1" style="border-bottom-color: #CCCCCC" required>
                     <div class="w3-col l12 w3-margin-top w3-small" >
-                    <i><span>Last Document Revision Number : </span>
-                      <label class="w3-medium">
-                        <?php 
-                        if($lastRevision_no){
-                          echo '#'.$lastRevision_no;
-                        }
-                        else{
-                          echo 'No Documents uploaded yet!';
-                        }
-                        ?>
-                      </label>
-                    </i>
+                      <i><span>Last Document Revision Number : </span>
+                        <label class="w3-medium">
+                          <?php 
+                          if($lastRevision_no){
+                            echo '#'.$lastRevision_no;
+                          }
+                          else{
+                            echo 'No Documents uploaded yet!';
+                          }
+                          ?>
+                        </label>
+                      </i>
 
-                  </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -94,9 +94,8 @@
             <div class="clearfix"></div>
           </div>
           <div class="container x_content">
-
-
-            <div class="w3-col l12 w3-padding w3-small" id="allPortfolioDiv">
+            <div id="table_msg"></div>
+            <div class="w3-col l12 w3-padding w3-small" id="allDocumentDiv">
               <table id="datatable" class="table table-striped table-bordered">
                 <thead>
                   <tr >
@@ -126,16 +125,15 @@
                         ?></td>
                         <td>
                           <div class="btn-group">
-                            <button data-toggle="dropdown" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
+                            <button data-toggle="dropdown" id="actionBtn_<?php echo $doc['document_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
                             </button>
                             <ul role="menu" class="dropdown-menu pull-right">
                               <li><a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#DocModal_<?php echo $doc['document_id']; ?>" onclick="openHelp('DocModal_<?php echo $doc['document_id']; ?>')">View Files</a>
                               </li>
-                              <li><a title="view files" href="<?php echo base_url(); ?>modules/manage_documents/edit_document/<?php echo base64_encode($doc['document_id']); ?>">Edit Files</a>
+                              <li><a title="view files" class="btn btn-xs text-left" href="<?php echo base_url(); ?>modules/manage_documents/edit_document/<?php echo base64_encode($doc['document_id']); ?>">Edit Files</a>
                               </li>
-                              <li><a onclick="removePortfolio('<?php echo base64_encode($doc['document_id']); ?>')" title="Delete document">Delete Document</a>
+                              <li><a class="btn btn-xs text-left" onclick="removeDocument('<?php echo base64_encode($doc['document_id']); ?>','<?php echo $doc['document_id']; ?>')" title="Delete document">Delete Document</a>
                               </li>
-
                             </ul>
                           </div>
                         </td>
@@ -171,13 +169,12 @@
                                       $filename=$arr[3];
                                       ?>
                                       <div class="w3-padding-small" style="display: inline;">
-                                      <a class="w3-text-grey btn w3-round w3-border"  target="_self" href="<?php echo base_url().$file; ?>" title="Download file" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;"><b><i class="fa fa-download"></i></b> <?php echo $filename; ?></a>
-                                    </div>
+                                        <a class="w3-text-grey btn w3-round w3-border"  target="_self" href="<?php echo base_url().$file; ?>" title="Download file" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;"><b><i class="fa fa-download"></i></b> <?php echo $filename; ?></a>
+                                      </div>
                                       <?php
                                     }
                                     ?>
                                   </div>
-                                  
                                 </div>
                               </div>
                               <!-- Modal container ends -->

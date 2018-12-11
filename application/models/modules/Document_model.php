@@ -52,6 +52,18 @@ class Document_model extends CI_Model {
         }
     }
 
+    // delete document
+    public function removeDoc($document_id){
+        $sql = "DELETE FROM document_tab WHERE document_id='$document_id'";
+        $result = $this->db->query($sql);
+        if($this->db->affected_rows()>0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     // get all documents with this project
     public function getAllDocuments($project_id){
         $sql = "SELECT * FROM document_tab WHERE project_id='$project_id'";

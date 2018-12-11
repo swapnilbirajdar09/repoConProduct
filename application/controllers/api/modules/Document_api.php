@@ -79,6 +79,21 @@ class Document_api extends REST_Controller {
         }
     }
 
+    // api to remove document
+    public function removeDoc_get() {
+        extract($_GET);
+        $document_id=base64_decode($doc_id);
+        $result = $this->document_model->removeDoc($document_id);
+        if($result)
+        {
+            return $this->response($result, 200);
+        } 
+        else
+        {
+            return $this->response(NULL, 404);
+        }
+    }
+
     // api to add Document
     public function addDocument_post() {
         $data=$_POST;

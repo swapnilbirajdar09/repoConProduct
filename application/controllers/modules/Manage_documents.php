@@ -222,4 +222,30 @@ class Manage_documents extends CI_Controller {
         return $response;
     }
 
+    // remove document
+    public function removeDoc(){
+        extract($_GET);
+        $path = base_url();
+        $url = $path . 'api/modules/document_api/removeDoc?doc_id='.$doc_id;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        // authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER.":".API_PASSWD);  
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+        //close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        if($response==true){
+            echo '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success!</strong> Document removed successfully.</div>';
+        }
+        else{
+            echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Document deletion failed.</div>';
+        }
+    }
+
 }

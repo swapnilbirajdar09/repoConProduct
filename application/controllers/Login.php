@@ -7,19 +7,19 @@ class Login extends CI_Controller {
     // Login controller
     public function __construct() {
         parent::__construct();
-        //start session		
-        $admin_name = $this->session->userdata('usersession_name');
-        if ($admin_name != '') {
-            //     //check session variable set or not, otherwise logout
-            redirect('user_dashboard');
-        }
+        
         // load common model
         $this->load->model('Login_model');
     }
 
     // main index function
     public function index() {
-
+        //start session     
+        $admin_name = $this->session->userdata('usersession_name');
+        if ($admin_name != '') {
+            //     //check session variable set or not, otherwise logout
+            redirect('user_dashboard');
+        }
         //$this->load->view('includes/header');
         $this->load->view('pages/login');
         //$this->load->view('includes/footer');
@@ -69,7 +69,7 @@ class Login extends CI_Controller {
         $admin_name = $this->session->userdata('usersession_name');
         
         //if logout success then destroy session and unset session variables
-        $this->session->unset_userdata($admin_name);
+        $this->session->unset_userdata(array('usersession_name'));
         $this->session->sess_destroy();
         redirect('login');
     }

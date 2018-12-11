@@ -36,6 +36,51 @@ function openHelp(modal_id) {
   modal.addClass('in');
 }
 
+// fucntion to delete document
+function removeDocument(doc_id,key) {
+  $.confirm({
+    title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to remove this Document?</span>',
+    content: '',
+    type: 'red',
+    buttons: {
+      confirm: function () {
+        $.ajax({
+          type: "GET",
+          url: BASE_URL + "modules/manage_documents/removeDoc",
+          data: {
+            doc_id: doc_id
+          },
+          cache: false,
+          beforeSend: function(){
+            $('#actionBtn_'+key).html('<i class="fa fa-circle-o-notch fa-spin"></i> Deleting');
+          },
+          success: function(data){
+            $('#table_msg').html(data);
+            $('#actionBtn_'+key).html('Action <span class="caret"></span>');
+
+            window.setTimeout(function() {
+             $(".alert").fadeTo(500, 0).slideUp(500, function(){
+               $(this).remove(); 
+             });
+             window.location.reload();
+           }, 1500);
+          },
+          error:function(data){
+           $('#table_msg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
+           $('#actionBtn_'+key).html('Action <span class="caret"></span>');
+           window.setTimeout(function() {
+             $(".alert").fadeTo(500, 0).slideUp(500, function(){
+               $(this).remove(); 
+             });
+           }, 5000);
+         }
+       });
+      },
+      cancel: function () {
+      }
+    }
+  });
+}
 
 // Angular js for all product view
 // var app = angular.module("portfolioApp", ['ngSanitize']); 
@@ -55,48 +100,48 @@ function openHelp(modal_id) {
 
 
 // remove image from portfolio gallery
-function removeImage(key,portfolio_id) {
-  $.confirm({
-    title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to remove this Image?</span>',
-    content: '',
-    type: 'red',
-    buttons: {
-      confirm: function () {
-        $.ajax({
-          type: "GET",
-          url: BASE_URL + "admin/manage_portfolio/removeImage",
-          data: {
-            key: key,
-            portfolio_id: portfolio_id
-          },
-          cache: false,
-          beforeSend: function(){
-            $('#imgBtn_'+key).html('<i class="fa fa-circle-o-notch fa-spin w3-large"></i>');
-          },
-          success: function(data){
-            $('#edit_formOutput').html(data);
-            $('#imgBtn_'+key).html('<i class="fa fa-times"></i>');
+// function removeImage(key,portfolio_id) {
+//   $.confirm({
+//     title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to remove this Image?</span>',
+//     content: '',
+//     type: 'red',
+//     buttons: {
+//       confirm: function () {
+//         $.ajax({
+//           type: "GET",
+//           url: BASE_URL + "admin/manage_portfolio/removeImage",
+//           data: {
+//             key: key,
+//             portfolio_id: portfolio_id
+//           },
+//           cache: false,
+//           beforeSend: function(){
+//             $('#imgBtn_'+key).html('<i class="fa fa-circle-o-notch fa-spin w3-large"></i>');
+//           },
+//           success: function(data){
+//             $('#edit_formOutput').html(data);
+//             $('#imgBtn_'+key).html('<i class="fa fa-times"></i>');
 
-            window.setTimeout(function() {
-             $(".alert").fadeTo(500, 0).slideUp(500, function(){
-               $(this).remove(); 
-             });
-             window.location.reload();
-           }, 2000);
-          },
-          error:function(data){
-           $('#edit_formOutput').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
-           $('#imgBtn_'+key).html('<i class="fa fa-times"></i>');
-           window.setTimeout(function() {
-             $(".alert").fadeTo(500, 0).slideUp(500, function(){
-               $(this).remove(); 
-             });
-           }, 5000);
-         }
-       });
-      },
-      cancel: function () {
-      }
-    }
-  });
-}
+//             window.setTimeout(function() {
+//              $(".alert").fadeTo(500, 0).slideUp(500, function(){
+//                $(this).remove(); 
+//              });
+//              window.location.reload();
+//            }, 2000);
+//           },
+//           error:function(data){
+//            $('#edit_formOutput').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
+//            $('#imgBtn_'+key).html('<i class="fa fa-times"></i>');
+//            window.setTimeout(function() {
+//              $(".alert").fadeTo(500, 0).slideUp(500, function(){
+//                $(this).remove(); 
+//              });
+//            }, 5000);
+//          }
+//        });
+//       },
+//       cancel: function () {
+//       }
+//     }
+//   });
+// }
