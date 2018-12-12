@@ -100,9 +100,39 @@
                 </form>
             </div>
         </div>
+        <div class="w3-col l12 col-sm-12 col-xs-12 w3-margin-top ">                
+            <?php
+            if ($users['status'] != 500) {
+                foreach ($users['status_message'] as $use) {
+                    ?>
+                    <div class="col-md-4 col-sm-4 col-xs-12 w3-padding">
+                        <div class="w3-col l12 w3-round w3-white w3-card-2">
+                            <div class="col-sm-12">
+                                <a class="btn pull-left w3-text-red" title="Delete User" onclick="deleteUser(<?php echo $use['user_id']; ?>);"><i class="fa fa-close"></i></a>
+                                <h4 class="brief w3-small pull-right"><i><?php echo $use['role_name'] ?></i></h4>
+                                <div class="left col-xs-12">
+                                    <h2><?php echo $use['first_name'] . ' ' . $use['last_name']; ?></h2>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fa fa-user"></i> <?php echo $use['user_name']; ?></li>
+                                        <li><i class="fa fa-at"></i> <?php echo $use['user_email']; ?></li>
+                                        <li><i class="fa fa-phone"></i> <?php echo $use['user_mobile']; ?></li>
+                                    </ul>
+                                </div>                                
+                            </div>                           
+                        </div>
+                    </div>
+                    <?php
+                }
+            } else {
+                ?>
+                <div class="col-md-12 col-sm-12 col-xs-12 w3-center">
+                    <span class="w3-center"><h3> No Users Are Available</h3></span>
+                </div>
+            <?php } ?>
+        </div>
     </div>
 </div>
-<!--<script src="<?php echo base_url(); ?>assets/js/module/user/userRegister.js"></script>-->
+<script src="<?php echo base_url(); ?>assets/js/module/user/createUser.js"></script>
 <script type="text/javascript">
     $(function () {
         $("#createNewUser").submit(function (e) {
@@ -118,9 +148,6 @@
                 success: function (response) {
                     //console.log(response);
                     var data = JSON.parse(response);
-                    // console.log(response);
-                    //return false;
-                    // Re_Enabling the Elements
                     $('#createUser').prop('disabled', false);
                     // response message
                     switch (data.status) {
@@ -149,6 +176,5 @@
             });
         });
     });
-
 </script>
 

@@ -13,10 +13,26 @@ class Createuser extends CI_Controller {
     // main index function
     public function index() {
         $data['roles'] = Createuser::getProjectRoles();
+        $data['users'] = Createuser::getProjectUsers();
         //print_r($data);        die();
         $this->load->view('includes/header');
         $this->load->view('pages/user/createUser', $data);
         $this->load->view('includes/footer');
+    }
+
+    public function getProjectUsers() {
+        $project_id = 2;
+        $path = base_url();
+        $url = $path . 'api/user/Createuser_api/getProjectUsers?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
     }
 
     public function getProjectRoles() {
@@ -61,7 +77,7 @@ class Createuser extends CI_Controller {
         curl_close($ch);
         $response = json_decode($response_json, true);
         //print_r($response_json);die();
-        if ($response) {
+        if ($response['status'] == 'success') {
             $response = array('status' => 'success',
                 'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -74,6 +90,19 @@ class Createuser extends CI_Controller {
 			});
 			location.reload();
 			}, 1000);
+			</script>');
+        } elseif ($response['status'] == 'validation') {
+            $response = array('status' => 'validation',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Failure!</strong> Something Went Wrong. Username Must be Unique.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			}, 5000);
 			</script>');
         } else {
             $response = array('status' => 'error',
@@ -91,4 +120,53 @@ class Createuser extends CI_Controller {
         }
         echo json_encode($response);
     }
+
+    public function deleteUser() {
+        extract($_GET);
+        $path = base_url();
+        $url = $path . 'api/user/Createuser_api/deleteUser?user_id=' . $user_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        //print_r($response_json);die();
+        if ($response['status'] == 'success') {
+            $response = array(
+                'status' => 'success',
+                'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Success!</strong> User Removed successfully.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			location.reload();
+			}, 1000);
+			</script>'
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Failure!</strong> User Not Removed Successfully.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			}, 5000);
+			</script>'
+            );
+        }
+        echo json_encode($response);
+    }
+
 }

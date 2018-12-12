@@ -18,6 +18,18 @@ class Createuser_api extends REST_Controller {
         return $this->response($result);
     }
 
+    public function getProjectUsers_get() {
+        extract($_GET);
+        $result = $this->projectuser_model->getProjectUsers($project_id);
+        return $this->response($result);
+    }
+    
+    public function deleteUser_get() {
+        extract($_GET);
+        $result = $this->projectuser_model->deleteUser($user_id);
+        return $this->response($result);
+    }
+
     public function createNewUser_post() {
         extract($_POST);
         $data = $_POST;

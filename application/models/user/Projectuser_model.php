@@ -23,30 +23,43 @@ class Projectuser_model extends CI_Model {
 
     public function createNewUser($data) {
         extract($data);
-        //print_r($data);die();
-        $project_name = '';
-        $sqlSelect = "SELECT * FROM project_tab WHERE project_id = '$project_id'";
-        $result = $this->db->query($sqlSelect);
-        foreach ($result->result_array() as $key) {
-            $project_name = $key['project_name'];
-        }
-        $unique = rand(1111, 9999);
-        $username = $userFirstName[0] . '.' . $userLastName . '@' . $unique;
-        $roles = explode("/", $roles);
-        $role_id = $roles[0]; // piece1
-        $role_name = $roles[1];
-        $sql = "INSERT INTO user_tab(project_id,role_id,role_name,"
-                . "first_name,last_name,user_email,user_mobile,"
-                . "user_name,password,created_date)"
-                . "VALUES('$project_id','$role_id','$role_name','" . addslashes($userFirstName) . "',"
-                . "'" . addslashes($userLastName) . "',"
-                . "'$userEmail','$user_mobile','$username','$userPassword',NOW())";
-        if ($this->db->query($sql)) {
-            $emailsend = Projectuser_model::sendEmail($project_name, $userFirstName, $role_name, $userLastName, $userEmail, $username, $userPassword);
-            return TRUE;
+        
+        $sqlSel = "SELECT * FROM user_tab WHERE user_email='$userEmail'";
+        $res = $this->db->query($sqlSel);
+
+        if ($res->num_rows() > 0) {
+            $response = array('status' => 'validation',
+                'status_message' => 'Username Already exist.');
         } else {
-            return FALSE;
+            $project_name = '';
+            $sqlSelect = "SELECT * FROM project_tab WHERE project_id = '$project_id'";
+            $result = $this->db->query($sqlSelect);
+            foreach ($result->result_array() as $key) {
+                $project_name = $key['project_name'];
+            }
+            $unique = rand(1111, 9999);
+            $username = $userFirstName[0] . '.' . $userLastName . '@' . $unique;
+            $roles = explode("/", $roles);
+            $role_id = $roles[0]; // piece1
+            $role_name = $roles[1];
+            $sql = "INSERT INTO user_tab(project_id,role_id,role_name,"
+                    . "first_name,last_name,user_email,user_mobile,"
+                    . "user_name,password,created_date)"
+                    . "VALUES('$project_id','$role_id','$role_name','" . addslashes($userFirstName) . "',"
+                    . "'" . addslashes($userLastName) . "',"
+                    . "'$userEmail','$user_mobile','$username','$userPassword',NOW())";
+            if ($this->db->query($sql)) {
+                $emailsend = Projectuser_model::sendEmail($project_name, $userFirstName, $role_name, $userLastName, $userEmail, $username, $userPassword);
+                //return TRUE;
+                $response = array('status' => 'success',
+                    'status_message' => 'User Created Successfully.');
+            } else {
+                //return FALSE;
+                $response = array('status' => 'error',
+                    'status_message' => 'User Not Created Successfully.');
+            }
         }
+        return $response;
     }
 
     public function sendEmail($project_name, $userFirstName, $role_name, $userLastName, $userEmail, $username, $userPassword) {
@@ -94,6 +107,36 @@ class Projectuser_model extends CI_Model {
         } else {
             return FALSE;
         }
+    }
+
+    public function getProjectUsers($project_id) {
+        $sql = "SELECT * FROM role_tab,user_tab WHERE role_tab.role_id=user_tab.role_id AND user_tab.project_id = '$project_id'";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
+
+    public function deleteUser($user_id) {
+        $sql = "DELETE FROM user_tab WHERE user_id = '$user_id'";
+        $this->db->query($sql);
+        if ($this->db->affected_rows() > 0) {
+            $response = array(
+                'status' => 'success',
+                'status_message' => 'Role Deleted Successfully.');
+        } else {
+            $response = array(
+                'status' => 'error',
+                'status_message' => 'Role Not Deleted Successfully.');
+        }
+        return $response;
     }
 
 }
