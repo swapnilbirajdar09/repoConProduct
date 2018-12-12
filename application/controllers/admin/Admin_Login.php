@@ -16,12 +16,8 @@ class Admin_Login extends CI_Controller {
     public function index() {
         //start session		
          $admin_name = $this->session->userdata('admin_name');
-         if ($admin_name != '') {
-            $sessionArr = explode('|', $admin_name);
-        //     //check session variable set or not, otherwise logout
-             if (($sessionArr[0] == 'SWANROCKSPlates')) {
-                redirect('admin/admin_dashboard');
-            }
+         if ($admin_name != '') {         
+            redirect('admin/admin_dashboard');
         }
         //$this->load->view('includes/header');
         $this->load->view('pages/admin/admin_login');
