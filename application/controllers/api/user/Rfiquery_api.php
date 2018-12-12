@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require(APPPATH . '/libraries/REST_Controller.php');
 
-class Createuser_api extends REST_Controller {
+class Rfiquery_api extends REST_Controller {
 
     public function __construct() {
         parent::__construct();

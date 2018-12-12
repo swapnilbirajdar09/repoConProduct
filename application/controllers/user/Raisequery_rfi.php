@@ -32,7 +32,7 @@ class Raisequery_rfi extends CI_Controller {
         $prod_Arr = array();
         $imageArr = array();
         //print_r($_POST);
-        print_r($_FILES);
+        //print_r($_FILES);
         $allowed_types = ['gif', 'jpg', 'png', 'jpeg', 'JPG', 'GIF', 'JPEG', 'PNG'];
         for ($i = 0; $i < count($_FILES['prod_image']['name']); $i++) {
             $imagePath = '';
@@ -67,11 +67,13 @@ class Raisequery_rfi extends CI_Controller {
             }
             $imageArr[] = $imagePath;
         }
+        $data['project_id'] = '2';
         $data['images'] = json_encode($imageArr);
-        print_r($data);die();
+        $data['created_by'] = $this->session->userdata('usersession_name');
+        //print_r($data);die();
         //$header = array('user_id' =>  $user_id);
         $path = base_url();
-        $url = $path . 'api/Rfiquery_api/raiseQuery';
+        $url = $path . 'api/user/Rfiquery_api/raiseQuery';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -79,8 +81,50 @@ class Raisequery_rfi extends CI_Controller {
         $response_json = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response_json, true);
-        //print_r($response_json);
-        //die();
+//        print_r($response_json);
+//        die();
+        if ($response['status'] == 'success') {
+            $response = array('status' => 'success',
+                'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Success!</strong> Query Raised Successfully.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			location.reload();
+			}, 1000);
+			</script>');
+        } elseif ($response['status'] == 'validation') {
+            $response = array('status' => 'validation',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Failure!</strong> Something Went Wrong. Email Id Must be Unique.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			}, 5000);
+			</script>');
+        } else {
+            $response = array('status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Failure!</strong> Something Went Wrong. Query Not Raised Successfully.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			}, 5000);
+			</script>');
+        }
+        echo json_encode($response);
     }
 
 }

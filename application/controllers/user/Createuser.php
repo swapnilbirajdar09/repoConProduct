@@ -95,7 +95,7 @@ class Createuser extends CI_Controller {
             $response = array('status' => 'validation',
                 'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Failure!</strong> Something Went Wrong. Username Must be Unique.
+			<strong>Failure!</strong> Something Went Wrong. Email Id Must be Unique.
 			</div>
 			<script>
 			window.setTimeout(function() {
