@@ -121,7 +121,7 @@
                         <td><?php echo $doc['created_by']; ?></td>
                         <td><?php 
                         $dtime = new DateTime($doc['created_date']);
-                        echo $dtime->format("d M y H:i:s");
+                        echo $dtime->format("d M y H:i a");
                         ?></td>
                         <td>
                           <div class="btn-group">
@@ -130,10 +130,18 @@
                             <ul role="menu" class="dropdown-menu pull-right">
                               <li><a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#DocModal_<?php echo $doc['document_id']; ?>" onclick="openHelp('DocModal_<?php echo $doc['document_id']; ?>')">View Files</a>
                               </li>
-                              <li><a title="view files" class="btn btn-xs text-left" href="<?php echo base_url(); ?>modules/manage_documents/edit_document/<?php echo base64_encode($doc['document_id']); ?>">Edit Files</a>
-                              </li>
-                              <li><a class="btn btn-xs text-left" onclick="removeDocument('<?php echo base64_encode($doc['document_id']); ?>','<?php echo $doc['document_id']; ?>')" title="Delete document">Delete Document</a>
-                              </li>
+                              <?php 
+                              $user_role= $this->session->userdata('role');
+                              $user_name= $this->session->userdata('usersession_name');
+                              if($user_role=='company_admin' || $user_name==$doc['created_by']){
+                                ?>
+                                <li><a title="view files" class="btn btn-xs text-left" href="<?php echo base_url(); ?>modules/manage_documents/edit_document/<?php echo base64_encode($doc['document_id']); ?>">Edit Files</a>
+                                </li>
+                                <li><a class="btn btn-xs text-left" onclick="removeDocument('<?php echo base64_encode($doc['document_id']); ?>','<?php echo $doc['document_id']; ?>')" title="Delete document">Delete Document</a>
+                                </li>
+                                <?php 
+                              }
+                              ?>
                             </ul>
                           </div>
                         </td>
@@ -164,14 +172,18 @@
                                   ?>                                
                                   <div class="w3-col l12 w3-padding">
                                     <?php 
+                                    $count=1;
                                     foreach ($image_arr as $file) {
                                       $arr=explode('/', $file);
                                       $filename=$arr[3];
+                                      $ext_arr=explode('.',$file);
+                                      $ext=end($ext_arr);
                                       ?>
                                       <div class="w3-padding-small" style="display: inline;">
-                                        <a class="w3-text-grey btn w3-round w3-border"  target="_self" href="<?php echo base_url().$file; ?>" title="Download file" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;"><b><i class="fa fa-download"></i></b> <?php echo $filename; ?></a>
+                                        <a class="w3-text-grey btn w3-round w3-border"  target="_self" href="<?php echo base_url().$file; ?>" title="Download file" download="<?php echo 'File_'.$count.'.'.$ext; ?>" style="padding:4px;display: inline-block;"><b><i class="fa fa-download"></i></b> <?php echo 'File_'.$count.'.'.$ext; ?></a>
                                       </div>
                                       <?php
+                                      $count++;
                                     }
                                     ?>
                                   </div>

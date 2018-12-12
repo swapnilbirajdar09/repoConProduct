@@ -79,6 +79,21 @@ class Document_api extends REST_Controller {
         }
     }
 
+    // api to get document details
+    public function getDocumentDetail_get() {
+        extract($_GET);
+        $document_id=base64_decode($doc_id);
+        $result = $this->document_model->getDocumentDetail($document_id);
+        if($result)
+        {
+            return $this->response($result, 200);
+        } 
+        else
+        {
+            return $this->response(NULL, 404);
+        }
+    }
+
     // api to remove document
     public function removeDoc_get() {
         extract($_GET);
@@ -98,6 +113,48 @@ class Document_api extends REST_Controller {
     public function addDocument_post() {
         $data=$_POST;
         $result = $this->document_model->addDocument($data);
+        if($result)
+        {
+            return $this->response($result, 200);
+        } 
+        else
+        {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    // api to update Document
+    public function updateDocument_post() {
+        $data=$_POST;
+        $result = $this->document_model->updateDocument($data);
+        if($result)
+        {
+            return $this->response($result, 200);
+        } 
+        else
+        {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    // api to upload file in Document
+    public function uploadFile_post() {
+        $data=$_POST;
+        $result = $this->document_model->uploadFile($data);
+        if($result)
+        {
+            return $this->response($result, 200);
+        } 
+        else
+        {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    // api to remove file in Document
+    public function removeFile_post() {
+        extract($_POST);
+        $result = $this->document_model->removeFile($key,$document_id,$author);
         if($result)
         {
             return $this->response($result, 200);

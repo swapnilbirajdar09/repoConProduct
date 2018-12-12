@@ -52,4 +52,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'homepage';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-// $route['admin/products/viewproduct/(:any)'] = "admin/products/viewproduct/index/$1";
+$route['modules/manage_documents/edit_document/(:any)'] = "modules/manage_documents/edit_document/$1";
