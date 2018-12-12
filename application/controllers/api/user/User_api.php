@@ -37,4 +37,11 @@ class User_api extends REST_Controller {
 		$result = $this->settings_model->updatePass($data);
 		return $this->response($result);			
 	}
+
+	public function getUserDetails_get(){
+		extract($_GET);
+		
+		$result = $this->settings_model->getUserDetails($company_id);
+		return $this->response($result);			
+	}
 }

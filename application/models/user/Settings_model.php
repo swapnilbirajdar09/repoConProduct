@@ -64,4 +64,22 @@ class Settings_model extends CI_Model {
         return $response;
     }
 
+    public function getUserDetails($company_id) {
+    		//extract($data);
+        $query = "SELECT * FROM company_tab WHERE company_id='$company_id'";
+
+        $result = $this->db->query($query);
+
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
+
 }

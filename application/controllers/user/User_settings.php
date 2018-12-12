@@ -12,9 +12,10 @@ class User_settings extends CI_Controller {
 
     // main index function
     public function index() {
-       // $data['companies'] = Admin_dashboard::getAllCompanies();
+        $data['user'] = User_settings::getUserDetails();
+      //  print_r($data);die();
         $this->load->view('includes/header');
-        $this->load->view('pages/user/user_settings');
+        $this->load->view('pages/user/user_settings',$data);
         $this->load->view('includes/footer');
     }
 
@@ -115,4 +116,18 @@ public function updatePass()
 
 }
  
+ public function getUserDetails() {
+  $company_id = $this->session->userdata('company_id');
+   //$data['company_id'] = $company_id;
+  $path = base_url();
+  $url = $path . 'api/user/user_api/getUserDetails?company_id='.$company_id;
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_HTTPGET, true);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  $response_json = curl_exec($ch);
+  curl_close($ch);
+  $response = json_decode($response_json, true);
+  return $response;
+}
+
 }

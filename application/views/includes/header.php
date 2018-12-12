@@ -54,6 +54,7 @@ if ($admin_name != '') {
                                 <li><a href="<?php echo base_url(); ?>user_dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
                                 <li><a href="<?php echo base_url(); ?>user/roles"><i class="fa fa-user-secret"></i> Create Role </a></li>
                                 <li><a href="<?php echo base_url(); ?>user/createuser"><i class="fa fa-user"></i> Create User </a></li>
+                                <li><a href="<?php echo base_url(); ?>"><i class="fa fa-user-md"></i> Update Profile </a></li>
 <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
                                 <li><a><i class="fa fa-cubes"></i> Raw Material Section <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
@@ -62,7 +63,7 @@ if ($admin_name != '') {
                                     </ul>
                                 </li>-->
 
-                                <li><a href="<?php echo base_url(); ?>"><i class="fa fa-cog"></i>Settings</a></li>
+                                <li><a href="<?php echo base_url(); ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>
                             </ul>
                         </div>
                         <div class="menu_section">
@@ -96,7 +97,7 @@ if ($admin_name != '') {
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
                                     <li>
-                                        <a href="<?php echo base_url(); ?>settings/Settings" data-toggle="tooltip" data-placement="top" title="Settings" style="width: 50%;">
+                                        <a href="<?php echo base_url(); ?>user/user_settings" data-toggle="tooltip" data-placement="top" title="Settings" style="width: 50%;">
                                             <span class="glyphicon glyphicon-cog" aria-hidden="true"> SETTINGS</span>
                                         </a>
                                     </li>
