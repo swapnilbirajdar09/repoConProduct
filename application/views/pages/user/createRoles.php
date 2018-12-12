@@ -22,9 +22,17 @@
                         <div class="col-md-12 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
                                 <label for="featureslist">Features <b class="w3-text-red w3-medium"></b> </label><br>
-                                <?php foreach ($features['status_message'] as $key) { ?>
-                                    <input type="checkbox" id="features" name="features[]" value="<?php echo $key['feature_id']; ?>"> <?php echo $key['feature_name']; ?><br>
-                                <?php } ?>                                
+                                <?php
+                                if ($features['status'] == 500) {
+                                    foreach ($features['status_message'] as $key) {
+                                        ?>
+                                        <input type="checkbox" id="features" name="features[]" value="<?php echo $key['feature_id']; ?>"> <?php echo $key['feature_name']; ?><br>
+                                        <?php
+                                    }
+                                } else {
+                                    ?>  
+                                    <center><span>No Features Are Available.</span></center>
+                                <?php } ?>
                             </div>
                         </div>
                         <div class="w3-col l12 form-group w3-center w3-padding-top">

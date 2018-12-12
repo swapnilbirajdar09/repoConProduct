@@ -53,7 +53,7 @@ if ($admin_name != '') {
                             <ul class="nav side-menu">
                                 <li><a href="<?php echo base_url(); ?>user_dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
                                 <li><a href="<?php echo base_url(); ?>user/roles"><i class="fa fa-user-secret"></i> Create Role </a></li>
-                                <li><a href="<?php echo base_url(); ?>user/Createuser"><i class="fa fa-user"></i> Create User </a></li>
+                                <li><a href="<?php echo base_url(); ?>user/createuser"><i class="fa fa-user"></i> Create User </a></li>
 <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
                                 <li><a><i class="fa fa-cubes"></i> Raw Material Section <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
