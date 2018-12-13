@@ -104,17 +104,26 @@ if ($admin_name != '') {
                             </li>
                             <li class="">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                   Select Projects <b><?php //echo $session_name; ?>  </b>
+                                    Select Projects <b><?php //echo $session_name;       ?>  </b>
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
-                                <?php// print_r($projects);?>
+                                <?php // print_r($projects);?>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                    <li><a href="<?php echo ?>"> Settings</a></li>
-                                    <li><a href="<?php echo base_url(); ?>login/logoutAdmin"> Log Out</a></li>
+                                    <?php
+                                    if ($projects['status'] != 500) {
+                                        foreach ($projects['status_message'] as $key) {
+                                            ?>
+                                            <li><a href="<?php echo base_url(); ?>user_dashboard/startSesstionByProjectID?project_id=<?php echo base64_encode($key['project_id']); ?>"><?php echo $key['project_name']; ?></a></li>
+                                            <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <li><a >No Projects Created.</a></li>
+                                    <?php } ?>
                                 </ul>
                             </li>
                         </ul>
-                        
+
                     </nav>
                 </div>
             </div>
