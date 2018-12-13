@@ -47,6 +47,69 @@
             </div>
         </form>
     </div>
+    <div class="w3-col l12 w3-padding-small w3-margin-top page_title">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-list"></i> All Documents</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="container x_content">
+                <div id="table_msg"></div>
+                <div class="w3-col l12 w3-padding w3-small" id="allDocumentDiv">
+                    <table id="datatable" class="table table-striped table-bordered">
+                        <thead>
+                            <tr >
+                                <th class="text-center">Sr.No</th>
+                                <th class="text-center">Query Title</th>
+                                <th class="text-center">Revision No</th>
+                                <th class="text-center">Total Files</th>
+                                <th class="text-center">Uploaded by</th>
+                                <th class="text-center">Uploaded date</th>
+                                <th class="text-center"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+//                            if ($allDocuments) {
+//                                foreach ($allDocuments as $doc) {
+                            ?>
+                            <tr class="w3-center">
+                                <td><?php ?></td>
+                                <td><?php ?></td>
+                                <td><?php ?></td>
+                                <td><?php ?></td>
+                                <td><?php ?></td>
+                                <td><?php ?></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button data-toggle="dropdown" id="actionBtn_<?php ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
+                                        </button>
+                                        <ul role="menu" class="dropdown-menu pull-right">                                                    
+                                            <li><a title="view files" class="btn btn-xs text-left" href="<?php ?>modules/manage_documents/edit_document/<?php ?>">Edit Files</a>
+                                            </li>
+                                            <li><a class="btn btn-xs text-left" onclick="removeDocument('<?php ?>', '<?php ?>')" title="Delete document">Delete Document</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>                                
+                            <?php
+//                                }
+//                            } else {
+                            ?>
+                            <tr>
+                                <td colspan="5" class="w3-center theme_text"><b>No Requests Raised.</b></td>
+                            </tr>
+                            <?php // } ?>                       
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     $(document).ready(function () {
