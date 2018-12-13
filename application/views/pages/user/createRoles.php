@@ -23,7 +23,8 @@
                             <div class="form-group">
                                 <label for="featureslist">Features <b class="w3-text-red w3-medium"></b> </label><br>
                                 <?php
-                                if ($features['status'] == 500) {
+                                //print_r($features);
+                                if ($features['status'] != 500) {
                                     foreach ($features['status_message'] as $key) {
                                         ?>
                                         <input type="checkbox" id="features" name="features[]" value="<?php echo $key['feature_id']; ?>"> <?php echo $key['feature_name']; ?><br>
