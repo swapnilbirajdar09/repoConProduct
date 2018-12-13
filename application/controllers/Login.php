@@ -52,6 +52,7 @@ class Login extends CI_Controller {
             // success scope
             //----create session array--------//
             $session_data = array(
+                'project_id' => '2',
                 'role'  =>  'company_admin',
                 'usersession_name' => $response['admin_name'],
                 'company_id' => $response['company_id']

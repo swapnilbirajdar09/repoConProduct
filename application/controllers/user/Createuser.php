@@ -15,13 +15,31 @@ class Createuser extends CI_Controller {
         $data['roles'] = Createuser::getProjectRoles();
         $data['users'] = Createuser::getProjectUsers();
         //print_r($data);        die();
-        $this->load->view('includes/header');
+        $data['projects'] = Createuser::getAllprojects();
+
+        $this->load->view('includes/header', $data);
         $this->load->view('pages/user/createUser', $data);
         $this->load->view('includes/footer');
     }
 
+    
+     public function getAllprojects() {
+        $company_id = $this->session->userdata('company_id');
+        $path = base_url();
+        $url = $path . 'api/user/Role_api/getAllProjects?company_id=' . $company_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
+    }
+
     public function getProjectUsers() {
-        $project_id = 2;
+        $project_id = $this->session->userdata('project_id');
         $path = base_url();
         $url = $path . 'api/user/Createuser_api/getProjectUsers?project_id=' . $project_id;
         //create a new cURL resource
@@ -36,9 +54,8 @@ class Createuser extends CI_Controller {
     }
 
     public function getProjectRoles() {
-        // $project_id = $this->session->userdata('project_id');
+        $project_id = $this->session->userdata('project_id');
 
-        $project_id = 2;
         $path = base_url();
         $url = $path . 'api/user/Createuser_api/getProjectRoles?project_id=' . $project_id;
         //create a new cURL resource
@@ -66,7 +83,8 @@ class Createuser extends CI_Controller {
             die();
         }
         // $project_id = $this->session->userdata('project_id');
-        $data['project_id'] = '2';
+        $data['project_id'] = $this->session->userdata('project_id');
+
         $path = base_url();
         $url = $path . 'api/user/Createuser_api/createNewUser';
         $ch = curl_init($url);

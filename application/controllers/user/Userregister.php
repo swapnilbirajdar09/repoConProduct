@@ -14,10 +14,27 @@ class Userregister extends CI_Controller {
     public function index() {
         $data['country'] = Userregister::getAllCountries();
         //print_r($data);        die();
-        $this->load->view('includes/header');
+        $data['projects'] = Userregister::getAllprojects();
+
+        $this->load->view('includes/header', $data);
         $this->load->view('pages/user/user_register', $data);
         $this->load->view('includes/footer');
     }
+
+public function getAllProjects() {
+       $company_id = $this->session->userdata('company_id');
+       $path = base_url();
+       $url = $path . 'api/user/Role_api/getAllProjects?company_id='.$company_id;
+       //create a new cURL resource
+       $ch = curl_init($url);
+       curl_setopt($ch, CURLOPT_HTTPGET, true);
+       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+       curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+       $response_json = curl_exec($ch);
+       curl_close($ch);
+       $response = json_decode($response_json, true);
+       return $response;
+   }
 
     public function registerUser() {
         extract($_POST);

@@ -15,9 +15,27 @@ class Create_project extends CI_Controller {
        // $data['roles'] = Createuser::getProjectRoles();
        // $data['users'] = Createuser::getProjectUsers();
         //print_r($data);        die();
-        $this->load->view('includes/header');
-        $this->load->view('pages/user/create_project');
+
+        $data['projects'] = Create_project::getAllprojects();
+
+        $this->load->view('includes/header', $data);
+        $this->load->view('pages/user/create_project',$data);
         $this->load->view('includes/footer');
+    }
+
+     public function getAllprojects() {
+        $company_id = $this->session->userdata('company_id');
+        $path = base_url();
+        $url = $path . 'api/user/Role_api/getAllProjects?company_id=' . $company_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
     }
 
      public function create_Newproject() {

@@ -20,24 +20,27 @@ class Roles extends CI_Controller {
 //        $data['projects'] = Roles::getAllProjects($company_id);
         $data['features'] = Roles::getAllFeatures();
         $data['roles'] = Roles::getAllRoles();
-        $this->load->view('includes/header');
+        $data['projects'] = Roles::getAllprojects();
+
+        $this->load->view('includes/header', $data);
         $this->load->view('pages/user/createRoles', $data);
         $this->load->view('includes/footer');
     }
 
-//    public function getAllProjects($company_id) {
-//        $path = base_url();
-//        $url = $path . 'api/user/Role_api/getAllProjects?company_id='.$company_id;
-//        //create a new cURL resource
-//        $ch = curl_init($url);
-//        curl_setopt($ch, CURLOPT_HTTPGET, true);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
-//        $response_json = curl_exec($ch);
-//        curl_close($ch);
-//        $response = json_decode($response_json, true);
-//        return $response;
-//    }
+   public function getAllProjects() {
+       $company_id = $this->session->userdata('company_id');
+       $path = base_url();
+       $url = $path . 'api/user/Role_api/getAllProjects?company_id='.$company_id;
+       //create a new cURL resource
+       $ch = curl_init($url);
+       curl_setopt($ch, CURLOPT_HTTPGET, true);
+       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+       curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+       $response_json = curl_exec($ch);
+       curl_close($ch);
+       $response = json_decode($response_json, true);
+       return $response;
+   }
 
     public function getAllFeatures() {
         $path = base_url();
@@ -58,7 +61,8 @@ class Roles extends CI_Controller {
 
         $data = $_POST;
         // $project_id = $this->session->userdata('project_id');
-        $data['project_id'] = '2';
+        $data['project_id'] = $this->session->userdata('project_id');
+
         $data['features'] = json_encode($features);
         $path = base_url();
         $url = $path . 'api/user/Role_api/saveRoles';
@@ -109,7 +113,8 @@ class Roles extends CI_Controller {
 
     public function getAllRoles() {
         // $project_id = $this->session->userdata('project_id');
-        $project_id = 2;
+        $project_id =  $this->session->userdata('project_id');
+
         $path = base_url();
         $url = $path . 'api/user/Role_api/getAllRoles?project_id=' . $project_id;
         //create a new cURL resource
