@@ -52,13 +52,12 @@ if ($admin_name != '') {
                             <!-- <h3>General</h3> -->
                             <ul class="nav side-menu">
                                 <li><a href="<?php echo base_url(); ?>user_dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
+                                <li><a href="<?php echo base_url(); ?>user/create_project"><i class="fa fa-plus-circle"></i> Create Project </a></li>
                                 <li><a href="<?php echo base_url(); ?>user/roles"><i class="fa fa-user-secret"></i> Create Role </a></li>
                                 <li><a href="<?php echo base_url(); ?>user/createuser"><i class="fa fa-user"></i> Create User </a></li>
-                                <li><a href="<?php echo base_url(); ?>user/create_project"><i class="fa fa-plus-circle"></i> Create Project </a></li>
                                 <li><a href="<?php echo base_url(); ?>user/raisequery_rfi"><i class="fa fa-check"></i> Raise Query(RFI) </a></li>
                                 <li><a href="<?php echo base_url(); ?>modules/manage_documents"><i class="fa fa-file"></i> Manage Document </a></li> 
   <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
-                                  <li><a><i class="fa fa-cubes"></i> Raw Material Section <span class="fa fa-chevron-down"></span></a>
                                       <ul class="nav child_menu">
                                           <li><a href="<?php echo base_url(); ?>materials/addmaterial">Add New Material</a></li>
                                           <li><a href="<?php echo base_url(); ?>materials/allmaterial">View All Materials</a></li>
@@ -104,12 +103,12 @@ if ($admin_name != '') {
                             </li>
                             <li class="">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Select Projects <b><?php //echo $session_name;       ?>  </b>
+                                    Select Projects <b><?php //echo $session_name;        ?>  </b>
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
-                                <?php // print_r($projects);
-                                        // $project_id = $this->session->userdata('project_id');
-
+                                <?php
+                                // print_r($projects);
+                                // $project_id = $this->session->userdata('project_id');
                                 ?>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
                                     <?php
