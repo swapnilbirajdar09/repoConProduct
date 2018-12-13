@@ -107,7 +107,10 @@ if ($admin_name != '') {
                                     Select Projects <b><?php //echo $session_name;       ?>  </b>
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
-                                <?php // print_r($projects);?>
+                                <?php // print_r($projects);
+                                        // $project_id = $this->session->userdata('project_id');
+
+                                ?>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
                                     <?php
                                     if ($projects['status'] != 500) {
