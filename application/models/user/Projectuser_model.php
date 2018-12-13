@@ -139,4 +139,35 @@ class Projectuser_model extends CI_Model {
         return $response;
     }
 
+     public function create_Newproject($data) {
+          
+    	extract($data);
+    	$database ='';
+    	$database = $this->db->database;
+    	        $sql = "SELECT * FROM information_schema.TABLES WHERE TABLE_NAME ='project_tab' AND TABLE_SCHEMA='$database'";
+    	       // echo $sql;die();
+    	        $result = $this->db->query($sql);
+    	        $parent_id = '';
+            foreach ($result->result_array() as $row) {
+                $parent_id = $row['AUTO_INCREMENT'];
+            }
+             $profile_key = substr(base64_encode($parent_id), 0, 4);
+             $project_key = 'PRODUCT#'. $profile_key;
+            //echo $project_key ;die();
+        $sql = "INSERT INTO project_tab(company_id,project_name,project_description,project_key)
+                 VALUES('$company_id','$projectName','$projectDesc','$project_key')";
+
+        if ($this->db->query($sql)) {
+            $response = array(
+                'status' => 200,
+                'status_message' => 'Project Added Successfully..!');
+        } else {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'Project Addition Failed...!');
+        }
+        return $response;
+    }
+    
+
 }

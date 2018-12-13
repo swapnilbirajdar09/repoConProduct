@@ -59,7 +59,7 @@
 	$(function(){
 		$("#updateEmail").submit(function(){
 			dataString = $("#updateEmail").serialize();
-			alert(dataString);
+			//alert(dataString);
 			$.ajax({
 				type: "POST",
 				url: "<?php echo base_url(); ?>user/user_settings/updateEmail",

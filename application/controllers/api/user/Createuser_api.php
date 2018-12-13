@@ -37,4 +37,12 @@ class Createuser_api extends REST_Controller {
         return $this->response($result);
     }
 
+    
+    public function create_Newproject_post() {
+        extract($_POST);
+        $data = $_POST;
+        $result = $this->projectuser_model->create_Newproject($data);
+        return $this->response($result);
+    }
+
 }
