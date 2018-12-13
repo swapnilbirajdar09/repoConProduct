@@ -64,46 +64,43 @@
                             <tr >
                                 <th class="text-center">Sr.No</th>
                                 <th class="text-center">Query Title</th>
-                                <th class="text-center">Revision No</th>
-                                <th class="text-center">Total Files</th>
-                                <th class="text-center">Uploaded by</th>
-                                <th class="text-center">Uploaded date</th>
+                                <th class="text-center">Query Description</th>                               
                                 <th class="text-center"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-//                            if ($allDocuments) {
-//                                foreach ($allDocuments as $doc) {
-                            ?>
-                            <tr class="w3-center">
-                                <td><?php ?></td>
-                                <td><?php ?></td>
-                                <td><?php ?></td>
-                                <td><?php ?></td>
-                                <td><?php ?></td>
-                                <td><?php ?></td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button data-toggle="dropdown" id="actionBtn_<?php ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
-                                        </button>
-                                        <ul role="menu" class="dropdown-menu pull-right">                                                    
-                                            <li><a title="view files" class="btn btn-xs text-left" href="<?php ?>modules/manage_documents/edit_document/<?php ?>">Edit Files</a>
-                                            </li>
-                                            <li><a class="btn btn-xs text-left" onclick="removeDocument('<?php ?>', '<?php ?>')" title="Delete document">Delete Document</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>                                
-                            <?php
-//                                }
-//                            } else {
-                            ?>
-                            <tr>
-                                <td colspan="5" class="w3-center theme_text"><b>No Requests Raised.</b></td>
-                            </tr>
-                            <?php // } ?>                       
+                            //print_r($queries);
+                            $i = 1;
+                            if ($queries['status'] != 500) {
+                                foreach ($queries['status_message'] as $val) {
+                                    ?>
+                                    <tr class="w3-center">
+                                        <td style=" vertical-align: middle;"><?php echo $i; ?></td>
+                                        <td style=" vertical-align: middle;"><?php echo $val['query_title']; ?></td>
+                                        <td style=" vertical-align: middle; width: 450px;"><p><?php echo $val['query_description']; ?></p></td>                                        
+                                        <td style=" vertical-align: middle;">
+                                            <div class="btn-group">
+                                                <button data-toggle="dropdown" id="actionBtn_<?php echo $val['query_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
+                                                </button>
+                                                <ul role="menu" class="dropdown-menu pull-right">                                                    
+<!--                                                    <li><a title="view files" class="btn btn-xs text-left" href="<?php ?>modules/manage_documents/edit_document/<?php ?>">View Query</a>
+                                                    </li>-->
+                                                    <li><a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>                                
+                                    <?php
+                                    $i++;
+                                }
+                            } else {
+                                ?>
+                                <tr>
+                                    <td colspan="5" class="w3-center theme_text"><b>No Requests Raised.</b></td>
+                                </tr>
+                            <?php } ?>                       
                         </tbody>
                     </table>
                 </div>
@@ -111,6 +108,7 @@
         </div>
     </div>
 </div>
+<script src="<?php echo base_url(); ?>assets/js/module/user/requestForInfo.js"></script>
 <script>
     $(document).ready(function () {
         var max_fields = 5;

@@ -19,12 +19,13 @@ class Raisequery_rfi extends CI_Controller {
 //        $company_id = $this->session->userdata('company_id');
 //        $data['projects'] = Roles::getAllProjects($company_id);
 //        $data['features'] = Roles::getAllFeatures();
-//        $data['roles'] = Roles::getAllRoles();
+        $data['queries'] = Raisequery_rfi::getAllQueries();
         $this->load->view('includes/header');
-        $this->load->view('pages/user/requestForInfo');
+        $this->load->view('pages/user/requestForInfo', $data);
         $this->load->view('includes/footer');
     }
 
+//-------------fun for save query details
     public function raiseQuery() {
         extract($_POST);
         $data = $_POST;
@@ -123,6 +124,69 @@ class Raisequery_rfi extends CI_Controller {
 			});
 			}, 5000);
 			</script>');
+        }
+        echo json_encode($response);
+    }
+
+//------------fun for get all queries
+    public function getAllQueries() {
+        $path = base_url();
+        $url = $path . 'api/user/Rfiquery_api/getAllQueries';
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
+    }
+
+//---------------fun for delete query
+    public function removeQuery() {
+        extract($_GET);
+        $path = base_url();
+        $url = $path . 'api/user/Rfiquery_api/removeQuery?query_id=' . $query_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        if ($response['status'] == 'success') {
+            $response = array(
+                'status' => 'success',
+                'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Success!</strong> Query Removed successfully.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			location.reload();
+			}, 1000);
+			</script>'
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Failure!</strong> Query Not Removed Successfully.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			}, 5000);
+			</script>'
+            );
         }
         echo json_encode($response);
     }

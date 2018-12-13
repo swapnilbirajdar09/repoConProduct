@@ -56,14 +56,14 @@ if ($admin_name != '') {
                                 <li><a href="<?php echo base_url(); ?>user/createuser"><i class="fa fa-user"></i> Create User </a></li>
                                 <li><a href="<?php echo base_url(); ?>user/create_project"><i class="fa fa-plus-circle"></i> Create Project </a></li>
                                 <li><a href="<?php echo base_url(); ?>user/raisequery_rfi"><i class="fa fa-check"></i> Raise Query(RFI) </a></li>
-                             <!---   <li><a href="<?php echo base_url(); ?>"><i class="fa fa-user-circle"></i> Update Profile </a></li> -->
-<!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
-                                <li><a><i class="fa fa-cubes"></i> Raw Material Section <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="<?php echo base_url(); ?>materials/addmaterial">Add New Material</a></li>
-                                        <li><a href="<?php echo base_url(); ?>materials/allmaterial">View All Materials</a></li>
-                                    </ul>
-                                </li>-->
+                                <li><a href="<?php echo base_url(); ?>modules/manage_documents"><i class="fa fa-file"></i> Manage Document </a></li> 
+  <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
+                                  <li><a><i class="fa fa-cubes"></i> Raw Material Section <span class="fa fa-chevron-down"></span></a>
+                                      <ul class="nav child_menu">
+                                          <li><a href="<?php echo base_url(); ?>materials/addmaterial">Add New Material</a></li>
+                                          <li><a href="<?php echo base_url(); ?>materials/allmaterial">View All Materials</a></li>
+                                      </ul>
+                                  </li>-->
 
                                 <li><a href="<?php echo base_url(); ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>
                             </ul>
@@ -98,16 +98,23 @@ if ($admin_name != '') {
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                    <li>
-                                        <a href="<?php echo base_url(); ?>user/user_settings" data-toggle="tooltip" data-placement="top" title="Settings" style="width: 50%;">
-                                            <span class="glyphicon glyphicon-cog" aria-hidden="true"> SETTINGS</span>
-                                        </a>
-                                    </li>
+                                    <li><a href="<?php echo base_url(); ?>user/user_settings"><i class="fa fa-cog pull-right"></i> Settings</a></li>
                                     <li><a href="<?php echo base_url(); ?>login/logoutAdmin"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                                 </ul>
                             </li>
-
+                            <li class="">
+                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                   Select Projects <b><?php //echo $session_name; ?>  </b>
+                                    <span class=" fa fa-angle-down"></span>
+                                </a>
+                                <?php// print_r($projects);?>
+                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                    <li><a href="<?php echo ?>"> Settings</a></li>
+                                    <li><a href="<?php echo base_url(); ?>login/logoutAdmin"> Log Out</a></li>
+                                </ul>
+                            </li>
                         </ul>
+                        
                     </nav>
                 </div>
             </div>

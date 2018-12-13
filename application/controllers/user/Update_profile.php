@@ -17,3 +17,4 @@ class Update_profile extends CI_Controller {
         $this->load->view('pages/user/update_profile');
         $this->load->view('includes/footer');
     }
+}
