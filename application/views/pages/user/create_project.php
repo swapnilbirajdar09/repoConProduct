@@ -1,4 +1,4 @@
-<title>Construction Manager | Register User</title>
+<title>Construction Manager | Create Project</title>
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="row">
@@ -6,7 +6,7 @@
             <div class="">
                 <div class="row x_title">
                     <div class="col-md-6">
-                        <h3><i class="fa fa-plus"></i> Create New User </h3>
+                        <h3><i class="fa fa-plus"></i> Create Project</h3>
                     </div>
                 </div>             
                 <form id="create_project" name="create_project" method="post">
