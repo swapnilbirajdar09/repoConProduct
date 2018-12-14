@@ -57,6 +57,7 @@
                                 <li><a class="nav-link" href="#team">Team</a></li>
                                 <!--                                <li><a class="nav-link" href="#blog">Blog</a></li>-->
                                 <li><a class="nav-link" href="#contact">Contact Us</a></li>
+                                <li><a class="nav-link" href="<?php echo base_url();?>login">Login</a></li>
 <!--                                <li><a class="appao-btn" href="#">Download</a></li>-->
                             </ul>
                         </div>

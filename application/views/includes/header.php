@@ -43,7 +43,7 @@ if ($admin_name != '') {
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="<?php echo base_url(); ?>admin/dashboard" class="site_title" style="padding-left: 15px">Const.Manager</a>
+                        <a href="<?php echo base_url(); ?>user_dashboard" class="site_title" style="padding-left: 15px">Const.Manager</a>
                     </div>
                     <div class="clearfix"></div>
                     <!-- sidebar menu -->
@@ -73,7 +73,7 @@ if ($admin_name != '') {
                     <!-- /sidebar menu -->
                     <!-- /menu footer buttons -->
                     <div class="sidebar-footer hidden-small w3-center">
-                        <a href="<?php echo base_url(); ?>settings/Settings" data-toggle="tooltip" data-placement="top" title="Settings" style="width: 50%;">
+                        <a href="<?php echo base_url(); ?>user/user_settings" data-toggle="tooltip" data-placement="top" title="Settings" style="width: 50%;">
                             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="Logout" href="<?php echo base_url(); ?>login/logoutAdmin" style="width: 50%;">

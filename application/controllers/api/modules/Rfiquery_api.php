@@ -39,6 +39,13 @@ class Rfiquery_api extends REST_Controller {
         return $this->response($result);
     }
 
+    // get all query responses
+    public function getQueryComments_get() {
+        extract($_GET);
+        $result = $this->rfiquery_model->getQueryComments($query_id);
+        return $this->response($result);
+    }
+
     // api to post comment
     public function postComment_post() {
         $data = $_POST;
@@ -77,6 +84,20 @@ class Rfiquery_api extends REST_Controller {
     public function uploadImage_post() {
         $data = $_POST;
         $result = $this->rfiquery_model->uploadImage($data);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    public function commentReply_post() {
+        extract($_POST);
+        print_r($_POST);
+        die();
+        $result = $this->rfiquery_model->postComment($replyfor, $comment_posted, $author);
+        print_r($result);
+        die();
         if ($result) {
             return $this->response($result, 200);
         } else {

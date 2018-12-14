@@ -177,13 +177,26 @@ class Rfiquery_model extends CI_Model {
 //        //die();
 //        $this->db->where('query_id', $query_id);
 //        $this->db->update('rfi_query_tab', $result);
-        
-        $sql = "";
-        
-        if ($this->db->affected_rows() == 1) {
+
+        $sqlsel = "UPDATE rfi_query_tab SET images = '$json',modified_by ='$author',modified_date ='$dat' WHERE query_id = '$query_id'";
+
+        $this->db->query($sqlsel);
+
+        if ($this->db->affected_rows() > 0) {
             return true;
         } else {
             return false;
+        }
+    }
+
+    // get query comments
+    public function getQueryComments($query_id) {
+        $sql = "SELECT * FROM rfi_query_response_tab WHERE query_id='$query_id'";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            return false;
+        } else {
+            return $result->result_array();
         }
     }
 

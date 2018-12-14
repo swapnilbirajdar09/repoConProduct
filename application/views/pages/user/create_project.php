@@ -62,17 +62,17 @@
 	$(function(){
 		$("#create_project").submit(function(){
 			dataString = $("#create_project").serialize();
-			alert(dataString);
+			//alert(dataString);
 			$.ajax({
 				type: "POST",
 				url: "<?php echo base_url(); ?>user/create_project/create_Newproject",
 				data: dataString,
            return: false,  //stop the actual form post !important!
 
-           success: function(data)
+           success: function(response)
            {
-           	alert(data);
-           	$.alert(data);                       
+           	data = JSON.parse(response)
+            $('#message').html(data.message);                       
            }
          });
          return false;  //stop the actual form post !important!

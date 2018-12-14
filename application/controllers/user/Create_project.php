@@ -54,18 +54,36 @@ class Create_project extends CI_Controller {
 		  curl_close($ch);
 		  $response = json_decode($response_json, true);
  //print_r($response_json);die();
-  
-  if ($response['status'] != 200) {
-    echo '<h4 class="w3-text-red w3-margin"><i class="fa fa-warning"></i> '.$response['status_message'].'</h4>
-    ';
-  } else {
-    echo '<h4 class="w3-text-green w3-margin"><i class="fa fa-check"></i> '.$response['status_message'].'</h4>
-    <script>
-    window.setTimeout(function() {
-     location.reload();
-   }, 1000);
-   </script>';
- }
+   if ($response['status'] == 200) {
+            $response = array('status' => '200',
+                'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Success!</strong> Project Created successfully.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			location.reload();
+			}, 1000);
+			</script>');
+        }  else {
+            $response = array('status' => 500,
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Failure!</strong> Something Went Wrong. Project Not Created Successfully.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			}, 5000);
+			</script>');
+        }
+        echo json_encode($response);
+
 }
     
 
