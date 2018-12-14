@@ -49,16 +49,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="subscribe-form">
-                    <form action="#">
-                        <input type="text" placeholder="Your email address here">
-                        <button type="submit">Subcribe</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+      
         <div class="row">
             <div class="col-lg-12">
                 <div class="copyright-area">

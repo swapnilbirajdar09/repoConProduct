@@ -43,7 +43,7 @@ if ($admin_name != '') {
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="<?php echo base_url(); ?>admin/dashboard" class="site_title" style="padding-left: 15px">Const.Manager</a>
+                        <a href="<?php echo base_url(); ?>user_dashboard" class="site_title" style="padding-left: 15px">Const.Manager</a>
                     </div>
                     <div class="clearfix"></div>
                     <!-- sidebar menu -->

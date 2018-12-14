@@ -155,7 +155,7 @@ class Projectuser_model extends CI_Model {
              $project_key = 'PRODUCT#'. $profile_key;
             //echo $project_key ;die();
         $sql = "INSERT INTO project_tab(company_id,project_name,project_description,project_key)
-                 VALUES('$company_id','$projectName','$projectDesc','$project_key')";
+                 VALUES('$company_id','".addslashes($projectName)."','".addslashes($projectDesc)."','$project_key')";
 
         if ($this->db->query($sql)) {
             $response = array(
