@@ -74,23 +74,35 @@ class Rfiquery_model extends CI_Model {
     }
 
     // post new comment
-    public function postComment($data){
-        extract($data);
-        // print_r($data);die();
-        $ins_Data = array(
-            'query_id' => base64_decode($token),
-            'response_description' => addslashes($comment_posted),
-            'created_by' => $author,
-            'created_date' => date('Y-m-d H:i:s')
-        );
-        // print_r($ins_Data);die();
-        $this->db->insert('rfi_query_response_tab',$ins_Data);
-        print_r($this->db->_error_message());die();
+    public function postComment($replyfor,$comment_posted,$author){
+        // $ins_Data = array(
+        //     'query_id' => base64_decode($replyfor),
+        //     'response_description' => addslashes($comment_posted),
+        //     'created_by' => $author,
+        //     'created_date' => date('Y-m-d H:i:s')
+        // );
+        $this->db->set('query_id', $replyfor);
+$this->db->set('response_description', addslashes($comment_posted));
+$this->db->set('created_by', $author);
+$this->db->set('created_date', date('Y-m-d H:i:s'));
+        //print_r($ins_Data);die();
+        $this->db->insert('rfi_query_response_tab');
         if($this->db->affected_rows()>0){
             return true;
         }
         else{
             return false;
+        }
+    }
+
+    // get query comments
+    public function getQueryComments($query_id){
+        $sql = "SELECT * FROM rfi_query_response_tab WHERE query_id='$query_id'";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            return false;
+        } else {
+            return $result->result_array();
         }
     }
 

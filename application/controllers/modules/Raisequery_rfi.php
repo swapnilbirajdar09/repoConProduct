@@ -244,7 +244,7 @@ class Raisequery_rfi extends CI_Controller {
         }
         
         $path = base_url();
-        $url = $path . 'api/modules/rfiquery_api/postComment';
+        $url = $path . 'api/modules/rfiquery_api/commentReply';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
@@ -274,6 +274,39 @@ print_r($output);die();
             );
             echo json_encode($response);
             die();
+        }
+    }
+
+    // get associated comments for query
+    public function getQueryComments() {
+        extract($_GET);
+        $path = base_url();
+        $url = $path . 'api/modules/rfiquery_api/getQueryComments?query_id=' . $query_id;
+        // echo $url;die();
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        // authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+        //close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        // echo $output;
+        foreach ($response as $key) {
+            echo '
+            <div class="w3-border w3-padding" >
+                                                    <label><i>'.$key['created_by'].'-'.$key['created_date'].'</i></label>
+                                                    <p><i class="fa fa-quote-left"></i> 
+                                                        <i>'.$key['response_description'].'</i> 
+                                                        <i class="fa fa-quote-right"></i></p>
+                                                    </div>
+                                                </div>
+            ';
         }
     }
 

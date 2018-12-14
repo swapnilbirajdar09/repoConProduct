@@ -85,7 +85,7 @@
                                                 </button>
                                                 <ul role="menu" class="dropdown-menu pull-right">              
                                                     <li>
-                                                        <a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['query_id']; ?>" onclick="openHelp('RFIModal_<?php echo $val['query_id']; ?>')">View Query</a>
+                                                        <a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['query_id']; ?>" onclick="openHelp('<?php echo $val['query_id']; ?>')">View Query</a>
                                                     </li>
                                                     <?php 
                                                     $user_role= $this->session->userdata('role');
@@ -161,15 +161,18 @@
                                             <hr>
                                             <label>Comments: </label>
                                             <div class="w3-col l12 w3-round w3-light-grey w3-padding w3-margin-bottom">
-                                                <form id="rfiReply_form">
+                                                <form class="rfiReply_form">
                                                     <textarea name="comment_posted" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
-                                                    <input type="hidden" id="token" name="token" value="<?php echo base64_encode($val['query_id']); ?>">
+                                                    <input type="hidden" id="replyfor" name="replyfor" value="<?php echo $val['query_id']; ?>">
                                                     <div id="comment_msg"></div>
                                                     <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" type="submit"><i class="fa fa-reply"></i> Post Comment</button>
                                                 </form>
                                             </div>
-                                            <div class="w3-col l12 w3-small" id="comment_list">
-                                                <div class="w3-border w3-padding">
+                                            <div class="w3-col l12 w3-small comment_list" id="comment_list">
+                                                <!-- <?php 
+
+                                                ?>
+                                                <div class="w3-border w3-padding" >
                                                     <label><i>samrat-<?php echo date('d M Y h:i a'); ?></i></label>
                                                     <p><i class="fa fa-quote-left"></i> 
                                                         <i>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -178,31 +181,32 @@
                                                             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
                                                             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                                                         proident.</i> 
-                                                        <i class="fa fa-quote-right"></i></p>
-                                                    </div>
-                                                </div>
+                                                        <i class="fa fa-quote-right"></i>
+                                                    </p>
+                                                </div> -->
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Modal container ends -->
                                 </div>
-                                <!-- Modal Body ends -->
+                                <!-- Modal container ends -->
                             </div>
-                            <!-- Modal contenet ends -->
+                            <!-- Modal Body ends -->
                         </div>
+                        <!-- Modal contenet ends -->
                     </div>
-                    <!-- Modal ends here -->                              
-                    <?php
-                    $i++;
-                }
-            } else {
-                ?>
-                <tr>
-                    <td colspan="5" class="w3-center theme_text"><b>No Requests Raised.</b></td>
-                </tr>
-            <?php } ?>                       
-        </tbody>
-    </table>
+                </div>
+                <!-- Modal ends here -->                              
+                <?php
+                $i++;
+            }
+        } else {
+            ?>
+            <tr>
+                <td colspan="5" class="w3-center theme_text"><b>No Requests Raised.</b></td>
+            </tr>
+        <?php } ?>                       
+    </tbody>
+</table>
 </div>
 </div>
 </div>
