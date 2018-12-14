@@ -175,6 +175,8 @@ class Document_model extends CI_Model {
             return $response;
             die();
         }
+        unlink($fileArr[$key]);
+
         // unset key value
         unset($fileArr[$key]);
         $fileArr = array_values($fileArr);
@@ -191,7 +193,6 @@ class Document_model extends CI_Model {
                 'status'    =>  'success',
                 'message'   =>  '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> File was successfully deleted.</div>'
             );
-            unlink($fileArr[$key]);
             return $response;
         }
         else{

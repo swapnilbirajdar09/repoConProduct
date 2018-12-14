@@ -40,21 +40,21 @@ $modifiedtime = new DateTime($queryDetails['status_message'][0]['modified_date']
 
                     <div class="container x_content">
                         <div class="col-md-12">
-                            <form id="editDocument_form" name="editDocument_form" enctype="multipart/form-data">
+                            <form id="editQuery_form" name="editQuery_form" enctype="multipart/form-data">
                                 <div class="w3-col l12 w3-margin-bottom">                
                                     <div class="col-md-6 col-xs-12 w3-margin-bottom">
-                                        <input type="hidden" name="document_id" value="<?php echo base64_encode($queryDetails['status_message'][0]['query_id']); ?>">
+                                        <input type="hidden" name="query_id" value="<?php echo base64_encode($queryDetails['status_message'][0]['query_id']); ?>">
                                         <label>Query Title: </label>
-                                        <input type="text" class="w3-input" name="document_title" id="document_title" placeholder="Enter Document title" value="<?php echo $queryDetails['status_message'][0]['query_title']; ?>" style="border-bottom-color: #CCCCCC" required>
+                                        <input type="text" class="w3-input" name="query_title" id="query_title" placeholder="Enter query title" value="<?php echo $queryDetails['status_message'][0]['query_title']; ?>" style="border-bottom-color: #CCCCCC" required>
                                     </div>
 
                                     <div class="col-md-6 col-xs-12 w3-margin-bottom">
                                         <label>Query Description(#): </label>
-<!--                                        <input type="number" class="w3-input" name="revision_number" id="revision_number" placeholder="Enter Revision number" min="1" value="<?php //echo $queryDetails['status_message'][0]['query_description']; ?>" style="border-bottom-color: #CCCCCC" required>-->
+<!--                                        <input type="number" class="w3-input" name="revision_number" id="revision_number" placeholder="Enter Revision number" min="1" value="<?php //echo $queryDetails['status_message'][0]['query_description'];    ?>" style="border-bottom-color: #CCCCCC" required>-->
                                         <textarea class="w3-input w3-border w3-margin-bottom" placeholder="Query Description" name="queryDescription" id="queryDescription" rows="5" cols="50" style="resize: none;" required><?php echo $queryDetails['status_message'][0]['query_description']; ?></textarea>
                                     </div> 
                                     <div class="w3-col l12 w3-center">
-                                        <button type="submit" id="updateDocBtn" class="btn theme_bg w3-hover-text-grey btn-large"><i class="fa fa-edit"></i> Click here to Save Changes</button>
+                                        <button type="submit" id="updateQuryBtn" class="btn theme_bg w3-hover-text-grey btn-large"><i class="fa fa-edit"></i> Click here to Save Changes</button>
                                         <div id="response_msg"></div>
                                     </div>                
                                 </div>
@@ -76,41 +76,43 @@ $modifiedtime = new DateTime($queryDetails['status_message'][0]['modified_date']
                         <div class="clearfix"></div>
                     </div>
                     <div class="container x_content">
-
                         <div class="col-md-12">
                             <div class="w3-col l12 w3-margin-bottom">
                                 <?php
                                 $image_arr = json_decode($queryDetails['status_message'][0]['images']);
+                                //print_r($image_arr);
                                 ?>                                
                                 <?php
                                 $count = 1;
-                                if($image_arr != ''){
-                                foreach ($image_arr as $key=>$file) {
-                                    $arr = explode('/', $file);
-                                    $filename = $arr[3];
-                                    $ext_arr = explode('.', $file);
-                                    $ext = end($ext_arr);
-                                    ?>
-                                    <div class="col-md-3">
-                                        <div class="image view view-first" style="height: 150px">
-                                            <img style="width: 100%;height:100%" class="img img-thumbnail" src="<?php echo base_url() . $file; ?>" alt="image">
-                                            <div class="mask no-caption">
-                                                <div class="tools" style="margin: 20px 0">
-                                                    <a class="btn w3-small"  target="_self" href="<?php echo base_url() . $file; ?>" title="Download image" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;" ><i class="fa fa-download"></i> Download</a>
-                                                </div>
-                                                <div class="tools" style="margin: 20px 0">
-                                                    <a class="btn w3-small" onclick="deleteQueryImage('<?php echo $key; ?>','<?php echo $queryDetails['status_message'][0]['query_id']; ?>')" title="Delete image" style="padding:4px;display: inline-block;" ><i class="fa fa-close"></i> Delete Image</a>
+                                if ($image_arr != '' && $image_arr != []) {
+                                    foreach ($image_arr as $key => $file) {
+                                        //echo $key;
+                                        $arr = explode('/', $file);
+                                        $filename = $arr[3];
+                                        $ext_arr = explode('.', $file);
+                                        $ext = end($ext_arr);
+                                        ?>
+                                        <div class="col-md-3">
+                                            <div class="image view view-first" style="height: 150px">
+                                                <img style="width: 100%;height:100%" class="img img-thumbnail" src="<?php echo base_url() . $file; ?>" alt="image">
+                                                <div class="mask no-caption">
+                                                    <div class="tools" style="margin: 20px 0">
+                                                        <a class="btn w3-small"  target="_self" href="<?php echo base_url() . $file; ?>" title="Download image" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;" ><i class="fa fa-download"></i> Download</a>
+                                                    </div>
+                                                    <div class="tools" style="margin: 20px 0">
+                                                        <a class="btn w3-small" onclick="removeImage('<?php echo $key; ?>', '<?php echo $queryDetails['status_message'][0]['query_id']; ?>')" id="image_<?php echo $queryDetails['status_message'][0]['query_id']; ?>" title="Delete image" style="padding:4px;display: inline-block;" ><i class="fa fa-close"></i> Delete Image</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <?php
+                                        $count++;
+                                    }
+                                } else {
+                                    ?>
+                                    <div class="w3-col l12 w3-margin-top"> 
+                                        <center><h3>No Images are available</h3></center>
                                     </div>
-                                    <?php
-                                    $count++;
-                                }}else{
-                                ?>
-                                <div class="w3-col l12 w3-margin-top"> 
-                                    <center><h3>No Images are available</h3></center>
-                                </div>
                                 <?php } ?>
                             </div>
                             <!-- upload document div -->

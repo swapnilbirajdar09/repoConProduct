@@ -41,15 +41,45 @@ class Rfiquery_api extends REST_Controller {
 
     // api to post comment
     public function postComment_post() {
-        $data=$_POST;
+        $data = $_POST;
         $result = $this->rfiquery_model->postComment($data);
-        print_r($result);die();
-        if($result)
-        {
+        print_r($result);
+        die();
+        if ($result) {
             return $this->response($result, 200);
-        } 
-        else
-        {
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    public function updateQueryDetails_post() {
+        $data = $_POST;
+        $result = $this->rfiquery_model->updateQueryDetails($data);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    // api to remove file in Document
+    public function removeImage_post() {
+        extract($_POST);
+        $result = $this->rfiquery_model->removeImage($key, $query_id, $author);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    // api to upload file in Document
+    public function uploadImage_post() {
+        $data = $_POST;
+        $result = $this->rfiquery_model->uploadImage($data);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
             return $this->response(NULL, 404);
         }
     }
