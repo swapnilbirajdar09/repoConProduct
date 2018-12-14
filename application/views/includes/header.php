@@ -55,7 +55,7 @@ if ($admin_name != '') {
                                 <li><a href="<?php echo base_url(); ?>user/create_project"><i class="fa fa-plus-circle"></i> Create Project </a></li>
                                 <li><a href="<?php echo base_url(); ?>user/roles"><i class="fa fa-user-secret"></i> Create Role </a></li>
                                 <li><a href="<?php echo base_url(); ?>user/createuser"><i class="fa fa-user"></i> Create User </a></li>
-                                <li><a href="<?php echo base_url(); ?>user/raisequery_rfi"><i class="fa fa-check"></i> Raise Query(RFI) </a></li>
+                                <li><a href="<?php echo base_url(); ?>modules/raisequery_rfi"><i class="fa fa-check"></i> Raise Query(RFI) </a></li>
                                 <li><a href="<?php echo base_url(); ?>modules/manage_documents"><i class="fa fa-file"></i> Manage Document </a></li> 
   <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
                                       <ul class="nav child_menu">

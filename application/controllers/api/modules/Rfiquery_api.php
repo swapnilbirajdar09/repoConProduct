@@ -8,7 +8,7 @@ class Rfiquery_api extends REST_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('user/rfiquery_model');
+        $this->load->model('modules/rfiquery_model');
     }
 //-----------fun for save query details
     public function raiseQuery_post() {

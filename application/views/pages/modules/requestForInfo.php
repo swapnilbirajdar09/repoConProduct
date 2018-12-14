@@ -83,30 +83,103 @@
                                             <div class="btn-group">
                                                 <button data-toggle="dropdown" id="actionBtn_<?php echo $val['query_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
                                                 </button>
-                                                <ul role="menu" class="dropdown-menu pull-right">                                                    
-<!--                                                    <li><a title="view files" class="btn btn-xs text-left" href="<?php ?>modules/manage_documents/edit_document/<?php ?>">View Query</a>
-                                                    </li>-->
-                                                    <li><a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
+                                                <ul role="menu" class="dropdown-menu pull-right">              
+                                                    <li>
+                                                        <a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['query_id']; ?>" onclick="openHelp('RFIModal_<?php echo $val['query_id']; ?>')">View Query</a>
                                                     </li>
+                                                    <?php 
+                                                    $user_role= $this->session->userdata('role');
+                                                    $user_name= $this->session->userdata('usersession_name');
+                                                    if($user_role=='company_admin' || $user_name==$val['created_by']){
+                                                        ?>
+                                                        <li><a title="edit query" class="btn btn-xs text-left" href="<?php echo base_url(); ?>modules/raisequery_rfi/edit_query/<?php echo base64_encode($val['query_id']); ?>">Edit Query</a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
+                                                        </li>
+                                                        <?php 
+                                                    }
+                                                    ?>
+                                                    
                                                 </ul>
                                             </div>
                                         </td>
-                                    </tr>                                
-                                    <?php
-                                    $i++;
-                                }
-                            } else {
-                                ?>
-                                <tr>
-                                    <td colspan="5" class="w3-center theme_text"><b>No Requests Raised.</b></td>
-                                </tr>
-                            <?php } ?>                       
-                        </tbody>
-                    </table>
+                                    </tr>  
+                                    <!-- Modal to edit product -->
+                                    <div class="modal fade bs-example-modal-lg" id="RFIModal_<?php echo $val['query_id']; ?>" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-md ">
+                                          <!-- Modal content starts -->
+                                          <div class="modal-content">
+
+                                            <div class="modal-header">
+                                              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                              </button>
+                                              <h4 class="modal-title w3-left w3-margin-left"><b>Query:</b> <?php echo $val['query_title']; ?></h4>
+                                          </div>
+                                          <!-- Modal body starts -->
+                                          <div class="modal-body">
+                                              <!-- Modal container starts -->
+                                              <div class="container"> 
+                                                <div class="col-lg-12">
+                                                  <div class="w3-col l12 w3-padding w3-medium">
+                                                    <label>Description: </label>
+                                                    <p>                                        
+                                                        <?php echo $val['query_description']; ?>
+                                                    </p>
+                                                </div>
+
+                                                <?php 
+                                                $image_arr=json_decode($val['images']);
+                                                ?>                                
+                                                <div class="w3-col l12">
+                                                    <?php 
+                                                    $count=1;
+                                                    foreach ($image_arr as $file) {
+                                                      $arr=explode('/', $file);
+                                                      $filename=$arr[3];
+                                                      $ext_arr=explode('.',$file);
+                                                      $ext=end($ext_arr);
+                                                      ?>
+                                                      <div class="col-md-3">
+                                                          <div class="image view view-first" style="height: 100px">
+                                                            <img style="width: 100%;height:100%" class="img img-thumbnail" src="<?php echo base_url().$file; ?>" alt="image">
+                                                            <div class="mask no-caption">
+                                                              <div class="tools" style="margin: 20px 0">
+                                                                <a class="btn w3-small"  target="_self" href="<?php echo base_url().$file; ?>" title="Download image" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;" ><i class="fa fa-download"></i> download</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php
+                                                $count++;
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal container ends -->
+                            </div>
+                            <!-- Modal Body ends -->
+                        </div>
+                        <!-- Modal contenet ends -->
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
+                <!-- Modal ends here -->                              
+                <?php
+                $i++;
+            }
+        } else {
+            ?>
+            <tr>
+                <td colspan="5" class="w3-center theme_text"><b>No Requests Raised.</b></td>
+            </tr>
+        <?php } ?>                       
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <script src="<?php echo base_url(); ?>assets/js/module/user/requestForInfo.js"></script>
 <script>
@@ -155,48 +228,54 @@
         }
     }
 // ------------function preview image end------------------//
-    function readURLNEW(input, id) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#adminImagePreview_' + id).attr('src', e.target.result);
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
+function readURLNEW(input, id) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#adminImagePreview_' + id).attr('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
     }
+}
 
-    $(function () {
-        $("#raiseQueryForm").submit(function (e) {
-            e.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: "<?php echo base_url(); ?>user/raisequery_rfi/raiseQuery",
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                beforeSend: function () {
-                    $('#raiseQry').prop('disabled', true);
-                },
-                success: function (response) {
-                    console.log(response);
+// ----function to open modal product------//
+function openHelp(modal_id) {
+  var modal=$('#'+modal_id);
+  modal.addClass('in');
+}
+
+$(function () {
+    $("#raiseQueryForm").submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url(); ?>user/raisequery_rfi/raiseQuery",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend: function () {
+                $('#raiseQry').prop('disabled', true);
+            },
+            success: function (response) {
+                console.log(response);
                     //alert(response);
                     var data = JSON.parse(response);
                     $('#raiseQry').prop('disabled', false);
                     // response message
                     switch (data.status) {
                         case 'success':
-                            $('#message').html(data.message);
-                            break;
+                        $('#message').html(data.message);
+                        break;
                         case 'error':
-                            $('#message').html(data.message);
-                            break;
+                        $('#message').html(data.message);
+                        break;
                         case 'validation':
-                            $('#message').html(data.message);
-                            break;
+                        $('#message').html(data.message);
+                        break;
                         default:
-                            $('#message').html('<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></div>window.setTimeout(function() {	$(".alert").fadeTo(500, 0).slideUp(500, function(){$(this).remove(); });}, 5000);');
-                            break;
+                        $('#message').html('<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></div>window.setTimeout(function() {	$(".alert").fadeTo(500, 0).slideUp(500, function(){$(this).remove(); });}, 5000);');
+                        break;
                     }
                 },
                 error: function (response) {
@@ -208,6 +287,6 @@
                     }, 4000); // <-- time in milliseconds  
                 }
             });
-        });
     });
+});
 </script>

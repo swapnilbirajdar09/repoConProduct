@@ -16,19 +16,16 @@ class Raisequery_rfi extends CI_Controller {
 
     // main index function
     public function index() {
-//        $company_id = $this->session->userdata('company_id');
-//        $data['projects'] = Roles::getAllProjects($company_id);
-//        $data['features'] = Roles::getAllFeatures();
         $data['queries'] = Raisequery_rfi::getAllQueries();
         $data['projects'] = Raisequery_rfi::getAllprojects();
 
         $this->load->view('includes/header', $data);
-        $this->load->view('pages/user/requestForInfo', $data);
+        $this->load->view('pages/modules/requestForInfo', $data);
         $this->load->view('includes/footer');
     }
 
 
-     public function getAllprojects() {
+    public function getAllprojects() {
         $company_id = $this->session->userdata('company_id');
         $path = base_url();
         $url = $path . 'api/user/Role_api/getAllProjects?company_id=' . $company_id;
@@ -93,7 +90,7 @@ class Raisequery_rfi extends CI_Controller {
         //print_r($data);die();
         //$header = array('user_id' =>  $user_id);
         $path = base_url();
-        $url = $path . 'api/user/Rfiquery_api/raiseQuery';
+        $url = $path . 'api/modules/Rfiquery_api/raiseQuery';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -106,43 +103,43 @@ class Raisequery_rfi extends CI_Controller {
         if ($response['status'] == 'success') {
             $response = array('status' => 'success',
                 'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Success!</strong> Query Raised Successfully.
-			</div>
-			<script>
-			window.setTimeout(function() {
-			$(".alert").fadeTo(500, 0).slideUp(500, function(){
-			$(this).remove(); 
-			});
-			location.reload();
-			}, 1000);
-			</script>');
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Success!</strong> Query Raised Successfully.
+                </div>
+                <script>
+                window.setTimeout(function() {
+                 $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                     $(this).remove(); 
+                     });
+                     location.reload();
+                     }, 1000);
+                     </script>');
         } elseif ($response['status'] == 'validation') {
             $response = array('status' => 'validation',
                 'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Failure!</strong> Something Went Wrong. Email Id Must be Unique.
-			</div>
-			<script>
-			window.setTimeout(function() {
-			$(".alert").fadeTo(500, 0).slideUp(500, function(){
-			$(this).remove(); 
-			});
-			}, 5000);
-			</script>');
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Failure!</strong> Something Went Wrong. Email Id Must be Unique.
+                </div>
+                <script>
+                window.setTimeout(function() {
+                 $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                     $(this).remove(); 
+                     });
+                     }, 5000);
+                     </script>');
         } else {
             $response = array('status' => 'error',
                 'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Failure!</strong> Something Went Wrong. Query Not Raised Successfully.
-			</div>
-			<script>
-			window.setTimeout(function() {
-			$(".alert").fadeTo(500, 0).slideUp(500, function(){
-			$(this).remove(); 
-			});
-			}, 5000);
-			</script>');
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Failure!</strong> Something Went Wrong. Query Not Raised Successfully.
+                </div>
+                <script>
+                window.setTimeout(function() {
+                 $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                     $(this).remove(); 
+                     });
+                     }, 5000);
+                     </script>');
         }
         echo json_encode($response);
     }
@@ -150,7 +147,7 @@ class Raisequery_rfi extends CI_Controller {
 //------------fun for get all queries
     public function getAllQueries() {
         $path = base_url();
-        $url = $path . 'api/user/Rfiquery_api/getAllQueries';
+        $url = $path . 'api/modules/Rfiquery_api/getAllQueries';
         //create a new cURL resource
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPGET, true);
@@ -166,7 +163,7 @@ class Raisequery_rfi extends CI_Controller {
     public function removeQuery() {
         extract($_GET);
         $path = base_url();
-        $url = $path . 'api/user/Rfiquery_api/removeQuery?query_id=' . $query_id;
+        $url = $path . 'api/modules/Rfiquery_api/removeQuery?query_id=' . $query_id;
         //create a new cURL resource
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPGET, true);
@@ -179,33 +176,33 @@ class Raisequery_rfi extends CI_Controller {
             $response = array(
                 'status' => 'success',
                 'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Success!</strong> Query Removed successfully.
-			</div>
-			<script>
-			window.setTimeout(function() {
-			$(".alert").fadeTo(500, 0).slideUp(500, function(){
-			$(this).remove(); 
-			});
-			location.reload();
-			}, 1000);
-			</script>'
-            );
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Success!</strong> Query Removed successfully.
+                </div>
+                <script>
+                window.setTimeout(function() {
+                 $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                     $(this).remove(); 
+                     });
+                     location.reload();
+                     }, 1000);
+                     </script>'
+                 );
         } else {
             $response = array(
                 'status' => 'error',
                 'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Failure!</strong> Query Not Removed Successfully.
-			</div>
-			<script>
-			window.setTimeout(function() {
-			$(".alert").fadeTo(500, 0).slideUp(500, function(){
-			$(this).remove(); 
-			});
-			}, 5000);
-			</script>'
-            );
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Failure!</strong> Query Not Removed Successfully.
+                </div>
+                <script>
+                window.setTimeout(function() {
+                 $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                     $(this).remove(); 
+                     });
+                     }, 5000);
+                     </script>'
+                 );
         }
         echo json_encode($response);
     }
