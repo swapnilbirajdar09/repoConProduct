@@ -83,8 +83,9 @@ class Rfiquery_model extends CI_Model {
             'created_by' => $author,
             'created_date' => date('Y-m-d H:i:s')
         );
-        print_r($ins_Data);die();
+        // print_r($ins_Data);die();
         $this->db->insert('rfi_query_response_tab',$ins_Data);
+        print_r($this->db->_error_message());die();
         if($this->db->affected_rows()>0){
             return true;
         }
