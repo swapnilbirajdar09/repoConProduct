@@ -24,7 +24,6 @@ class Raisequery_rfi extends CI_Controller {
         $this->load->view('includes/footer');
     }
 
-
     public function getAllprojects() {
         $company_id = $this->session->userdata('company_id');
         $path = base_url();
@@ -187,7 +186,7 @@ class Raisequery_rfi extends CI_Controller {
                      location.reload();
                      }, 1000);
                      </script>'
-                 );
+            );
         } else {
             $response = array(
                 'status' => 'error',
@@ -202,9 +201,32 @@ class Raisequery_rfi extends CI_Controller {
                      });
                      }, 5000);
                      </script>'
-                 );
+            );
         }
         echo json_encode($response);
+    }
+
+    public function edit_query($param = '') {
+        $query_id = base64_decode($param);
+
+        $path = base_url();
+        $url = $path . 'api/modules/Rfiquery_api/getQueryDetails?query_id=' . $query_id;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+        //close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        
+        $data['queryDetails'] = $response;
+        $this->load->view('includes/header');
+        $this->load->view('pages/modules/edit_queries', $data);
+        $this->load->view('includes/footer');
     }
 
 }

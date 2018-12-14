@@ -53,3 +53,4 @@ $route['default_controller'] = 'homepage';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['modules/manage_documents/edit_document/(:any)'] = "modules/manage_documents/edit_document/$1";
+$route['modules/raisequery_rfi/edit_query/(:any)'] = "modules/raisequery_rfi/edit_query/$1";

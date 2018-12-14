@@ -6,6 +6,7 @@ class Rfiquery_model extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
+
 //----------fun for save the query details
     public function raiseQuery($data) {
         extract($data);
@@ -23,6 +24,7 @@ class Rfiquery_model extends CI_Model {
         }
         return $response;
     }
+
 //--------------fun for get all queries
     public function getAllQueries() {
         $sql = "SELECT * FROM rfi_query_tab";
@@ -38,6 +40,7 @@ class Rfiquery_model extends CI_Model {
         }
         return $response;
     }
+
 //------------fun for delete query
     public function removeQuery($query_id) {
         $sql = "DELETE FROM rfi_query_tab WHERE query_id = '$query_id'";
@@ -50,6 +53,22 @@ class Rfiquery_model extends CI_Model {
             $response = array(
                 'status' => 'error',
                 'status_message' => 'Role Not Deleted Successfully.');
+        }
+        return $response;
+    }
+
+//----------------------get query details
+    public function getQueryDetails($query_id) {
+        $sql = "SELECT * FROM rfi_query_tab WHERE query_id = '$query_id'";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
         }
         return $response;
     }

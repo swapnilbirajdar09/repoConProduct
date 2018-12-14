@@ -10,6 +10,7 @@ class Rfiquery_api extends REST_Controller {
         parent::__construct();
         $this->load->model('modules/rfiquery_model');
     }
+
 //-----------fun for save query details
     public function raiseQuery_post() {
         extract($_POST);
@@ -17,16 +18,25 @@ class Rfiquery_api extends REST_Controller {
         $result = $this->rfiquery_model->raiseQuery($data);
         return $this->response($result);
     }
+
 //---------------fun for get all queries
     public function getAllQueries_get() {
         $result = $this->rfiquery_model->getAllQueries();
         return $this->response($result);
     }
+
 //-------------fun for remove query
-    public function removeQuery_get(){
+    public function removeQuery_get() {
         extract($_GET);
         $result = $this->rfiquery_model->removeQuery($query_id);
         return $this->response($result);
     }
-    
+
+    //---------fun for get query details
+    public function getQueryDetails_get() {
+        extract($_GET);
+        $result = $this->rfiquery_model->getQueryDetails($query_id);
+        return $this->response($result);
+    }
+
 }
