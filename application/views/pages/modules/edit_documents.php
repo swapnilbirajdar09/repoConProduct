@@ -9,8 +9,13 @@ $modifiedtime = new DateTime($documentDetails[0]['modified_date']);
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3>Edit Document </h3>
+        <h3>Edit Document 
+        <a class="btn btn btn-sm theme_bg w3-hover-text-grey" href="<?php echo base_url(); ?>modules/manage_documents"> Back to Manage Document </a></h3>
       </div>
+      <div class="title_left">
+        
+      </div>
+      <div>
       <?php 
       if($documentDetails[0]['modified_by']==''){
         ?>
@@ -23,6 +28,7 @@ $modifiedtime = new DateTime($documentDetails[0]['modified_date']);
         <?php 
       }
       ?>
+  </div>
     </div>
 
     <div class="clearfix"></div>

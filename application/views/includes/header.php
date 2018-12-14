@@ -73,7 +73,7 @@ if ($admin_name != '') {
                     <!-- /sidebar menu -->
                     <!-- /menu footer buttons -->
                     <div class="sidebar-footer hidden-small w3-center">
-                        <a href="<?php echo base_url(); ?>settings/Settings" data-toggle="tooltip" data-placement="top" title="Settings" style="width: 50%;">
+                        <a href="<?php echo base_url(); ?>user/user_settings" data-toggle="tooltip" data-placement="top" title="Settings" style="width: 50%;">
                             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="Logout" href="<?php echo base_url(); ?>login/logoutAdmin" style="width: 50%;">
