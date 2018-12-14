@@ -126,56 +126,83 @@
                                                     <p>                                        
                                                         <?php echo $val['query_description']; ?>
                                                     </p>
-                                                </div>
+                                                </div>                            
+                                                <div class="w3-col l12 w3-margin-bottom w3-padding w3-medium">
 
-                                                <?php 
-                                                $image_arr=json_decode($val['images']);
-                                                ?>                                
-                                                <div class="w3-col l12">
                                                     <?php 
-                                                    $count=1;
-                                                    foreach ($image_arr as $file) {
-                                                      $arr=explode('/', $file);
-                                                      $filename=$arr[3];
-                                                      $ext_arr=explode('.',$file);
-                                                      $ext=end($ext_arr);
-                                                      ?>
-                                                      <div class="col-md-3">
-                                                          <div class="image view view-first" style="height: 100px">
-                                                            <img style="width: 100%;height:100%" class="img img-thumbnail" src="<?php echo base_url().$file; ?>" alt="image">
-                                                            <div class="mask no-caption">
-                                                              <div class="tools" style="margin: 20px 0">
-                                                                <a class="btn w3-small"  target="_self" href="<?php echo base_url().$file; ?>" title="Download image" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;" ><i class="fa fa-download"></i> download</a>
+                                                    if($val['images']!='[]' && $val['images']!='')
+                                                    {
+                                                        $image_arr=json_decode($val['images']);
+                                                        $count=1;
+                                                        echo '<label>Images: </label><br>';
+                                                        foreach ($image_arr as $file) {
+                                                          $arr=explode('/', $file);
+                                                          $filename=$arr[3];
+                                                          $ext_arr=explode('.',$file);
+                                                          $ext=end($ext_arr);
+                                                          ?>
+                                                          <div class="col-md-3">
+                                                              <div class="image view view-first" style="height: 100px">
+                                                                <img style="width: 100%;height:100%" class="img img-thumbnail" src="<?php echo base_url().$file; ?>" alt="image">
+                                                                <div class="mask no-caption">
+                                                                  <div class="tools" style="margin: 20px 0">
+                                                                    <a class="btn w3-small"  target="_self" href="<?php echo base_url().$file; ?>" title="Download image" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;" ><i class="fa fa-download"></i> download</a>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <?php
-                                                $count++;
+                                                    <?php
+                                                    $count++;
+                                                }
                                             }
                                             ?>
                                         </div>
+                                        <div class="col-lg-12 w3-medium">
+                                            <hr>
+                                            <label>Comments: </label>
+                                            <div class="w3-col l12 w3-round w3-light-grey w3-padding w3-margin-bottom">
+                                                <form id="rfiReply_form">
+                                                    <textarea name="comment_posted" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
+                                                    <input type="hidden" id="token" name="token" value="<?php echo base64_encode($val['query_id']); ?>">
+                                                    <div id="comment_msg"></div>
+                                                    <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" type="submit"><i class="fa fa-reply"></i> Post Comment</button>
+                                                </form>
+                                            </div>
+                                            <div class="w3-col l12 w3-small" id="comment_list">
+                                                <div class="w3-border w3-padding">
+                                                    <label><i>samrat-<?php echo date('d M Y h:i a'); ?></i></label>
+                                                    <p><i class="fa fa-quote-left"></i> 
+                                                        <i>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                                                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                                                        proident.</i> 
+                                                        <i class="fa fa-quote-right"></i></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <!-- Modal container ends -->
                                 </div>
-                                <!-- Modal container ends -->
+                                <!-- Modal Body ends -->
                             </div>
-                            <!-- Modal Body ends -->
+                            <!-- Modal contenet ends -->
                         </div>
-                        <!-- Modal contenet ends -->
                     </div>
-                </div>
-                <!-- Modal ends here -->                              
-                <?php
-                $i++;
-            }
-        } else {
-            ?>
-            <tr>
-                <td colspan="5" class="w3-center theme_text"><b>No Requests Raised.</b></td>
-            </tr>
-        <?php } ?>                       
-    </tbody>
-</table>
+                    <!-- Modal ends here -->                              
+                    <?php
+                    $i++;
+                }
+            } else {
+                ?>
+                <tr>
+                    <td colspan="5" class="w3-center theme_text"><b>No Requests Raised.</b></td>
+                </tr>
+            <?php } ?>                       
+        </tbody>
+    </table>
 </div>
 </div>
 </div>
@@ -238,18 +265,13 @@ function readURLNEW(input, id) {
     }
 }
 
-// ----function to open modal product------//
-function openHelp(modal_id) {
-  var modal=$('#'+modal_id);
-  modal.addClass('in');
-}
 
 $(function () {
     $("#raiseQueryForm").submit(function (e) {
         e.preventDefault();
         $.ajax({
             type: "POST",
-            url: "<?php echo base_url(); ?>user/raisequery_rfi/raiseQuery",
+            url: "<?php echo base_url(); ?>modules/raisequery_rfi/raiseQuery",
             data: new FormData(this),
             contentType: false,
             cache: false,
@@ -274,14 +296,14 @@ $(function () {
                         $('#message').html(data.message);
                         break;
                         default:
-                        $('#message').html('<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></div>window.setTimeout(function() {	$(".alert").fadeTo(500, 0).slideUp(500, function(){$(this).remove(); });}, 5000);');
+                        $('#message').html('<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></div>');
                         break;
                     }
                 },
                 error: function (response) {
                     // Re_Enabling the Elements
                     $('#raiseQry').prop('disabled', false);
-                    $('#message').html('<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></div>window.setTimeout(function() {	$(".alert").fadeTo(500, 0).slideUp(500, function(){$(this).remove(); });}, 5000);');
+                    $('#message').html('<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></div>');
                     setTimeout(function () {
                         $('.alert_message').fadeOut('fast');
                     }, 4000); // <-- time in milliseconds  

@@ -7,7 +7,7 @@ function removeQuery(query_id) {
             confirm: function () {
                 $.ajax({
                     type: "GET",
-                    url: BASE_URL + "user/raisequery_rfi/removeQuery",
+                    url: BASE_URL + "modules/raisequery_rfi/removeQuery",
                     data: {
                         query_id: query_id
                     },
@@ -37,3 +37,64 @@ function removeQuery(query_id) {
         }
     });
 }
+
+// ----function to open modal product------//
+function openHelp(modal_id) {
+  var modal=$('#'+modal_id);
+  modal.addClass('in');
+}
+
+
+// post comment
+$(function () {
+    $("#rfiReply_form").submit(function (e) {
+        e.preventDefault();
+        var id=$('#token').val();
+        if(id==''){
+            $('#comment_msg').html('<p class="w3-red w3-padding-small w3-small">Warning! Invalid query! Reload the page to resolve the issue.</p>');
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: BASE_URL+"modules/raisequery_rfi/postComment",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend: function () {
+                $('#comment_msg').html('');
+                // $('#commentBtn').prop('disabled', true);
+            },
+            success: function (response) {
+                console.log(response);return false;
+                    //alert(response);
+                    var data = JSON.parse(response);
+                    $('#commentBtn').prop('disabled', false);
+                    // response message
+                    switch (data.status) {
+                        case 'success':
+                        $('#comment_msg').html(data.message);
+                        $('#comment_list').load(location.href + " #comment_list>*", "");
+                        break;
+                        case 'error':
+                        $('#comment_msg').html(data.message);
+                        break;
+                        case 'validation':
+                        $('#comment_msg').html(data.message);
+                        break;
+                        default:
+                        $('#comment_msg').html('<p class="w3-red w3-padding-small w3-small"><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></p>');
+                        break;
+                    }
+                },
+                error: function (response) {
+                    // Re_Enabling the Elements
+                    $('#commentBtn').prop('disabled', false);
+                    $('#comment_msg').html('<p class="w3-red w3-padding-small w3-small"><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></p>');
+                    setTimeout(function () {
+                        $('#comment_msg').fadeOut('fast');
+                    }, 4000); // <-- time in milliseconds  
+                }
+            });
+    });
+});

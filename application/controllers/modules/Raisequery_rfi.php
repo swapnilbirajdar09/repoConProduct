@@ -229,4 +229,52 @@ class Raisequery_rfi extends CI_Controller {
         $this->load->view('includes/footer');
     }
 
+
+    // post comment to rfi query
+    public function postComment(){
+        extract($_POST);
+        // print_r($_POST);die();
+        $data = $_POST;
+        $session_name = $this->session->userdata('usersession_name');
+        $session_role = $this->session->userdata('role');
+        if ($session_role == 'company_admin') {
+            $data['author'] = 'Administrator';
+        } else {
+            $data['author'] = $session_name;
+        }
+        
+        $path = base_url();
+        $url = $path . 'api/modules/rfiquery_api/postComment';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        // authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $output = curl_exec($ch);
+        //close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+print_r($output);die();
+        if ($response) {
+            $response = array(
+                'status' => 'success',
+                'message' => '<p class="w3-green w3-padding-small w3-small"><strong>Success!</strong> Comment posted successfully!</p>'
+            );
+            echo json_encode($response);
+            die();
+        } else {
+            $response = array(
+                'status' => 'error',
+                'message' => '<p class="w3-red w3-padding-small w3-small"><strong>Error!</strong> Comment not posted successfully!</p>'
+            );
+            echo json_encode($response);
+            die();
+        }
+    }
+
 }
