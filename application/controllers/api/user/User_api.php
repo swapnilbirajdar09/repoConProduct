@@ -51,4 +51,10 @@ class User_api extends REST_Controller {
 		$result = $this->settings_model->getUserDetails($company_id);
 		return $this->response($result);			
 	}
+        
+        public function getAllFeatuesForUser_get(){
+            extract($_GET);
+            $result = $this->settings_model->getAllFeatuesForUser($project_id);
+            return $this->response($result);
+        }
 }

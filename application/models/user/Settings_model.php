@@ -1,6 +1,8 @@
 <?php
+
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
+
 class Settings_model extends CI_Model {
 
     public function __construct() {
@@ -11,7 +13,7 @@ class Settings_model extends CI_Model {
 
     //-------UPDATE ADMIN EMAIL FUNCTION--------------//
     public function updateEmail($data) {
-    	extract($data);
+        extract($data);
 
         $sql = "UPDATE company_tab SET email='$email' WHERE company_id='$company_id'";
 
@@ -27,9 +29,9 @@ class Settings_model extends CI_Model {
         return $response;
     }
 
-         //-------UPDATE username FUNCTION--------------//
+    //-------UPDATE username FUNCTION--------------//
     public function updateUname($data) {
-    		extract($data);
+        extract($data);
         $sql = "UPDATE company_tab SET username='$uname' WHERE company_id='$company_id'";
 
         if ($this->db->query($sql)) {
@@ -45,11 +47,10 @@ class Settings_model extends CI_Model {
     }
 
     //---------UPDATE ADMIN EMAIL ENDS------------------//
-
-           //-------UPDATE Password FUNCTION--------------//
+    //-------UPDATE Password FUNCTION--------------//
     public function updatePass($data) {
-    	extract($data);
-    	//print_r($data);
+        extract($data);
+        //print_r($data);
         $sql = "UPDATE company_tab SET password='$pass' WHERE company_id ='$company_id'";
 
         if ($this->db->query($sql)) {
@@ -65,7 +66,7 @@ class Settings_model extends CI_Model {
     }
 
     public function getUserDetails($company_id) {
-    		//extract($data);
+        //extract($data);
         $query = "SELECT * FROM company_tab WHERE company_id='$company_id'";
 
         $result = $this->db->query($query);
@@ -78,6 +79,34 @@ class Settings_model extends CI_Model {
             $response = array(
                 'status' => 200,
                 'status_message' => $result->result_array());
+        }
+        return $response;
+    }
+
+    public function getAllFeatuesForUser($project_id) {
+        $query = "SELECT * FROM user_tab,role_tab WHERE user_tab.role_id = role_tab.role_id AND project_id='$project_id'";
+        $result = $this->db->query($query);
+        $currentFiles = '';
+        $arr = array();
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            foreach ($result->result_array() as $key) {
+                $currentFiles = json_decode($key['features']);
+            }
+
+            foreach ($currentFiles as $key) {
+                $sql = "SELECT * FROM features_tab WHERE feature_id = '$key'";
+                $resultsel = $this->db->query($query);
+
+                $arr [] = $resultsel->result_array();
+            }
+
+            $response = array(
+                'status' => 200,
+                'status_message' => $arr);
         }
         return $response;
     }

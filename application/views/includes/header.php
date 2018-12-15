@@ -1,6 +1,9 @@
 <?php
 ////start session     
 $admin_name = $this->session->userdata('usersession_name');
+$project_id = $this->session->userdata('project_id');
+$role = $this->session->userdata('role');
+$company_id = $this->session->userdata('company_id');
 $session_name = '';
 if ($admin_name != '') {
 //    $sessionArr = explode('|', $admin_name);
@@ -47,40 +50,77 @@ if ($admin_name != '') {
                     </div>
                     <div class="clearfix"></div>
                     <!-- sidebar menu -->
-                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                        <div class="menu_section">
-                            <!-- <h3>General</h3> -->
-                            <ul class="nav side-menu">
-                                <li><a href="<?php echo base_url(); ?>user_dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
-                                <li><a href="<?php echo base_url(); ?>user/create_project"><i class="fa fa-plus-circle"></i> Create Project </a></li>
-                                <li><a href="<?php echo base_url(); ?>user/roles"><i class="fa fa-user-secret"></i> Create Role </a></li>
-                                <li><a href="<?php echo base_url(); ?>user/createuser"><i class="fa fa-user"></i> Create User </a></li>
-                                <li><a href="<?php echo base_url(); ?>modules/raisequery_rfi"><i class="fa fa-check"></i> Raise Query(RFI) </a></li>
-                                <li><a href="<?php echo base_url(); ?>modules/manage_documents"><i class="fa fa-file"></i> Manage Document </a></li> 
-  <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
-                                      <ul class="nav child_menu">
-                                          <li><a href="<?php echo base_url(); ?>materials/addmaterial">Add New Material</a></li>
-                                          <li><a href="<?php echo base_url(); ?>materials/allmaterial">View All Materials</a></li>
-                                      </ul>
-                                  </li>-->
+                    <?php if ($role == 'company_admin') { ?>
+                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                            <div class="menu_section">
+                                <!-- <h3>General</h3> -->
+                                <ul class="nav side-menu">
+                                    <li><a href="<?php echo base_url(); ?>user_dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
+                                    <li><a href="<?php echo base_url(); ?>user/create_project"><i class="fa fa-plus-circle"></i> Create Project </a></li>
+                                    <li><a href="<?php echo base_url(); ?>user/roles"><i class="fa fa-user-secret"></i> Create Role </a></li>
+                                    <li><a href="<?php echo base_url(); ?>user/createuser"><i class="fa fa-user"></i> Create User </a></li>
+                                    <li><a href="<?php echo base_url(); ?>modules/raisequery_rfi"><i class="fa fa-check"></i> Raise Query(RFI) </a></li>
+                                    <li><a href="<?php echo base_url(); ?>modules/manage_documents"><i class="fa fa-file"></i> Manage Document </a></li> 
+      <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
+                                          <ul class="nav child_menu">
+                                              <li><a href="<?php echo base_url(); ?>materials/addmaterial">Add New Material</a></li>
+                                              <li><a href="<?php echo base_url(); ?>materials/allmaterial">View All Materials</a></li>
+                                          </ul>
+                                      </li>-->
 
-                                <li><a href="<?php echo base_url(); ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>
-                            </ul>
+                                    <li><a href="<?php echo base_url(); ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>
+                                </ul>
+                            </div>
+                            <div class="menu_section">
+                            </div>
                         </div>
-                        <div class="menu_section">
+                        <!-- /sidebar menu -->
+                        <!-- /menu footer buttons -->
+                        <div class="sidebar-footer hidden-small w3-center">
+                            <a href="<?php echo base_url(); ?>user/user_settings" data-toggle="tooltip" data-placement="top" title="Settings" style="width: 50%;">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            </a>
+                            <a data-toggle="tooltip" data-placement="top" title="Logout" href="<?php echo base_url(); ?>login/logoutAdmin" style="width: 50%;">
+                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                            </a>
                         </div>
-                    </div>
-                    <!-- /sidebar menu -->
-                    <!-- /menu footer buttons -->
-                    <div class="sidebar-footer hidden-small w3-center">
-                        <a href="<?php echo base_url(); ?>user/user_settings" data-toggle="tooltip" data-placement="top" title="Settings" style="width: 50%;">
-                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                        </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="<?php echo base_url(); ?>login/logoutAdmin" style="width: 50%;">
-                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-                        </a>
-                    </div>
-                    <!-- /menu footer buttons -->
+                        <!-- /menu footer buttons -->
+                    <?php } else { ?>
+                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                            <div class="menu_section">
+                                <!-- <h3>General</h3> -->
+                                <ul class="nav side-menu">
+                                    <li><a href="<?php echo base_url(); ?>user_dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
+                                    <li><a href="<?php echo base_url(); ?>user/create_project"><i class="fa fa-plus-circle"></i> Create Project </a></li>
+                                    <li><a href="<?php echo base_url(); ?>user/roles"><i class="fa fa-user-secret"></i> Create Role </a></li>
+                                    <li><a href="<?php echo base_url(); ?>user/createuser"><i class="fa fa-user"></i> Create User </a></li>
+                                    <li><a href="<?php echo base_url(); ?>modules/raisequery_rfi"><i class="fa fa-check"></i> Raise Query(RFI) </a></li>
+                                    <li><a href="<?php echo base_url(); ?>modules/manage_documents"><i class="fa fa-file"></i> Manage Document </a></li> 
+      <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
+                                          <ul class="nav child_menu">
+                                              <li><a href="<?php echo base_url(); ?>materials/addmaterial">Add New Material</a></li>
+                                              <li><a href="<?php echo base_url(); ?>materials/allmaterial">View All Materials</a></li>
+                                          </ul>
+                                      </li>-->
+
+<!--                                    <li><a href="<?php //echo base_url(); ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>-->
+                                </ul>
+                            </div>
+                            <div class="menu_section">
+                            </div>
+                        </div>
+                        <!-- /sidebar menu -->
+                        <!-- /menu footer buttons -->
+                        <div class="sidebar-footer hidden-small w3-center">
+                            <a href="<?php echo base_url(); ?>user/user_settings" data-toggle="tooltip" data-placement="top" title="Settings" style="width: 50%;">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            </a>
+                            <a data-toggle="tooltip" data-placement="top" title="Logout" href="<?php echo base_url(); ?>login/logoutAdmin" style="width: 50%;">
+                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                            </a>
+                        </div>
+
+                    <?php } ?>
                 </div>
             </div>
             <!-- top navigation -->
@@ -103,7 +143,7 @@ if ($admin_name != '') {
                             </li>
                             <li class="">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Select Projects <b><?php //echo $session_name;        ?>  </b>
+                                    Select Projects <b><?php //echo $session_name;          ?>  </b>
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <?php
