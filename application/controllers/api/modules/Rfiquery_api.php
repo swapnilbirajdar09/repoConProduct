@@ -102,6 +102,7 @@ class Rfiquery_api extends REST_Controller {
             return $this->response($result, 200);
         } else {
             return $this->response(NULL, 404);
+            
         }
     }
 
