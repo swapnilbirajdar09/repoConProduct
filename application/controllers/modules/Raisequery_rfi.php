@@ -12,6 +12,7 @@ class Raisequery_rfi extends CI_Controller {
         if ($admin_name == '') {
             redirect('Login');
         }
+        $this->load->model('modules/query_model');
     }
 
     // main index function
@@ -23,7 +24,7 @@ class Raisequery_rfi extends CI_Controller {
         $this->load->view('pages/modules/requestForInfo', $data);
         $this->load->view('includes/footer');
     }
-
+//-------------fun for ge all projects
     public function getAllprojects() {
         $company_id = $this->session->userdata('company_id');
         $path = base_url();
@@ -83,8 +84,11 @@ class Raisequery_rfi extends CI_Controller {
             $imageArr[] = $imagePath;
         }
         $data['project_id'] = $this->session->userdata('project_id');
-
-        $data['images'] = json_encode($imageArr);
+        if ($imagePath == '') {
+            $data['images'] = '';
+        } else {
+            $data['images'] = json_encode($imageArr);
+        }
         $data['created_by'] = $this->session->userdata('usersession_name');
         //print_r($data);die();
         //$header = array('user_id' =>  $user_id);
@@ -205,7 +209,7 @@ class Raisequery_rfi extends CI_Controller {
         }
         echo json_encode($response);
     }
-
+//---------fun for edit query page view
     public function edit_query($param = '') {
         $query_id = base64_decode($param);
 
@@ -230,7 +234,7 @@ class Raisequery_rfi extends CI_Controller {
     }
 
     // post comment to rfi query
-    public function postComment() {
+    public function addComment() {
         extract($_POST);
         // print_r($_POST);die();
         $data = $_POST;
@@ -243,23 +247,15 @@ class Raisequery_rfi extends CI_Controller {
         }
 
         $path = base_url();
-        $url = $path . 'api/modules/rfiquery_api/commentReply';
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        // authenticate API
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+        $url = $path . 'api/modules/Query_api/saveComments';
+        $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        $output = curl_exec($ch);
-        //close cURL resource
+        $response_json = curl_exec($ch);
         curl_close($ch);
-        $response = json_decode($output, true);
-        print_r($output);
-        die();
+        $response = json_decode($response_json, true);
+
         if ($response) {
             $response = array(
                 'status' => 'success',
@@ -362,7 +358,7 @@ class Raisequery_rfi extends CI_Controller {
             echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> Image not found.</div>';
         }
     }
-
+//------------fun for upload image
     public function uploadImage() {
         extract($_POST);
         $data = $_POST;
@@ -410,7 +406,7 @@ class Raisequery_rfi extends CI_Controller {
         $data['filepath'] = $filepath;
         // print_r($data);die();
         $path = base_url();
-        $url = $path . 'api/modules/rfiquery_api/uploadImage';
+        $url = $path . 'api/modules/Query_api/uploadImage';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         // authenticate API
@@ -423,8 +419,8 @@ class Raisequery_rfi extends CI_Controller {
         //close cURL resource
         curl_close($ch);
         $result = json_decode($output, true);
-        print_r($output);
-        die();
+//        print_r($output);
+//        die();
         if ($result) {
             $response = array(
                 'status' => 'success',
@@ -462,8 +458,11 @@ class Raisequery_rfi extends CI_Controller {
         curl_close($ch);
         $response = json_decode($output, true);
         // echo $output;
-        foreach ($response as $key) {
-            echo '
+        if (!$response) {
+            echo '<span>No Comments Available.</span>';
+        } else {
+            foreach ($response as $key) {
+                echo '
             <div class="w3-border w3-padding" >
              <label><i>' . $key['created_by'] . '-' . $key['created_date'] . '</i></label>
               <p><i class="fa fa-quote-left"></i> 
@@ -472,6 +471,7 @@ class Raisequery_rfi extends CI_Controller {
                </div>
              </div>
             ';
+            }
         }
     }
 

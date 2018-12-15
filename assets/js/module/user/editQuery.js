@@ -131,7 +131,7 @@ $("#uploadFileForm").on('submit', function (e) {
         success: function (response) {
             $('#uploadFile').prop('disabled', false);
             $('#uploadFile').html('<i class="fa fa-upload"></i> Upload File');
-            console.log(response); return false;
+            //console.log(response); return false;
             var data = JSON.parse(response);
             // response message
             switch (data.status) {

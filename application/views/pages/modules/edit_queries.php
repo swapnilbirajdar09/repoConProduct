@@ -10,7 +10,8 @@ $modifiedtime = new DateTime($queryDetails['status_message'][0]['modified_date']
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Edit Document </h3>
+                <h3>Edit Queries <a class="btn btn btn-sm theme_bg w3-hover-text-grey" href="<?php echo base_url(); ?>modules/raisequery_rfi"> Back to Manage Queries </a></h3>
+                </h3>
             </div>
             <?php
             if ($queryDetails['status_message'][0]['modified_by'] == '') {
@@ -50,7 +51,7 @@ $modifiedtime = new DateTime($queryDetails['status_message'][0]['modified_date']
 
                                     <div class="col-md-6 col-xs-12 w3-margin-bottom">
                                         <label>Query Description(#): </label>
-<!--                                        <input type="number" class="w3-input" name="revision_number" id="revision_number" placeholder="Enter Revision number" min="1" value="<?php //echo $queryDetails['status_message'][0]['query_description'];    ?>" style="border-bottom-color: #CCCCCC" required>-->
+<!--                                        <input type="number" class="w3-input" name="revision_number" id="revision_number" placeholder="Enter Revision number" min="1" value="<?php //echo $queryDetails['status_message'][0]['query_description'];     ?>" style="border-bottom-color: #CCCCCC" required>-->
                                         <textarea class="w3-input w3-border w3-margin-bottom" placeholder="Query Description" name="queryDescription" id="queryDescription" rows="5" cols="50" style="resize: none;" required><?php echo $queryDetails['status_message'][0]['query_description']; ?></textarea>
                                     </div> 
                                     <div class="w3-col l12 w3-center">

@@ -9,7 +9,7 @@ class User_api extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('user/settings_model');
-        $this->load->model('user/userlogin_model')
+        $this->load->model('user/userlogin_model');
     }
 
 //------- user role login api ----//

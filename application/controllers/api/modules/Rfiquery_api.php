@@ -91,18 +91,5 @@ class Rfiquery_api extends REST_Controller {
         }
     }
 
-    public function commentReply_post() {
-        extract($_POST);
-        print_r($_POST);
-        die();
-        $result = $this->rfiquery_model->postComment($replyfor, $comment_posted, $author);
-        print_r($result);
-        die();
-        if ($result) {
-            return $this->response($result, 200);
-        } else {
-            return $this->response(NULL, 404);
-        }
-    }
 
 }

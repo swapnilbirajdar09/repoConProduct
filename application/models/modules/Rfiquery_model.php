@@ -73,26 +73,7 @@ class Rfiquery_model extends CI_Model {
         return $response;
     }
 
-    // post new comment
-    public function postComment($data) {
-        extract($data);
-        // print_r($data);die();
-        $ins_Data = array(
-            'query_id' => base64_decode($token),
-            'response_description' => addslashes($comment_posted),
-            'created_by' => $author,
-            'created_date' => date('Y-m-d H:i:s')
-        );
-        // print_r($ins_Data);die();
-        $this->db->insert('rfi_query_response_tab', $ins_Data);
-        print_r($this->db->_error_message());
-        die();
-        if ($this->db->affected_rows() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+  
 
     public function updateQueryDetails($data) {
         extract($data);
@@ -111,7 +92,7 @@ class Rfiquery_model extends CI_Model {
             return false;
         }
     }
-
+//-------fun for remove image
     public function removeImage($key, $query_id, $author) {
         //extract($data);        
         $sql = "SELECT images FROM rfi_query_tab WHERE query_id='$query_id'";
@@ -147,46 +128,6 @@ class Rfiquery_model extends CI_Model {
             //return $response;
         }
         return $response;
-    }
-
-    // upload portfolio image
-    public function uploadImage($data) {
-        extract($data);
-        $query_id = base64_decode($query_id);
-        $currentFiles = '';
-        $fileArr = array();
-        $sql = "SELECT images FROM rfi_query_tab WHERE query_id='$query_id'";
-        $result_arr = $this->db->query($sql);
-        foreach ($result_arr->result_array() as $key) {
-            $currentFiles = $key['images'];
-        }
-        if ($currentFiles != '' && $currentFiles != '[]') {
-            $fileArr = json_decode($currentFiles);
-            array_push($fileArr, $filepath);
-        } else {
-            $fileArr[] = $filepath;
-        }
-        $json = json_encode($fileArr);
-        $dat = date('Y-m-d H:i:s');
-//        $result = array(
-//            'images' => $json,
-//            'modified_by' => $author,
-//            'modified_date' => $dat
-//        );
-//        //print_r($result);
-//        //die();
-//        $this->db->where('query_id', $query_id);
-//        $this->db->update('rfi_query_tab', $result);
-
-        $sqlsel = "UPDATE rfi_query_tab SET images = '$json',modified_by ='$author',modified_date ='$dat' WHERE query_id = '$query_id'";
-
-        $this->db->query($sqlsel);
-
-        if ($this->db->affected_rows() > 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     // get query comments
