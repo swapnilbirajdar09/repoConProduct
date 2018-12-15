@@ -9,8 +9,15 @@ class User_api extends REST_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('user/settings_model');
+        $this->load->model('user/userlogin_model')
     }
 
+//------- user role login api ----//
+	 public function userrole_login_post() {
+        $data = ($_POST);
+        $result = $this->userlogin_model->userrole_login($data);
+        return $this->response($result);
+    }
     // -----------------------UPDATE EMAIL API----------------------//
 	//-------------------------------------------------------------//
 	public function updateEmail_post(){
