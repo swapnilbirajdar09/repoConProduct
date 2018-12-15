@@ -113,6 +113,27 @@ class Sitecontroller_model extends CI_Model {
         }
     }
 
+    // add new activity function
+    public function addActivity($data){
+        extract($data);
+        $insert_data = array(
+            'activity_name' => $activity,
+            'work_item' => $work_item_selected,
+            'comments' => $activity_comment,
+            'project_id' => $project_id,
+            'created_by' => $author,
+            'created_date' => date('Y-m-d H:i:s')
+        );
+        // print_r($insert_data);die();
+        $this->db->insert('checklist_activity_tab',$insert_data);
+        if($this->db->affected_rows()>0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     // edit document function
     public function updateDocument($data){
         extract($data);

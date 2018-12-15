@@ -43,6 +43,7 @@ class Site_inspection extends CI_Controller {
         return $response;
     }
 
+    // add new work item function
     public function addWitem() {
         extract($_POST);
         // print_r($_FILES);
@@ -96,6 +97,42 @@ class Site_inspection extends CI_Controller {
         curl_close($ch);
         $response = json_decode($output, true);
         return $response;
+    }
+
+    // add new activity in checklist function
+    public function addActivity() {
+        extract($_POST);
+        // print_r($_FILES);
+        $project_id = $this->session->userdata('project_id');
+        $data = $_POST;
+        $data['project_id'] = $project_id;
+
+        $session_name = $this->session->userdata('usersession_name');
+        $session_role = $this->session->userdata('company_admin');
+        if ($session_role == 'company_admin') {
+            $data['author'] = 'Administrator';
+        } else {
+            $data['author'] = $session_name;
+        }
+        
+        // print_r($data);die();
+        $path = base_url();
+        $url = $path . 'api/modules/sitecontroller_api/addActivity';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);        
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $output = curl_exec($ch);
+        //close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        if ($response) {
+            echo '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> Activity added.</div>';
+        } else {
+            echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> Activity was not added successfully.</div>';
+        }
     }
 
     // get last revision number for current project

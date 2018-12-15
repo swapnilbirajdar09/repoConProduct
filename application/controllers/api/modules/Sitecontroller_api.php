@@ -122,6 +122,20 @@ class Sitecontroller_api extends REST_Controller {
         }
     }
 
+    // api to add Activity
+    public function addActivity_post() {
+        $data=$_POST;
+        $result = $this->sitecontroller_model->addActivity($data);
+        if($result)
+        {
+            return $this->response($result, 200);
+        } 
+        else
+        {
+            return $this->response(NULL, 404);
+        }
+    }
+
     // api to update Document
     public function updateDocument_post() {
         $data=$_POST;

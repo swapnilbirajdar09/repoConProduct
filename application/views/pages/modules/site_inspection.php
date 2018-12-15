@@ -1,6 +1,4 @@
 <!-- page content --> 
-<script src="<?php echo base_url(); ?>assets/dropzone/dropzone.js"></script>
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/dropzone/dropzone.css">
 
 <div class="right_col" role="main" ng-app="siteApp" ng-cloak ng-controller="siteCtrl">
   <div class="">
@@ -136,13 +134,16 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2><i class="fa fa-list"></i> All Documents</h2>
+            <h2><i class="fa fa-list"></i> Checklist Timeline</h2>
             <ul class="nav navbar-right panel_toolbox">
               <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
             </ul>
             <div class="clearfix"></div>
           </div>
-          <div class="container x_content"></div>
+          <div class="container x_content">
+            <div class="w3-col l12 w3-margin-top" style="height: 450px;overflow-y: scroll;">
+            </div>
+          </div>
         </div>
       </div>
       <!-- view all document div ends -->

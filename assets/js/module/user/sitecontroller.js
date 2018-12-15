@@ -130,9 +130,9 @@ $("#addWitemForm").on('submit', function(e) {
 return false;  //stop the actual form post !important!
 });
 
-// add new activity in checklist
-$("#addActivityDiv").on('submit', function(e) {
- e.preventDefault(); 
+// add new product
+$("#addChecklistForm").on('submit', function(e) {
+ e.preventDefault();  
  $.ajax({
     url: BASE_URL+"modules/site_inspection/addActivity", // point to server-side PHP script
     data: new FormData(this),
@@ -141,24 +141,22 @@ $("#addActivityDiv").on('submit', function(e) {
     cache: false, // To unable request pages to be cached
     processData: false,
     beforeSend: function(){
-      $('#errWitemMsg').html('<span class="w3-small w3-padding-small theme_text w3-margin-bottom w3-round"><i class="fa fa-circle-o-notch fa-spin w3-large"></i> <b>Adding category...</b></span>');
-      $('#addWitemBtn').attr('disabled',true);
+      $('#btnsubmit').html('<span class="w3-card w3-padding-small theme_text w3-margin-bottom w3-round"><i class="fa fa-spinner fa-spin w3-large"></i> <b>Adding...</b></span>');
     },
     success: function(data){
-      $('#addWitemBtn').removeAttr('disabled');
-      $('#errWitemMsg').html(data);  
-      $('#work_item').val('');
-      $("#allWitemDiv").load(location.href + " #allWitemDiv>*", ""); 
-      $("#addActivityDiv").load(location.href + " #addActivityDiv>*", ""); 
+      $('#formOutput').html(data);
+      $('#btnsubmit').html('<button class="btn w3-button theme_bg" id="addActivityBtn" type="submit"><i class="fa fa-plus"></i> Add Activity </button>');
+
       window.setTimeout(function() {
        $(".alert").fadeTo(500, 0).slideUp(500, function(){
          $(this).remove(); 
        });
-     }, 1500);   
+       location.reload();
+     }, 1500);
     },
     error:function(data){
-     $('#errWitemMsg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
-     $('#addWitemBtn').removeAttr('disabled');
+     $('#formOutput').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
+     $('#btnsubmit').html('<button class="btn w3-button theme_bg" id="addActivityBtn" type="submit"><i class="fa fa-plus"></i> Add Activity </button>');
      window.setTimeout(function() {
        $(".alert").fadeTo(500, 0).slideUp(500, function(){
          $(this).remove(); 
