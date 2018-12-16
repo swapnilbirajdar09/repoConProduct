@@ -107,7 +107,6 @@ if ($role == 'company_admin') {
                                 <!-- <h3>General</h3> -->
                                 <ul class="nav side-menu">
                                     <li><a href="<?php echo base_url(); ?>user_dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
-
                                     <?php
                                     //print_r($features);
                                     if ($features['status'] != 500) {
@@ -128,7 +127,7 @@ if ($role == 'company_admin') {
                                         ?>
                                         <li><span>No Features Available.</span></li>
                                     <?php } ?>
-    <!--                   <li><a href="<?php //echo base_url();        ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>-->
+    <!--                   <li><a href="<?php //echo base_url();         ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>-->
                                 </ul>
                             </div>
                             <div class="menu_section">
@@ -169,7 +168,7 @@ if ($role == 'company_admin') {
                                 </li>
                                 <li class="">
                                     <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                        Select Projects <b><?php //echo $session_name;                              ?>  </b>
+                                        Select Projects <b><?php //echo $session_name;                               ?>  </b>
                                         <span class=" fa fa-angle-down"></span>
                                     </a>
                                     <?php
@@ -210,7 +209,7 @@ if ($role == 'company_admin') {
                                         <span class=" fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-usermenu pull-right">
-<!--                                        <li><a href="<?php echo base_url(); ?>user/user_settings"><i class="fa fa-cog pull-right"></i> Settings</a></li>-->
+    <!--                                        <li><a href="<?php echo base_url(); ?>user/user_settings"><i class="fa fa-cog pull-right"></i> Settings</a></li>-->
                                         <li><a href="<?php echo base_url(); ?>user/userrole_login/logOutUser"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                                     </ul>
                                 </li>                                
