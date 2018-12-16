@@ -84,7 +84,13 @@ class Createuser extends CI_Controller {
         }
         // $project_id = $this->session->userdata('project_id');
         $data['project_id'] = $this->session->userdata('project_id');
-
+        $session_role = $this->session->userdata('role');
+        if ($session_role == 'company_admin') {
+            $data['author'] = 'Administrator';
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $data['author'] = $user_name;
+        }
         $path = base_url();
         $url = $path . 'api/user/Createuser_api/createNewUser';
         $ch = curl_init($url);

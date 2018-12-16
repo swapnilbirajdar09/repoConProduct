@@ -83,8 +83,10 @@ class Settings_model extends CI_Model {
         return $response;
     }
 
-    public function getAllFeatuesForUser($project_id) {
-        $query = "SELECT * FROM user_tab,role_tab WHERE user_tab.role_id = role_tab.role_id AND project_id='$project_id'";
+    public function getAllFeatuesForUser($user_id,$role_id) {
+        $query = "SELECT * FROM user_tab,role_tab WHERE user_tab.role_id = role_tab.role_id "
+                . "AND user_tab.user_id='$user_id' AND user_tab.role_id = '$role_id'";
+        //echo $query;die();
         $result = $this->db->query($query);
         $currentFiles = '';
         $arr = array();
@@ -94,19 +96,20 @@ class Settings_model extends CI_Model {
                 'status_message' => 'No data found.');
         } else {
             foreach ($result->result_array() as $key) {
-                $currentFiles = json_decode($key['features']);
+                //print_r($key);die();
+                $currentFiles = json_decode($key['features_assign']);
             }
+            $feature = [];
 
             foreach ($currentFiles as $key) {
                 $sql = "SELECT * FROM features_tab WHERE feature_id = '$key'";
-                $resultsel = $this->db->query($query);
-
-                $arr [] = $resultsel->result_array();
+                $resultsel = $this->db->query($sql);
+                $feature [] = $resultsel->result_array();
             }
 
             $response = array(
                 'status' => 200,
-                'status_message' => $arr);
+                'status_message' => $feature);
         }
         return $response;
     }

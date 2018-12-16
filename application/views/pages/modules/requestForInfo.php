@@ -89,7 +89,11 @@
                                                     </li>
                                                     <?php
                                                     $user_role = $this->session->userdata('role');
-                                                    $user_name = $this->session->userdata('usersession_name');
+                                                    if ($user_role == 'company_admin') {
+                                                        $user_name = $this->session->userdata('usersession_name');
+                                                    } else {
+                                                        $user_name = $this->session->userdata('user_name');
+                                                    }
                                                     if ($user_role == 'company_admin' || $user_name == $val['created_by']) {
                                                         ?>
                                                         <li><a title="edit query" class="btn btn-xs text-left" href="<?php echo base_url(); ?>modules/raisequery_rfi/edit_query/<?php echo base64_encode($val['query_id']); ?>">Edit Query</a>
@@ -190,7 +194,7 @@
                             <tr>
                                 <td colspan="5" class="w3-center theme_text"><b>No Requests Raised.</b></td>
                             </tr>
-<?php } ?>                       
+                        <?php } ?>                       
                         </tbody>
                     </table>
                 </div>
@@ -200,16 +204,16 @@
 </div>
 <script src="<?php echo base_url(); ?>assets/js/module/user/requestForInfo.js"></script>
 <script>
-                            $(document).ready(function () {
-                                var max_fields = 5;
-                                var wrapper = $("#addedmore_imageDiv");
-                                var add_button = $("#add_moreimage");
-                                var x = 1;
-                                $(add_button).click(function (e) {
-                                    e.preventDefault();
-                                    if (x < max_fields) {
-                                        x++;
-                                        $(wrapper).append('<div>\n\
+                                                                $(document).ready(function () {
+                                                                    var max_fields = 5;
+                                                                    var wrapper = $("#addedmore_imageDiv");
+                                                                    var add_button = $("#add_moreimage");
+                                                                    var x = 1;
+                                                                    $(add_button).click(function (e) {
+                                                                        e.preventDefault();
+                                                                        if (x < max_fields) {
+                                                                            x++;
+                                                                            $(wrapper).append('<div>\n\
                     <div class="w3-col l12 s12 m12 w3-margin-top">\n\
                     <div class="w3-col l6 w3-padding-small">\n\
                     <label>Images:</label>\n\
@@ -222,16 +226,16 @@
                     </a>\n\
                     </div>\n\
                     </div>'); //add input box
-                                    } else {
-                                        $.alert('<label class="w3-label w3-text-red"><i class="fa fa-warning w3-xxlarge"></i> You Reached the maximum limit of adding ' + max_fields + ' fields</label>');   //alert when added more than 4 input fields
-                                    }
-                                });
-                                $(wrapper).on("click", ".delete", function (e) {
-                                    e.preventDefault();
-                                    $(this).parent('div').remove();
-                                    x--;
-                                });
-                            });
+                                                                        } else {
+                                                                            $.alert('<label class="w3-label w3-text-red"><i class="fa fa-warning w3-xxlarge"></i> You Reached the maximum limit of adding ' + max_fields + ' fields</label>');   //alert when added more than 4 input fields
+                                                                        }
+                                                                    });
+                                                                    $(wrapper).on("click", ".delete", function (e) {
+                                                                        e.preventDefault();
+                                                                        $(this).parent('div').remove();
+                                                                        x--;
+                                                                    });
+                                                                });
 </script>
 <script>
     // ----function to preview selected image for profile------//

@@ -1,13 +1,25 @@
 <?php
-////start session     
-$admin_name = $this->session->userdata('usersession_name');
-$project_id = $this->session->userdata('project_id');
+////start session 
 $role = $this->session->userdata('role');
-$company_id = $this->session->userdata('company_id');
-$session_name = '';
-if ($admin_name != '') {
+
+if ($role == 'company_admin') {
+    $admin_name = $this->session->userdata('usersession_name');
+    $project_id = $this->session->userdata('project_id');
+    $company_id = $this->session->userdata('company_id');
+    $session_name = '';
+    if ($admin_name != '') {
 //    $sessionArr = explode('|', $admin_name);
-    $session_name = $admin_name;
+        $session_name = $admin_name;
+    }
+} else {
+    $user_name = $this->session->userdata('user_name');
+    $project_id = $this->session->userdata('project_id');
+    $user_id = $this->session->userdata('user_id');
+    $role = $this->session->userdata('role');
+
+    $sessionArr = explode('/', $role);
+    $role_id = $sessionArr[0];
+    $role_name = $sessionArr[1];
 }
 ?>
 <!DOCTYPE html>
@@ -49,6 +61,8 @@ if ($admin_name != '') {
                         <a href="<?php echo base_url(); ?>user_dashboard" class="site_title" style="padding-left: 15px">Const.Manager</a>
                     </div>
                     <div class="clearfix"></div>
+                    <?php //print_r($features);
+                    ?>
                     <!-- sidebar menu -->
                     <?php if ($role == 'company_admin') { ?>
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
@@ -59,7 +73,7 @@ if ($admin_name != '') {
                                     <li><a href="<?php echo base_url(); ?>user/create_project"><i class="fa fa-plus-circle"></i> Create Project </a></li>
                                     <li><a href="<?php echo base_url(); ?>user/roles"><i class="fa fa-user-secret"></i> Create Role </a></li>
                                     <li><a href="<?php echo base_url(); ?>user/createuser"><i class="fa fa-user"></i> Create User </a></li>
-                                    <li><a href="<?php echo base_url(); ?>modules/site_inspection"><i class="fa fa-check-circle"></i> Site Inspection Controller </a></li>
+                                    <li><a href="<?php echo base_url(); ?>modules/site_inspection"><i class="fa fa-check-circle"></i> Site Inspection </a></li>
                                     <li><a href="<?php echo base_url(); ?>modules/raisequery_rfi"><i class="fa fa-question"></i> Raise Query (RFI) </a></li>
                                     <li><a href="<?php echo base_url(); ?>modules/manage_documents"><i class="fa fa-file"></i> Manage Document </a></li> 
       <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
@@ -86,26 +100,35 @@ if ($admin_name != '') {
                             </a>
                         </div>
                         <!-- /menu footer buttons -->
-                    <?php } else { ?>
+                    <?php } else {
+                        ?>
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">
                                 <!-- <h3>General</h3> -->
                                 <ul class="nav side-menu">
                                     <li><a href="<?php echo base_url(); ?>user_dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
-                                    <!-- <li><a href="<?php echo base_url(); ?>user/create_project"><i class="fa fa-plus-circle"></i> Create Project </a></li>
-                                    <li><a href="<?php echo base_url(); ?>user/roles"><i class="fa fa-user-secret"></i> Create Role </a></li>
-                                    <li><a href="<?php echo base_url(); ?>user/createuser"><i class="fa fa-user"></i> Create User </a></li> -->
-                                    <li><a href="<?php echo base_url(); ?>modules/site_inspection"><i class="fa fa-site-map"></i> Site Inspection Controller </a></li>
-                                    <li><a href="<?php echo base_url(); ?>modules/raisequery_rfi"><i class="fa fa-check"></i> Raise Query(RFI) </a></li>
-                                    <li><a href="<?php echo base_url(); ?>modules/manage_documents"><i class="fa fa-file"></i> Manage Document </a></li> 
-      <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
-                                          <ul class="nav child_menu">
-                                              <li><a href="<?php echo base_url(); ?>materials/addmaterial">Add New Material</a></li>
-                                              <li><a href="<?php echo base_url(); ?>materials/allmaterial">View All Materials</a></li>
-                                          </ul>
-                                      </li>-->
 
-<!--                                    <li><a href="<?php //echo base_url(); ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>-->
+                                    <?php
+                                    //print_r($features);
+                                    if ($features['status'] != 500) {
+                                        foreach ($features['status_message'] as $key) {
+                                            //print_r($key);
+                                            if ($key[0]['feature_name'] == 'Document controller') {
+                                                $symbole = 'check-circle';
+                                            }if ($key[0]['feature_name'] == 'Site Inspection') {
+                                                $symbole = 'file';
+                                            }if ($key[0]['feature_name'] == 'Raise Query') {
+                                                $symbole = 'check';
+                                            }
+                                            ?>
+                                            <li><a href="<?php echo base_url(); ?><?php echo $key[0]['url']; ?>"><i class="fa fa-<?php echo $symbole; ?>"></i> <?php echo $key[0]['feature_name']; ?> </a></li>                                                           
+                                            <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <li><span>No Features Available.</span></li>
+                                    <?php } ?>
+    <!--                   <li><a href="<?php //echo base_url();        ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>-->
                                 </ul>
                             </div>
                             <div class="menu_section">
@@ -126,51 +149,78 @@ if ($admin_name != '') {
                 </div>
             </div>
             <!-- top navigation -->
-            <div class="top_nav">
-                <div class="nav_menu">
-                    <nav>
-                        <div class="nav toggle">
-                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                        </div>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Welcome <b><?php echo $session_name; ?>  </b>
-                                    <span class=" fa fa-angle-down"></span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                    <li><a href="<?php echo base_url(); ?>user/user_settings"><i class="fa fa-cog pull-right"></i> Settings</a></li>
-                                    <li><a href="<?php echo base_url(); ?>login/logoutAdmin"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-                                </ul>
-                            </li>
-                            <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Select Projects <b><?php //echo $session_name;          ?>  </b>
-                                    <span class=" fa fa-angle-down"></span>
-                                </a>
-                                <?php
-                                // print_r($projects);
-                                // $project_id = $this->session->userdata('project_id');
-                                ?>
-                                <ul class="dropdown-menu dropdown-usermenu pull-right">
+            <?php if ($role == 'company_admin') { ?>
+                <div class="top_nav">
+                    <div class="nav_menu">
+                        <nav>
+                            <div class="nav toggle">
+                                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                            </div>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        Welcome <b><?php echo $session_name; ?>  </b>
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                        <li><a href="<?php echo base_url(); ?>user/user_settings"><i class="fa fa-cog pull-right"></i> Settings</a></li>
+                                        <li><a href="<?php echo base_url(); ?>login/logoutAdmin"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                    </ul>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        Select Projects <b><?php //echo $session_name;                              ?>  </b>
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
                                     <?php
-                                    if ($projects['status'] != 500) {
-                                        foreach ($projects['status_message'] as $key) {
+                                    // print_r($projects);
+                                    // $project_id = $this->session->userdata('project_id');
+                                    ?>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                        <?php
+                                        if ($projects['status'] != 500) {
+                                            foreach ($projects['status_message'] as $key) {
+                                                ?>
+                                                <li><a href="<?php echo base_url(); ?>user_dashboard/startSesstionByProjectID?project_id=<?php echo base64_encode($key['project_id']); ?>"><?php echo $key['project_name']; ?></a></li>
+                                                <?php
+                                            }
+                                        } else {
                                             ?>
-                                            <li><a href="<?php echo base_url(); ?>user_dashboard/startSesstionByProjectID?project_id=<?php echo base64_encode($key['project_id']); ?>"><?php echo $key['project_name']; ?></a></li>
-                                            <?php
-                                        }
-                                    } else {
-                                        ?>
-                                        <li><a >No Projects Created.</a></li>
-                                    <?php } ?>
-                                </ul>
-                            </li>
-                        </ul>
-
-                    </nav>
+                                            <li><a >No Projects Created.</a></li>
+                                        <?php } ?>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <?php // print_r($features);
+                            ?>
+                        </nav>
+                    </div>
                 </div>
-            </div>
+            <?php } else { ?>
+                <div class="top_nav">
+                    <div class="nav_menu">
+                        <nav>
+                            <div class="nav toggle">
+                                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                            </div>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        Welcome <b><?php echo $user_name; ?>  </b>
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+<!--                                        <li><a href="<?php echo base_url(); ?>user/user_settings"><i class="fa fa-cog pull-right"></i> Settings</a></li>-->
+                                        <li><a href="<?php echo base_url(); ?>user/userrole_login/logOutUser"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                                    </ul>
+                                </li>                                
+                            </ul>
+                            <?php // print_r($features);
+                            ?>
+                        </nav>
+                    </div>
+                </div>
+            <?php } ?>
             <!-- /top navigation -->
 
             <!--       </div>

@@ -44,10 +44,10 @@ class Projectuser_model extends CI_Model {
             $role_name = $roles[1];
             $sql = "INSERT INTO user_tab(project_id,role_id,role_name,"
                     . "first_name,last_name,user_email,user_mobile,"
-                    . "user_name,password,created_date)"
+                    . "user_name,password,created_date,created_by)"
                     . "VALUES('$project_id','$role_id','$role_name','" . addslashes($userFirstName) . "',"
                     . "'" . addslashes($userLastName) . "',"
-                    . "'$userEmail','$user_mobile','$username','$userPassword',NOW())";
+                    . "'$userEmail','$user_mobile','$username','$userPassword',NOW(),'$author')";
             if ($this->db->query($sql)) {
                 $emailsend = Projectuser_model::sendEmail($project_name, $userFirstName, $role_name, $userLastName, $userEmail, $username, $userPassword);
                 //return TRUE;
@@ -154,8 +154,8 @@ class Projectuser_model extends CI_Model {
              $profile_key = substr(base64_encode($parent_id), 0, 4);
              $project_key = 'PRODUCT#'. $profile_key;
             //echo $project_key ;die();
-        $sql = "INSERT INTO project_tab(company_id,project_name,project_description,project_key)
-                 VALUES('$company_id','".addslashes($projectName)."','".addslashes($projectDesc)."','$project_key')";
+        $sql = "INSERT INTO project_tab(company_id,project_name,project_description,project_key,created_by,created_date)
+                 VALUES('$company_id','".addslashes($projectName)."','".addslashes($projectDesc)."','$project_key','$author',NOW())";
 
         if ($this->db->query($sql)) {
             $response = array(

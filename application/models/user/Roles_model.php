@@ -42,8 +42,8 @@ class Roles_model extends CI_Model {
         //print_r($data);die();
         $role_name = strtoupper($role_name);
         //$json = json_encode($features);
-        $sql = "INSERT INTO role_tab(project_id,role_name,features_assign,created_date)"
-                . "VALUES('$project_id','" . addslashes($role_name) . "','$features',NOW())";
+        $sql = "INSERT INTO role_tab(project_id,role_name,features_assign,created_date,created_by)"
+                . "VALUES('$project_id','" . addslashes($role_name) . "','$features',NOW(),'$author')";
         if ($this->db->query($sql)) {
             return TRUE;
         } else {

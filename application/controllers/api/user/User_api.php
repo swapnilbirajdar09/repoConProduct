@@ -54,7 +54,7 @@ class User_api extends REST_Controller {
         
         public function getAllFeatuesForUser_get(){
             extract($_GET);
-            $result = $this->settings_model->getAllFeatuesForUser($project_id);
+            $result = $this->settings_model->getAllFeatuesForUser($user_id,$role_id);
             return $this->response($result);
         }
 }

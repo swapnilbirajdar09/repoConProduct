@@ -7,7 +7,7 @@ class Userrole_login extends CI_Controller {
     // Login controller
     public function __construct() {
         parent::__construct();
-        
+
         // load common model
         $this->load->model('user/userlogin_model');
     }
@@ -16,10 +16,10 @@ class Userrole_login extends CI_Controller {
     public function index() {
         //start session     
         $userrole_name = $this->session->userdata('user_name');
-         $user_id = $this->session->userdata('user_id');
-         $role = $this->session->userdata('role');
-         $project_id = $this->session->userdata('project_id');
-        if ($userrole_name != '' && $user_id !='' && $role !='' && $project_id !='') {
+        $user_id = $this->session->userdata('user_id');
+        $role = $this->session->userdata('role');
+        $project_id = $this->session->userdata('project_id');
+        if ($userrole_name != '' && $user_id != '' && $role != '' && $project_id != '') {
             //     //check session variable set or not, otherwise logout
             redirect('user_dashboard');
         }
@@ -47,7 +47,7 @@ class Userrole_login extends CI_Controller {
         $response_json = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response_json, true);
-        //print_r($response['status']);die();
+        //print_r($response_json);die();
         if ($response['status'] == 500) {
             // failure scope
             echo '<p class="w3-red w3-padding-small">Sorry, your credentials are incorrect!</p>';
@@ -56,24 +56,24 @@ class Userrole_login extends CI_Controller {
             //----create session array--------//
             $session_data = array(
                 'project_id' => $response['project_id'],
-                'user_id' =>$response['user_id'],
-                'role'  =>  $response['role'],
+                'user_id' => $response['user_id'],
+                'role' => $response['role'],
                 'user_name' => $response['userrole_name']
-               // 'company_id' => $response['company_id']
+                    // 'company_id' => $response['company_id']
             );
             //start session of user if login success
             $this->session->set_userdata($session_data);
-           // redirect('user_dashboard');
+            // redirect('user_dashboard');
             echo '200';
             //echo '<p class="w3-green w3-padding-small">Login successfull! Welcome Admin.</p>';
         }
         //print_r($result);
     }
 
-    public function logoutAdmin() {
+    public function logOutUser() {
         //start session		
-        $admin_name = $this->session->userdata('user_name');
-        
+        $user_name = $this->session->userdata('user_name');
+
         //if logout success then destroy session and unset session variables
         $this->session->unset_userdata(array('user_name'));
         $this->session->sess_destroy();

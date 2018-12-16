@@ -8,22 +8,68 @@ class Raisequery_rfi extends CI_Controller {
     public function __construct() {
         parent::__construct();
         // load common model
-        $admin_name = $this->session->userdata('usersession_name');
-        if ($admin_name == '') {
-            redirect('Login');
+        $role = $this->session->userdata('role');
+
+        if ($role == 'company_admin') {
+            $admin_name = $this->session->userdata('usersession_name');
+            if ($admin_name == '') {
+//     //check session variable set or not, otherwise logout
+                redirect('login');
+            }
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $user_id = $this->session->userdata('user_id');
+            $project_id = $this->session->userdata('project_id');
+            $role = $this->session->userdata('role');
+            $sessionArr = explode('/', $role);
+            $role_id = $sessionArr[0];
+            $role_name = $sessionArr[1];
+
+            if ($user_name == '') {
+//     //check session variable set or not, otherwise logout
+                redirect('user/userrole_login');
+            }
         }
         $this->load->model('modules/query_model');
     }
 
     // main index function
     public function index() {
-        $data['queries'] = Raisequery_rfi::getAllQueries();
-        $data['projects'] = Raisequery_rfi::getAllprojects();
+        $role = $this->session->userdata('role');
 
+        if ($role == 'company_admin') {
+            $data['queries'] = Raisequery_rfi::getAllQueries();
+            $data['projects'] = Raisequery_rfi::getAllprojects();
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $user_id = $this->session->userdata('user_id');
+            $project_id = $this->session->userdata('project_id');
+            $role = $this->session->userdata('role');
+            $sessionArr = explode('/', $role);
+            $role_id = $sessionArr[0];
+            $role_name = $sessionArr[1];
+            $data['features'] = Raisequery_rfi::getAllFeatuesForUser($user_id, $role_id);
+            $data['queries'] = Raisequery_rfi::getAllQueries();
+        }
         $this->load->view('includes/header', $data);
         $this->load->view('pages/modules/requestForInfo', $data);
         $this->load->view('includes/footer');
     }
+
+    public function getAllFeatuesForUser($user_id, $role_id) {
+        $path = base_url();
+        $url = $path . 'api/user/User_api/getAllFeatuesForUser?user_id=' . $user_id . '&role_id=' . $role_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
+    }
+
 //-------------fun for ge all projects
     public function getAllprojects() {
         $company_id = $this->session->userdata('company_id');
@@ -89,7 +135,12 @@ class Raisequery_rfi extends CI_Controller {
         } else {
             $data['images'] = json_encode($imageArr);
         }
-        $data['created_by'] = $this->session->userdata('usersession_name');
+        $user_role = $this->session->userdata('role');
+        if ($user_role == 'company_admin') {
+            $data['created_by'] = $this->session->userdata('usersession_name');
+        } else {
+            $data['created_by'] = $this->session->userdata('user_name');
+        }
         //print_r($data);die();
         //$header = array('user_id' =>  $user_id);
         $path = base_url();
@@ -209,6 +260,7 @@ class Raisequery_rfi extends CI_Controller {
         }
         echo json_encode($response);
     }
+
 //---------fun for edit query page view
     public function edit_query($param = '') {
         $query_id = base64_decode($param);
@@ -227,8 +279,24 @@ class Raisequery_rfi extends CI_Controller {
         curl_close($ch);
         $response = json_decode($output, true);
 
-        $data['queryDetails'] = $response;
-        $this->load->view('includes/header');
+        $role = $this->session->userdata('role');
+
+        if ($role == 'company_admin') {
+            $data['projects'] = Raisequery_rfi::getAllprojects();
+            $data['queryDetails'] = $response;
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $user_id = $this->session->userdata('user_id');
+            $project_id = $this->session->userdata('project_id');
+            $role = $this->session->userdata('role');
+            $sessionArr = explode('/', $role);
+            $role_id = $sessionArr[0];
+            $role_name = $sessionArr[1];
+            $data['features'] = Raisequery_rfi::getAllFeatuesForUser($user_id, $role_id);
+            $data['queryDetails'] = $response;
+        }
+
+        $this->load->view('includes/header', $data);
         $this->load->view('pages/modules/edit_queries', $data);
         $this->load->view('includes/footer');
     }
@@ -243,7 +311,8 @@ class Raisequery_rfi extends CI_Controller {
         if ($session_role == 'company_admin') {
             $data['author'] = 'Administrator';
         } else {
-            $data['author'] = $session_name;
+            $user_name = $this->session->userdata('user_name');
+            $data['author'] = $user_name;
         }
 
         $path = base_url();
@@ -282,7 +351,8 @@ class Raisequery_rfi extends CI_Controller {
         if ($session_role == 'company_admin') {
             $data['author'] = 'Administrator';
         } else {
-            $data['author'] = $session_name;
+            $user_name = $this->session->userdata('user_name');
+            $data['author'] = $user_name;
         }
 
         $path = base_url();
@@ -328,7 +398,8 @@ class Raisequery_rfi extends CI_Controller {
             if ($session_role == 'company_admin') {
                 $data['author'] = 'Administrator';
             } else {
-                $data['author'] = $session_name;
+                $user_name = $this->session->userdata('user_name');
+                $data['author'] = $user_name;
             }
             $path = base_url();
             $url = $path . 'api/modules/rfiquery_api/removeImage';
@@ -358,6 +429,7 @@ class Raisequery_rfi extends CI_Controller {
             echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> Image not found.</div>';
         }
     }
+
 //------------fun for upload image
     public function uploadImage() {
         extract($_POST);
@@ -368,7 +440,8 @@ class Raisequery_rfi extends CI_Controller {
         if ($session_role == 'company_admin') {
             $data['author'] = 'Administrator';
         } else {
-            $data['author'] = $session_name;
+            $user_name = $this->session->userdata('user_name');
+            $data['author'] = $user_name;
         }
         $filepath = '';
 

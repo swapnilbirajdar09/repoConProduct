@@ -23,8 +23,13 @@ class User_dashboard extends CI_Controller {
         } else {
             $user_id = $this->session->userdata('user_id');
             $project_id = $this->session->userdata('project_id');
+            $role = $this->session->userdata('role');
+            $sessionArr = explode('/', $role);
+            $role_id = $sessionArr[0];
+            $role_name = $sessionArr[1];
 
-            $data['features'] = User_dashboard::getAllFeatuesForUser($user_id);
+
+            $data['features'] = User_dashboard::getAllFeatuesForUser($user_id,$role_id);
         }
         $this->load->view('includes/header', $data);
         $this->load->view('pages/dashboard', $data);
@@ -46,9 +51,9 @@ class User_dashboard extends CI_Controller {
         return $response;
     }
 
-    public function getAllFeatuesForUser($project_id) {
+    public function getAllFeatuesForUser($user_id,$role_id) {
         $path = base_url();
-        $url = $path . 'api/user/User_api/getAllFeatuesForUser?project_id=' . $project_id;
+        $url = $path . 'api/user/User_api/getAllFeatuesForUser?user_id=' . $user_id.'&role_id='.$role_id;
         //create a new cURL resource
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPGET, true);

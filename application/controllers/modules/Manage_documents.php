@@ -4,36 +4,83 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Manage_documents extends CI_Controller {
 
-    // Addproduct controller
+// Addproduct controller
     public function __construct() {
         parent::__construct();
-        // load common model
-        // $this->load->model('modules/product_model');
-        $admin_name = $this->session->userdata('usersession_name');
-        if ($admin_name == '') {
-            //     //check session variable set or not, otherwise logout
-            redirect('login');
+// load common model
+// $this->load->model('modules/product_model');
+        $role = $this->session->userdata('role');
+
+        if ($role == 'company_admin') {
+            $admin_name = $this->session->userdata('usersession_name');
+            if ($admin_name == '') {
+//     //check session variable set or not, otherwise logout
+                redirect('login');
+            }
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $user_id = $this->session->userdata('user_id');
+            $project_id = $this->session->userdata('project_id');
+            $role = $this->session->userdata('role');
+            $sessionArr = explode('/', $role);
+            $role_id = $sessionArr[0];
+            $role_name = $sessionArr[1];
+
+            if ($user_name == '') {
+//     //check session variable set or not, otherwise logout
+                redirect('user/userrole_login');
+            }
         }
     }
 
-    // main index function
+// main index function
     public function index() {
-        $data['allDocument_types'] = Manage_documents::getDocumentTypes();
-        $data['lastRevision_no'] = Manage_documents::getlastRevision();
-        $data['allDocuments'] = Manage_documents::getAllDocuments();
-        // print_r($data);
-        $data['projects'] = Manage_documents::getAllprojects();
+        $role = $this->session->userdata('role');
 
+        if ($role == 'company_admin') {
+
+            $data['allDocument_types'] = Manage_documents::getDocumentTypes();
+            $data['lastRevision_no'] = Manage_documents::getlastRevision();
+            $data['allDocuments'] = Manage_documents::getAllDocuments();
+// print_r($data);
+            $data['projects'] = Manage_documents::getAllprojects();
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $user_id = $this->session->userdata('user_id');
+            $project_id = $this->session->userdata('project_id');
+            $role = $this->session->userdata('role');
+            $sessionArr = explode('/', $role);
+            $role_id = $sessionArr[0];
+            $role_name = $sessionArr[1];
+            $data['features'] = Manage_documents::getAllFeatuesForUser($user_id, $role_id);
+            $data['lastRevision_no'] = Manage_documents::getlastRevision();
+            $data['allDocuments'] = Manage_documents::getAllDocuments();
+            $data['allDocument_types'] = Manage_documents::getDocumentTypes();
+        }
         $this->load->view('includes/header', $data);
         $this->load->view('pages/modules/manage_documents', $data);
         $this->load->view('includes/footer');
+    }
+
+    public function getAllFeatuesForUser($user_id, $role_id) {
+        $path = base_url();
+        $url = $path . 'api/user/User_api/getAllFeatuesForUser?user_id=' . $user_id . '&role_id=' . $role_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
     }
 
     public function getAllprojects() {
         $company_id = $this->session->userdata('company_id');
         $path = base_url();
         $url = $path . 'api/user/Role_api/getAllProjects?company_id=' . $company_id;
-        //create a new cURL resource
+//create a new cURL resource
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPGET, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -46,19 +93,22 @@ class Manage_documents extends CI_Controller {
 
     public function upload() {
         extract($_POST);
-        // print_r($_FILES);
-        $project_id = '1';
+// print_r($_FILES);
+        $project_id = $this->session->userdata('project_id');
         $data = $_POST;
         $data['project_id'] = $project_id;
-
         $session_name = $this->session->userdata('usersession_name');
+
         $session_role = $this->session->userdata('company_admin');
         if ($session_role == 'company_admin') {
+
             $data['author'] = 'Administrator';
         } else {
-            $data['author'] = $session_name;
+            $user_name = $this->session->userdata('user_name');
+
+            $data['author'] = $user_name;
         }
-        // validate fields
+// validate fields
         if ($document_type == '0') {
             $response = array(
                 'status' => 'validation',
@@ -87,10 +137,10 @@ class Manage_documents extends CI_Controller {
                 $uploadPath = 'assets/modules/documents/';
                 $config['upload_path'] = $uploadPath;
                 $config['allowed_types'] = '*';
-                //allowed types of images           
+//allowed types of images           
                 $config['overwrite'] = FALSE;
                 $this->load->library('upload', $config);
-                //load upload file config.
+//load upload file config.
                 $this->upload->initialize($config);
 
                 if ($this->upload->do_upload('userFile')) {
@@ -115,7 +165,7 @@ class Manage_documents extends CI_Controller {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // authenticate API
+// authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -123,7 +173,7 @@ class Manage_documents extends CI_Controller {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         $output = curl_exec($ch);
-        //close cURL resource
+//close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
 
@@ -144,72 +194,72 @@ class Manage_documents extends CI_Controller {
         }
     }
 
-    // get document types
+// get document types
     public function getDocumentTypes() {
         $path = base_url();
         $url = $path . 'api/modules/document_api/getDocumentTypes';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // authenticate API
+// authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPGET, 1);
         $output = curl_exec($ch);
-        //close cURL resource
+//close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
         return $response;
     }
 
-    // get last revision number for current project
+// get last revision number for current project
     public function getlastRevision() {
-        $project_id = '1';
+        $project_id = $this->session->userdata('project_id');
         $path = base_url();
         $url = $path . 'api/modules/document_api/getlastRevision?project_id=' . $project_id;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // authenticate API
+// authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPGET, 1);
         $output = curl_exec($ch);
-        //close cURL resource
+//close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
         return $response;
     }
 
-    // get associated users for project
+// get associated users for project
     public function getUserAssoc() {
-        $project_id = '1';
+        $project_id = $this->session->userdata('project_id');
         $path = base_url();
         $url = $path . 'api/modules/document_api/getUserAssoc?project_id=' . $project_id;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // authenticate API
+// authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPGET, 1);
         $output = curl_exec($ch);
-        //close cURL resource
+//close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
         return $response;
     }
 
-    // edit document fucntion
+// edit document fucntion
     public function updateDocument() {
         extract($_POST);
-        // print_r($_FILES);
+// print_r($_FILES);
         $data = $_POST;
         $session_name = $this->session->userdata('usersession_name');
         $session_role = $this->session->userdata('role');
@@ -218,7 +268,7 @@ class Manage_documents extends CI_Controller {
         } else {
             $data['author'] = $session_name;
         }
-        // validate fields
+// validate fields
         if ($document_type == '0') {
             $response = array(
                 'status' => 'validation',
@@ -234,7 +284,7 @@ class Manage_documents extends CI_Controller {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // authenticate API
+// authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -242,7 +292,7 @@ class Manage_documents extends CI_Controller {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         $output = curl_exec($ch);
-        //close cURL resource
+//close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
 
@@ -263,7 +313,7 @@ class Manage_documents extends CI_Controller {
         }
     }
 
-    // upload more files in document edit page
+// upload more files in document edit page
     public function uploadFile() {
         extract($_POST);
         $data = $_POST;
@@ -273,7 +323,9 @@ class Manage_documents extends CI_Controller {
         if ($session_role == 'company_admin') {
             $data['author'] = 'Administrator';
         } else {
-            $data['author'] = $session_name;
+            $user_name = $this->session->userdata('user_name');
+
+            $data['author'] = $user_name;
         }
         $filepath = '';
 
@@ -309,13 +361,13 @@ class Manage_documents extends CI_Controller {
             }
         }
         $data['filepath'] = $filepath;
-        // print_r($data);die();
+// print_r($data);die();
         $path = base_url();
         $url = $path . 'api/modules/document_api/uploadFile';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // authenticate API
+// authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -323,7 +375,7 @@ class Manage_documents extends CI_Controller {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         $output = curl_exec($ch);
-        //close cURL resource
+//close cURL resource
         curl_close($ch);
         $result = json_decode($output, true);
 
@@ -355,14 +407,16 @@ class Manage_documents extends CI_Controller {
             if ($session_role == 'company_admin') {
                 $data['author'] = 'Administrator';
             } else {
-                $data['author'] = $session_name;
+                $user_name = $this->session->userdata('user_name');
+
+                $data['author'] = $user_name;
             }
             $path = base_url();
             $url = $path . 'api/modules/document_api/removeFile';
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
 
-            // authenticate API
+// authenticate API
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
             curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -370,7 +424,7 @@ class Manage_documents extends CI_Controller {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
             $output = curl_exec($ch);
-            //close cURL resource
+//close cURL resource
             curl_close($ch);
             $result = json_decode($output, true);
 // print_r($result);die();
@@ -388,49 +442,49 @@ class Manage_documents extends CI_Controller {
         }
     }
 
-    // get associated roles for project
+// get associated roles for project
     public function getRolesAssoc() {
-        $project_id = '1';
+        $project_id = $this->session->userdata('project_id');
         $path = base_url();
         $url = $path . 'api/modules/document_api/getRolesAssoc?project_id=' . $project_id;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // authenticate API
+// authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPGET, 1);
         $output = curl_exec($ch);
-        //close cURL resource
+//close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
         return $response;
     }
 
-    // get all documents for project
+// get all documents for project
     public function getAllDocuments() {
-        $project_id = '1';
+        $project_id = $this->session->userdata('project_id');
         $path = base_url();
         $url = $path . 'api/modules/document_api/getAllDocuments?project_id=' . $project_id;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // authenticate API
+// authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPGET, 1);
         $output = curl_exec($ch);
-        //close cURL resource
+//close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
         return $response;
     }
 
-    // remove document
+// remove document
     public function removeDoc() {
         extract($_GET);
         $path = base_url();
@@ -438,14 +492,14 @@ class Manage_documents extends CI_Controller {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // authenticate API
+// authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPGET, 1);
         $output = curl_exec($ch);
-        //close cURL resource
+//close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
         if ($response == true) {
@@ -455,27 +509,45 @@ class Manage_documents extends CI_Controller {
         }
     }
 
-    // fucntion to display edit document page
+// fucntion to display edit document page
     public function edit_document($param = '') {
         $path = base_url();
         $url = $path . 'api/modules/document_api/getDocumentDetail?doc_id=' . $param;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // authenticate API
+// authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPGET, 1);
         $output = curl_exec($ch);
-        //close cURL resource
+//close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
 
-        $data['allDocument_types'] = Manage_documents::getDocumentTypes();
-        $data['documentDetails'] = $response;
-        $this->load->view('includes/header');
+        $role = $this->session->userdata('role');
+
+        if ($role == 'company_admin') {
+            $data['allDocument_types'] = Manage_documents::getDocumentTypes();
+            $data['documentDetails'] = $response;
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $user_id = $this->session->userdata('user_id');
+            $project_id = $this->session->userdata('project_id');
+            $role = $this->session->userdata('role');
+            $sessionArr = explode('/', $role);
+            $role_id = $sessionArr[0];
+            $role_name = $sessionArr[1];
+            $data['features'] = Manage_documents::getAllFeatuesForUser($user_id, $role_id);
+
+            $data['allDocument_types'] = Manage_documents::getDocumentTypes();
+            $data['documentDetails'] = $response;
+        }
+
+
+        $this->load->view('includes/header',$data);
         $this->load->view('pages/modules/edit_documents', $data);
         $this->load->view('includes/footer');
     }

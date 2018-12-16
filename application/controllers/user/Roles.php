@@ -62,7 +62,13 @@ class Roles extends CI_Controller {
         $data = $_POST;
         // $project_id = $this->session->userdata('project_id');
         $data['project_id'] = $this->session->userdata('project_id');
-
+        $session_role = $this->session->userdata('role');
+        if ($session_role == 'company_admin') {
+            $data['author'] = 'Administrator';
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $data['author'] = $user_name;
+        }
         $data['features'] = json_encode($features);
         $path = base_url();
         $url = $path . 'api/user/Role_api/saveRoles';
