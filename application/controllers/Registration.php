@@ -41,7 +41,77 @@ class Registration extends CI_Controller {
     public function registerUser() {
         extract($_POST);
         $data = $_POST;
+       // print_r($data);
+        if($user_fullname =='')
+        {
+        	$response = array(
+                'status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px">
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><b>Error:</b> Please Enter Your Name!</strong> 
+            </div>'
+                    //'<b>Error:</b> You Have Not Registered Successfully!'
+            );
+            echo json_encode($response);
+            die();
+        }
 
+        if($user_email == '')
+        {
+        	$response = array(
+                'status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px">
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><b>Error:</b> Please Enter Your Email!</strong> 
+            </div>'
+                    //'<b>Error:</b> You Have Not Registered Successfully!'
+            );
+            echo json_encode($response);
+            die();
+        }
+
+        if($company_name == '')
+        {
+        	$response = array(
+                'status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px">
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><b>Error:</b> Please Enter Your Company Name!</strong> 
+            </div>'
+                    //'<b>Error:</b> You Have Not Registered Successfully!'
+            );
+            echo json_encode($response);
+            die();
+        }
+
+        if($user_username == '')
+        {
+        	$response = array(
+                'status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px">
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><b>Error:</b> Please Enter Your Username!</strong> 
+            </div>'
+                    //'<b>Error:</b> You Have Not Registered Successfully!'
+            );
+            echo json_encode($response);
+            die();
+        }
+
+        if($user_password == '')
+        {
+        	$response = array(
+                'status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px">
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><b>Error:</b> Please Enter Your Password!</strong> 
+            </div>'
+                    //'<b>Error:</b> You Have Not Registered Successfully!'
+            );
+            echo json_encode($response);
+            die();
+        }
+        
         $countries = explode("/", $country);
         $countryName = $countries[0]; // piece1
         $countryId = $countries[1]; // piece2
@@ -54,7 +124,7 @@ class Registration extends CI_Controller {
             </div>'
                     //'<b>Error:</b> You Have Not Registered Successfully!'
             );
-            echo $response;
+            echo json_encode($response);
             die();
         }
 
@@ -71,7 +141,7 @@ class Registration extends CI_Controller {
             </div>'
                     //'<b>Error:</b> You Have Not Registered Successfully!'
             );
-            echo $response;
+            echo json_encode($response);
             die();
         }
         if ($city == '0') {
@@ -83,7 +153,8 @@ class Registration extends CI_Controller {
             </div>'
                     //'<b>Error:</b> You Have Not Registered Successfully!'
             );
-            echo $response;
+            echo json_encode($response);
+            die();
         }
         $path = base_url();
         $url = $path . 'api/user/Registeruser_api/registerUser';
@@ -94,7 +165,7 @@ class Registration extends CI_Controller {
         $response_json = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response_json, true);
-       // echo $response_json;die();
+       //echo $response_json;die();
 
        if ($response =='500')
        {
@@ -106,6 +177,8 @@ class Registration extends CI_Controller {
             </div>'
                     //'<b>Error:</b> You Have Not Registered Successfully!'
             );
+        echo json_encode($response);
+        die();
        }
 
 

@@ -40,7 +40,7 @@
 										 <input type="number" maxlength="10" min="0" id="user_mobile" name="user_mobile" placeholder="Enter Your Mobile No" required>
 									</div>
 									<div class="col-lg-6">
-										 <input type="text"  id="company_name" ng-model="company_name" name="company_name" placeholder="Enter Your product name" required>
+										 <input type="text"  id="company_name" ng-model="company_name" name="company_name" placeholder="Enter Your Company name" required>
 									</div>
 									<div class="col-lg-12">
 										<textarea  id="user_address" ng-model="user_address" name="user_address" placeholder="Enter Your Address"></textarea>
@@ -87,12 +87,12 @@
 
 									<div class="col-lg-12" style="text-align:center;float:center">
 									<button id="register" class="btn btn-primary btn-lg" style="text-align:center;margin:10px;" type="button" > Register </button>
-								</div>
+								   </div>
 								</div>
 				            </form>
 				            <div class="w3-col l12 w3-margin-left w3-padding-small w3-center" style="margin:10px;" id="message"></div>
 				         
-        </div>
+       					 </div>
 <div class="google-map"></div>
 <script type="text/javascript">
     $(function () {
