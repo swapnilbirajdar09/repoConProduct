@@ -62,7 +62,7 @@
                                 <br />
 
                                 <div>
-                                   
+
                                     <p>©2018 All Rights Reserved | Powered by <a target="_blank" href="https://bizmo-tech.com">Bizmo Technologies</a></p>
                                 </div>
                             </div>
@@ -126,11 +126,11 @@
                             headers: {'Content-Type': 'application/json'},
                             data: JSON.stringify({username: $scope.username, password: $scope.password})
                         }).then(function (data) {
-                        	//alert(data);
+                            //alert(data);
                             if (data.data == 200) {
                                 //alert('got');
                                 $scope.message = '<p class="w3-green w3-padding-small">Login Successfull! Welcome Admin.</p>';
-                              $window.location.href = BASE_URL + 'user_dashboard';
+                                $window.location.href = BASE_URL + 'user_dashboard';
                             } else {
                                 $scope.message = data.data;
                             }

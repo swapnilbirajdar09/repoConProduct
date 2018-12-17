@@ -464,8 +464,19 @@
                                                 <div class="desc w3-medium"><i class="fa fa-check-circle"></i> <?php echo $key['activity_name']; ?></div>
                                                 <div class="desc"><?php echo $key['comments']; ?></div>
                                                 <div class="desc">
+                                                    <?php
+                                                    $user_role = $this->session->userdata('role');
+                                                    if ($user_role == 'company_admin') {
+                                                        $user_name = $this->session->userdata('usersession_name');
+                                                    } else {
+                                                        $user_name = $this->session->userdata('user_name');
+                                                    }
+                                                    if ($user_role == 'company_admin' || $user_name == $key['created_by']) {
+                                                        ?>
                                                     <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" href="<?php echo base_url(); ?>modules/site_inspection/edit_checklist/<?php echo base64_encode($key['activity_id']); ?>"><i class="fa fa-edit"></i> Edit</a>
+                                                    
                                                     <a class="btn btn-sm w3-text-grey w3-hover-text-black" id="delBtn_<?php echo $key['activity_id']; ?>" style="padding: 2px 5px;background-color: #DDDDDD" onclick="removeActivity('<?php echo base64_encode($key['activity_id']); ?>', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-trash"></i> Delete</a>
+                                                    <?php }?>
                                                 </div>
                                             </div>
                                         </li>

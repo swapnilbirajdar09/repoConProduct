@@ -169,7 +169,7 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="text-center">
-                                                    <a tabindex="5" class="forgot-password">Forgot Password?</a>
+                                                    <a tabindex="5" href="<?php echo base_url(); ?>admin_forgetpassword" class="forgot-password">Forgot Password?</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -198,7 +198,7 @@
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="text-center">
-                                                    <a tabindex="5" class="forgot-password">Forgot Password?</a>
+                                                    <a tabindex="5" href="<?php echo base_url(); ?>user_forgetpassword" class="forgot-password">Forgot Password?</a>
                                                 </div>
                                             </div>
                                         </div>
