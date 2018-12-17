@@ -45,7 +45,7 @@
 									<div class="col-lg-12">
 										<textarea  id="user_address" ng-model="user_address" name="user_address" placeholder="Enter Your Address"></textarea>
 									</div>
-									<div class="col-lg-6">
+									<div class="col-lg-6" style="margin-bottom:15px;">
 									<select name="country" id="country" class="form-control selectpicker" onchange="getCountryState();" data-placeholder="Choose country" tabindex="2" data-hide-disabled="true">
                                     <option value="0">Choose country</option>
                                     <?php for ($i = 0; $i < count($country['status_message']); $i++) { ?>
@@ -68,7 +68,7 @@
 									<div class="col-lg-6">
 										  <input type="number"  id="postal_code" ng-model="postal_code" name="postal_code" placeholder="Enter Postal Code">
 									</div>
-									<div class="col-lg-6">
+									<div class="col-lg-6" style="margin-bottom:15px;">
 									<select id="package" name="package" class="form-control form-control selectpicker" data-hide-disabled="true">
                                     <option value="0">Free</option>
                                     <option value="6">6 Months</option>
@@ -79,14 +79,15 @@
 										<input type="text" class="form-control" id="user_username" name="user_username" placeholder="Enter username" required>
 									</div>
 									<div class="col-lg-6">
-										 <input type="text" class="form-control" id="user_password" name="user_password" placeholder="Enter password " required>
+										 <input type="password" class="form-control" id="user_password" name="user_password" placeholder="Enter password " required>
 									</div>
 									<div class="col-lg-6">
-										<input type="text" class="form-control" onkeyup="checkPassword();" id="confPassword" name="confPassword" placeholder="Enter confirm password" required>
+										<input type="password" class="form-control" onkeyup="checkPassword();" id="confPassword" name="confPassword" placeholder="Enter confirm password" required>
 									</div>
 
-									
-									<button id="register" class="btn btn-primary btn-lg" style="margin-left:500px" type="button" > Register </button>
+									<div class="col-lg-12" style="text-align:center;float:center">
+									<button id="register" class="btn btn-primary btn-lg" style="text-align:center;margin:10px;" type="button" > Register </button>
+								</div>
 								</div>
 				            </form>
 				            <div class="w3-col l12 w3-margin-left w3-padding-small w3-center" style="margin:10px;" id="message"></div>
