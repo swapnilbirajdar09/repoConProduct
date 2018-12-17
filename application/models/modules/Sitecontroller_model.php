@@ -17,40 +17,16 @@ class Sitecontroller_model extends CI_Model {
         }
     }
 
-    // get last revision number of document uploaded for this project
-    public function lastRevision($project_id){
-        $sql = "SELECT revision_no FROM document_tab WHERE project_id='$project_id' ORDER BY document_id DESC LIMIT 1";
-        $result = $this->db->query($sql);
-        if ($result->num_rows() <= 0) {
-            return false;
-        } else {
-            foreach ($result->result_array() as $key) {
-                return $key['revision_no'];
-            }
-        }
-    }
-
-    // get users asssociated with this project
-    public function getUserAssoc($project_id){
-        $sql = "SELECT * FROM user_tab,role_tab WHERE user_tab.role_id=role_tab.role_id AND role_tab.project_id='$project_id' ORDER BY role_tab.role_id";
+    // get all activites
+    public function getAllActivity($project_id) {
+        $sql = "SELECT * FROM checklist_activity_tab WHERE project_id='$project_id' ORDER BY activity_id DESC";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             return false;
         } else {
             return $result->result_array();
         }
-    }
-
-    // get roles asssociated with this project
-    public function getRolesAssoc($project_id){
-        $sql = "SELECT * FROM role_tab WHERE project_id='$project_id'";
-        $result = $this->db->query($sql);
-        if ($result->num_rows() <= 0) {
-            return false;
-        } else {
-            return $result->result_array();
-        }
-    }
+    }  
 
     // delete work item
     public function delWitem($item_id){

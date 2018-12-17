@@ -40,6 +40,7 @@ class Site_inspection extends CI_Controller {
 
         if ($role == 'company_admin') {
             $data['allWitems'] = Site_inspection::getAllWitems();
+            $data['allActivities'] = Site_inspection::getAllActivity();
             // // print_r($data);
             $data['projects'] = Site_inspection::getAllprojects();
         } else {
@@ -52,6 +53,7 @@ class Site_inspection extends CI_Controller {
             $role_name = $sessionArr[1];
             $data['features'] = Site_inspection::getAllFeatuesForUser($user_id, $role_id);
             $data['allWitems'] = Site_inspection::getAllWitems();
+            $data['allActivities'] = Site_inspection::getAllActivity();
         }
         $this->load->view('includes/header', $data);
         $this->load->view('pages/modules/site_inspection', $data);
@@ -144,6 +146,27 @@ class Site_inspection extends CI_Controller {
         return $response;
     }
 
+    // get all work items
+    public function getAllActivity() {
+        $project_id = $this->session->userdata('project_id');
+        $path = base_url();
+        $url = $path . 'api/modules/sitecontroller_api/getAllActivity?project_id='.base64_encode($project_id);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        // authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+        //close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        return $response;
+    }
+
     // add new activity in checklist function
     public function addActivity() {
         extract($_POST);
@@ -202,27 +225,7 @@ class Site_inspection extends CI_Controller {
         return $response;
     }
 
-    // get associated users for project
-    public function getUserAssoc() {
-        $project_id = $this->session->userdata('project_id');
-        $path = base_url();
-        $url = $path . 'api/modules/document_api/getUserAssoc?project_id=' . $project_id;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        // authenticate API
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPGET, 1);
-        $output = curl_exec($ch);
-        //close cURL resource
-        curl_close($ch);
-        $response = json_decode($output, true);
-        return $response;
-    }
-
+    
     // edit document fucntion
     public function updateDocument() {
         extract($_POST);
@@ -400,48 +403,7 @@ class Site_inspection extends CI_Controller {
         }
     }
 
-    // get associated roles for project
-    public function getRolesAssoc() {
-        $project_id = $this->session->userdata('project_id');
-        $path = base_url();
-        $url = $path . 'api/modules/document_api/getRolesAssoc?project_id=' . $project_id;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        // authenticate API
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPGET, 1);
-        $output = curl_exec($ch);
-        //close cURL resource
-        curl_close($ch);
-        $response = json_decode($output, true);
-        return $response;
-    }
-
-    // get all documents for project
-    public function getAllDocuments() {
-        $project_id = $this->session->userdata('project_id');
-        $path = base_url();
-        $url = $path . 'api/modules/document_api/getAllDocuments?project_id=' . $project_id;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        // authenticate API
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPGET, 1);
-        $output = curl_exec($ch);
-        //close cURL resource
-        curl_close($ch);
-        $response = json_decode($output, true);
-        return $response;
-    }
-
+    
     // remove document
     public function removeDoc() {
         extract($_GET);

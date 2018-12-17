@@ -23,10 +23,11 @@ class Sitecontroller_api extends REST_Controller {
         }
     }
 
-    // api to get last revison number for project
-    public function getlastRevision_get() {
+    // api to get all activities
+    public function getAllActivity_get() {
         extract($_GET);
-        $result = $this->sitecontroller_model->lastRevision($project_id);
+        $proj_id=base64_decode($project_id);
+        $result = $this->sitecontroller_model->getAllActivity($proj_id);
         if($result)
         {
             return $this->response($result, 200);
@@ -37,49 +38,8 @@ class Sitecontroller_api extends REST_Controller {
         }
     }
 
-    // api to get associated users
-    public function getUserAssoc_get() {
-        extract($_GET);
-        $result = $this->sitecontroller_model->getUserAssoc($project_id);
-        if($result)
-        {
-            return $this->response($result, 200);
-        } 
-        else
-        {
-            return $this->response(NULL, 404);
-        }
-    }
 
-    // api to get associated roles
-    public function getRolesAssoc_get() {
-        extract($_GET);
-        $result = $this->sitecontroller_model->getRolesAssoc($project_id);
-        if($result)
-        {
-            return $this->response($result, 200);
-        } 
-        else
-        {
-            return $this->response(NULL, 404);
-        }
-    }
-
-    // api to get all documents
-    public function getAllDocuments_get() {
-        extract($_GET);
-        $result = $this->sitecontroller_model->getAllDocuments($project_id);
-        if($result)
-        {
-            return $this->response($result, 200);
-        } 
-        else
-        {
-            return $this->response(NULL, 404);
-        }
-    }
-
-    // api to get document details
+        // api to get document details
     public function getDocumentDetail_get() {
         extract($_GET);
         $document_id=base64_decode($doc_id);
