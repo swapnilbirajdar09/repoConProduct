@@ -114,4 +114,75 @@ class Settings_model extends CI_Model {
         return $response;
     }
 
+//---update email from user tab--//
+      public function updateUserRoleEmail($data) {
+        extract($data);
+
+        $sql = "UPDATE user_tab SET user_email='$email' WHERE user_id='$user_id'";
+
+        if ($this->db->query($sql)) {
+            $response = array(
+                'status' => 200,
+                'status_message' => 'Email Updated Successfully..!');
+        } else {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'Email Updation Failed...!');
+        }
+        return $response;
+    }
+
+    //----fetch details from user tab ---//
+      public function getUserRoleDetails($user_id) {
+        //extract($data);
+        $query = "SELECT * FROM user_tab WHERE user_id='$user_id'";
+
+        $result = $this->db->query($query);
+
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
+
+     //----update username from user tab ---//
+    public function updateUserRoleUname($data) {
+        extract($data);
+        $sql = "UPDATE user_tab SET user_name='$uname' WHERE user_id='$user_id'";
+
+        if ($this->db->query($sql)) {
+            $response = array(
+                'status' => 200,
+                'status_message' => 'Username Updated Successfully..!');
+        } else {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'Username Updation Failed...!');
+        }
+        return $response;
+    }
+  //----update Password from user tab ---//
+      public function updateUserRolePass($data) {
+        extract($data);
+        //print_r($data);
+        $sql = "UPDATE user_tab SET password='$pass' WHERE user_id ='$user_id'";
+
+        if ($this->db->query($sql)) {
+            $response = array(
+                'status' => 200,
+                'status_message' => 'Password Updated Successfully..!');
+        } else {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'Password Updation Failed...!');
+        }
+        return $response;
+    }
+
 }

@@ -57,4 +57,36 @@ class User_api extends REST_Controller {
             $result = $this->settings_model->getAllFeatuesForUser($user_id,$role_id);
             return $this->response($result);
         }
+
+        //----update email from user tab ---//
+        public function updateUserRoleEmail_post(){
+		extract($_POST);
+		$data = $_POST;
+		$result = $this->settings_model->updateUserRoleEmail($data);
+		return $this->response($result);			
+	}
+
+	//---fetch details from user tab ---//
+	public function getUserRoleDetails_get(){
+		extract($_GET);
+		$result = $this->settings_model->getUserRoleDetails($user_id);
+		return $this->response($result);			
+	}
+
+		//-----------update username from user tab-----------------------//
+	public function updateUserRoleUname_post(){
+		extract($_POST);
+		$data = $_POST;
+		$result = $this->settings_model->updateUserRoleUname($data);
+		return $this->response($result);			
+	}
+	
+// -----------------------update password from user tab----------------------//
+	
+	public function updateUserRolePass_post(){
+		extract($_POST);
+		$data = $_POST;
+		$result = $this->settings_model->updateUserRolePass($data);
+		return $this->response($result);			
+	}
 }

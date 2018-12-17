@@ -127,6 +127,7 @@ if ($role == 'company_admin') {
                                         ?>
                                         <li><span>No Features Available.</span></li>
                                     <?php } ?>
+                                    <li><a href="<?php echo base_url(); ?>user/user_profile"><i class="fa fa-cog"></i>Settings</a></li>
     <!--                   <li><a href="<?php //echo base_url();         ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>-->
                                 </ul>
                             </div>
