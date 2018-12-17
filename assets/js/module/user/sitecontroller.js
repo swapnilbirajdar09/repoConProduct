@@ -266,28 +266,6 @@ function openHelp(modal_id) {
   modal.addClass('in');
 }
 
-// preview images
-function readURL(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      $('#ImagePreview').attr('src', e.target.result);
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-
-// ------------function preview image end------------------//
-function readURLNEW(input,id){
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-
-    reader.onload = function (e) {
-      $('#ImagePreview'+id).attr('src', e.target.result);
-    }
-    reader.readAsDataURL(input.files[0]);
-  }
-}
 
 // fucntion to delete document
 function removeActivity(act_id,key) {

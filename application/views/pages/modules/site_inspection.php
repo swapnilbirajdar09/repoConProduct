@@ -1,496 +1,552 @@
 <!-- page content --> 
 <style type="text/css">
-/* ================ The Timeline ================ */
+    /* ================ The Timeline ================ */
 
-.timeline {
-  position: relative;
-  width: 660px;
-  margin: 0 auto;
-  margin-top: 20px;
-  padding: 1em 0;
-  list-style-type: none;
-}
+    .timeline {
+        position: relative;
+        width: 660px;
+        margin: 0 auto;
+        margin-top: 20px;
+        padding: 1em 0;
+        list-style-type: none;
+    }
 
-.timeline:before {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  content: ' ';
-  display: block;
-  width: 6px;
-  height: 100%;
-  margin-left: -3px;
-  background: rgb(80,80,80);
-  background: -moz-linear-gradient(top, rgba(80,80,80,0) 0%, rgb(80,80,80) 8%, rgb(80,80,80) 92%, rgba(80,80,80,0) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,87,153,1)), color-stop(100%,rgba(125,185,232,1)));
-  background: -webkit-linear-gradient(top, rgba(80,80,80,0) 0%, rgb(80,80,80) 8%, rgb(80,80,80) 92%, rgba(80,80,80,0) 100%);
-  background: -o-linear-gradient(top, rgba(80,80,80,0) 0%, rgb(80,80,80) 8%, rgb(80,80,80) 92%, rgba(80,80,80,0) 100%);
-  background: -ms-linear-gradient(top, rgba(80,80,80,0) 0%, rgb(80,80,80) 8%, rgb(80,80,80) 92%, rgba(80,80,80,0) 100%);
-  background: linear-gradient(to bottom, rgba(80,80,80,0) 0%, rgb(80,80,80) 8%, rgb(80,80,80) 92%, rgba(80,80,80,0) 100%);
-  
-  z-index: 5;
-}
+    .timeline:before {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        content: ' ';
+        display: block;
+        width: 6px;
+        height: 100%;
+        margin-left: -3px;
+        background: rgb(80,80,80);
+        background: -moz-linear-gradient(top, rgba(80,80,80,0) 0%, rgb(80,80,80) 8%, rgb(80,80,80) 92%, rgba(80,80,80,0) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,87,153,1)), color-stop(100%,rgba(125,185,232,1)));
+        background: -webkit-linear-gradient(top, rgba(80,80,80,0) 0%, rgb(80,80,80) 8%, rgb(80,80,80) 92%, rgba(80,80,80,0) 100%);
+        background: -o-linear-gradient(top, rgba(80,80,80,0) 0%, rgb(80,80,80) 8%, rgb(80,80,80) 92%, rgba(80,80,80,0) 100%);
+        background: -ms-linear-gradient(top, rgba(80,80,80,0) 0%, rgb(80,80,80) 8%, rgb(80,80,80) 92%, rgba(80,80,80,0) 100%);
+        background: linear-gradient(to bottom, rgba(80,80,80,0) 0%, rgb(80,80,80) 8%, rgb(80,80,80) 92%, rgba(80,80,80,0) 100%);
 
-.timeline li {
-  padding: 1em 0;
-}
+        z-index: 5;
+    }
 
-.timeline li:after {
-  content: "";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-}
+    .timeline li {
+        padding: 1em 0;
+    }
 
-.direction-l {
-  position: relative;
-  width: 300px;
-  float: left;
-  text-align: right;
-}
+    .timeline li:after {
+        content: "";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
 
-.direction-r {
-  position: relative;
-  width: 300px;
-  float: right;
-}
+    .direction-l {
+        position: relative;
+        width: 300px;
+        float: left;
+        text-align: right;
+    }
 
-.flag-wrapper {
-  position: relative;
-  display: inline-block;
-  
-  text-align: center;
-}
+    .direction-r {
+        position: relative;
+        width: 300px;
+        float: right;
+    }
 
-.flag {
-  position: relative;
-  display: inline;
-  background: rgb(248,248,248);
-  padding: 6px 10px;
-  border-radius: 5px;
-  
-  font-weight: 600;
-  text-align: left;
-}
+    .flag-wrapper {
+        position: relative;
+        display: inline-block;
 
-.direction-l .flag {
-  -webkit-box-shadow: -1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
-  -moz-box-shadow: -1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
-  box-shadow: -1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
-}
+        text-align: center;
+    }
 
-.direction-r .flag {
-  -webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
-  -moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
-  box-shadow: 1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
-}
+    .flag {
+        position: relative;
+        display: inline;
+        background: rgb(248,248,248);
+        padding: 6px 10px;
+        border-radius: 5px;
 
-.direction-l .flag:before,
-.direction-r .flag:before {
-  position: absolute;
-  top: 50%;
-  right: -40px;
-  content: ' ';
-  display: block;
-  width: 12px;
-  height: 12px;
-  margin-top: -10px;
-  background: #fff;
-  border-radius: 10px;
-  border: 4px solid rgb(255,80,80);
-  z-index: 10;
-}
+        font-weight: 600;
+        text-align: left;
+    }
 
-.direction-r .flag:before {
-  left: -40px;
-}
+    .direction-l .flag {
+        -webkit-box-shadow: -1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+        -moz-box-shadow: -1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+        box-shadow: -1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+    }
 
-.direction-l .flag:after {
-  content: "";
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  height: 0;
-  width: 0;
-  margin-top: -8px;
-  border: solid transparent;
-  border-left-color: rgb(248,248,248);
-  border-width: 8px;
-  pointer-events: none;
-}
+    .direction-r .flag {
+        -webkit-box-shadow: 1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+        -moz-box-shadow: 1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+        box-shadow: 1px 1px 1px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.15);
+    }
 
-.direction-r .flag:after {
-  content: "";
-  position: absolute;
-  right: 100%;
-  top: 50%;
-  height: 0;
-  width: 0;
-  margin-top: -8px;
-  border: solid transparent;
-  border-right-color: rgb(248,248,248);
-  border-width: 8px;
-  pointer-events: none;
-}
+    .direction-l .flag:before,
+    .direction-r .flag:before {
+        position: absolute;
+        top: 50%;
+        right: -40px;
+        content: ' ';
+        display: block;
+        width: 12px;
+        height: 12px;
+        margin-top: -10px;
+        background: #fff;
+        border-radius: 10px;
+        border: 4px solid rgb(255,80,80);
+        z-index: 10;
+    }
 
-.time-wrapper {
-  display: inline;
-  
-  line-height: 1em;
-  font-size: 12px;
-  color: rgb(250,80,80);
-  vertical-align: middle;
-}
+    .direction-r .flag:before {
+        left: -40px;
+    }
 
-.direction-l .time-wrapper {
-  float: left;
-}
+    .direction-l .flag:after {
+        content: "";
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        height: 0;
+        width: 0;
+        margin-top: -8px;
+        border: solid transparent;
+        border-left-color: rgb(248,248,248);
+        border-width: 8px;
+        pointer-events: none;
+    }
 
-.direction-r .time-wrapper {
-  float: right;
-}
+    .direction-r .flag:after {
+        content: "";
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        height: 0;
+        width: 0;
+        margin-top: -8px;
+        border: solid transparent;
+        border-right-color: rgb(248,248,248);
+        border-width: 8px;
+        pointer-events: none;
+    }
 
-.time {
-  display: inline-block;
-  padding: 4px 6px;
-  background: rgb(248,248,248);
-}
+    .time-wrapper {
+        display: inline;
 
-.desc {
-  margin: 3px 5px;
-  
-  font-size: 12px;
-  font-style: italic;
-  line-height: 1.5em;
-}
+        line-height: 1em;
+        font-size: 12px;
+        color: rgb(250,80,80);
+        vertical-align: middle;
+    }
 
-.direction-r .desc {
-  margin: 3px 5px;
-}
+    .direction-l .time-wrapper {
+        float: left;
+    }
 
-/* ================ Timeline Media Queries ================ */
+    .direction-r .time-wrapper {
+        float: right;
+    }
 
-@media screen and (max-width: 660px) {
+    .time {
+        display: inline-block;
+        padding: 4px 6px;
+        background: rgb(248,248,248);
+    }
 
-  .timeline {
-    width: 100%;
-    padding: 4em 0 1em 0;
-  }
+    .desc {
+        margin: 3px 5px;
 
-  .timeline li {
-    padding: 2em 0;
-  }
+        font-size: 12px;
+        font-style: italic;
+        line-height: 1.5em;
+    }
 
-  .direction-l,
-  .direction-r {
-    float: none;
-    width: 100%;
+    .direction-r .desc {
+        margin: 3px 5px;
+    }
 
-    text-align: center;
-  }
+    /* ================ Timeline Media Queries ================ */
 
-  .flag-wrapper {
-    text-align: center;
-  }
+    @media screen and (max-width: 660px) {
 
-  .flag {
-    background: rgb(255,255,255);
-    z-index: 15;
-  }
+        .timeline {
+            width: 100%;
+            padding: 4em 0 1em 0;
+        }
 
-  .direction-l .flag:before,
-  .direction-r .flag:before {
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    content: ' ';
-    display: block;
-    width: 12px;
-    height: 12px;
-    margin-left: -9px;
-    background: #fff;
-    border-radius: 10px;
-    border: 4px solid rgb(255,80,80);
-    z-index: 10;
-  }
+        .timeline li {
+            padding: 2em 0;
+        }
 
-  .direction-l .flag:after,
-  .direction-r .flag:after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: -8px;
-    height: 0;
-    width: 0;
-    margin-left: -8px;
-    border: solid transparent;
-    border-bottom-color: rgb(255,255,255);
-    border-width: 8px;
-    pointer-events: none;
-  }
+        .direction-l,
+        .direction-r {
+            float: none;
+            width: 100%;
 
-  .time-wrapper {
-    display: block;
-    position: relative;
-    margin: 4px 0 0 0;
-    z-index: 14;
-  }
+            text-align: center;
+        }
 
-  .direction-l .time-wrapper {
-    float: none;
-  }
+        .flag-wrapper {
+            text-align: center;
+        }
 
-  .direction-r .time-wrapper {
-    float: none;
-  }
+        .flag {
+            background: rgb(255,255,255);
+            z-index: 15;
+        }
 
-  .desc {
-    position: relative;
-    margin: 1em 0 0 0;
-    padding: 1em;
-    background: rgb(245,245,245);
-    -webkit-box-shadow: 0 0 1px rgba(0,0,0,0.20);
-    -moz-box-shadow: 0 0 1px rgba(0,0,0,0.20);
-    box-shadow: 0 0 1px rgba(0,0,0,0.20);
+        .direction-l .flag:before,
+        .direction-r .flag:before {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            content: ' ';
+            display: block;
+            width: 12px;
+            height: 12px;
+            margin-left: -9px;
+            background: #fff;
+            border-radius: 10px;
+            border: 4px solid rgb(255,80,80);
+            z-index: 10;
+        }
 
-    z-index: 15;
-  }
+        .direction-l .flag:after,
+        .direction-r .flag:after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: -8px;
+            height: 0;
+            width: 0;
+            margin-left: -8px;
+            border: solid transparent;
+            border-bottom-color: rgb(255,255,255);
+            border-width: 8px;
+            pointer-events: none;
+        }
 
-  .direction-l .desc,
-  .direction-r .desc {
-    position: relative;
-    margin: 1em 1em 0 1em;
-    padding: 1em;
+        .time-wrapper {
+            display: block;
+            position: relative;
+            margin: 4px 0 0 0;
+            z-index: 14;
+        }
 
-    z-index: 15;
-  }
+        .direction-l .time-wrapper {
+            float: none;
+        }
 
-}
+        .direction-r .time-wrapper {
+            float: none;
+        }
 
-@media screen and (min-width: 400px ?? max-width: 660px) {
+        .desc {
+            position: relative;
+            margin: 1em 0 0 0;
+            padding: 1em;
+            background: rgb(245,245,245);
+            -webkit-box-shadow: 0 0 1px rgba(0,0,0,0.20);
+            -moz-box-shadow: 0 0 1px rgba(0,0,0,0.20);
+            box-shadow: 0 0 1px rgba(0,0,0,0.20);
 
-  .direction-l .desc,
-  .direction-r .desc {
-    margin: 1em 4em 0 4em;
-  }
+            z-index: 15;
+        }
 
-}
+        .direction-l .desc,
+        .direction-r .desc {
+            position: relative;
+            margin: 1em 1em 0 1em;
+            padding: 1em;
+
+            z-index: 15;
+        }
+
+    }
+
+    @media screen and (min-width: 400px ?? max-width: 660px) {
+
+        .direction-l .desc,
+        .direction-r .desc {
+            margin: 1em 4em 0 4em;
+        }
+
+    }
 </style>
 <div class="right_col" role="main" ng-app="siteApp" ng-cloak ng-controller="siteCtrl">
-  <div class="">
-    <div class="page-title">
-      <div class="title_left">
-        <h3>Site Inspection Controller </h3>
-      </div>
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Site Inspection Controller </h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <!-- add work item list div -->
+            <div class="col-md-4 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-briefcase"></i> Add Work Item</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="container x_content">
+                        <div class="w3-col l12 w3-margin-top">
+                            <form id="addWitemForm">
+                                <div class="input-group">
+                                    <input type="text" name="work_item" id="work_item" autocomplete="off" class="w3-input" placeholder="Enter Work Item here" required>
+                                    <div class="input-group-btn">
+                                        <button class="btn w3-button theme_bg" id="addWitemBtn" type="submit">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="w3-text-red w3-col l12" id="errWitemMsg">
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- all work item list div -->
+                        <div class="w3-col l12 w3-padding-small" id="allWitemDiv">
+                            <div class="w3-col l12 w3-border" style="height: 325px;overflow-y: auto;">
+                                <ul style="list-style: none;padding: 0">
+
+                                    <?php
+                                    if (empty($allWitems)) {
+                                        ?>
+                                        <li class="w3-border-bottom w3-padding w3-center w3-text-red">
+                                            <span>
+                                                No Work Item Found
+                                            </span>
+                                        </li>
+                                        <?php
+                                    } else {
+                                        foreach ($allWitems as $item) {
+                                            ?>
+                                            <li class="w3-border-bottom w3-padding">
+                                                <div class="w3-row">
+
+                                                    <div class="w3-col l10 m10 s10">
+                                                        <span>
+                                                            <?php echo $item['witem_name']; ?>
+                                                        </span>
+                                                    </div>
+                                                    <div class="w3-col l2 m2 s2">
+                                                        <a onclick="delWitem('<?php echo $item['witem_id']; ?>')" title="Delete Work Item" class="btn" style="padding: 0"><i class="fa fa-close"></i></a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- add work item list div ends -->
+            <!-- add checklist div -->
+            <div class="col-md-8 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-check-circle"></i> Daily Checklist</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="container x_content">
+                        <div class="w3-col l12 w3-margin-top" id="addActivityDiv">
+                            <form id="addChecklistForm">
+                                <div class="w3-col l12">
+                                    <div class="w3-col l12">
+                                        <div class="col-lg-6 col-xs-12 col-sm-12 w3-margin-bottom">
+                                            <label>Work Item:</label>
+                                            <select class="w3-input" name="work_item_selected" id="work_item_selected">
+                                                <option value="0">Choose Work Item first</option>
+                                                <?php
+                                                if ($allWitems) {
+                                                    foreach ($allWitems as $key) {
+                                                        echo '<option value="' . $key['witem_name'] . '">' . $key['witem_name'] . '</option>';
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <!-- ---div for images -->
+                                        <div class="col-lg-6 w3-padding-tiny">
+                                            <div class="w3-col l12 s12 m12">
+                                                <div class="w3-col l6 ">
+                                                    <label>Images:</label>
+                                                    <input type="file" name="image[]" id="image" class="w3-input w3-border" onchange="readURL(this);">
+                                                </div>
+                                                <div class="w3-col l6 w3-padding-small w3-margin-top">
+                                                    <img src="<?php echo base_url(); ?>assets/images/no-image-selected.png" width="auto" id="ImagePreview" height="150px" alt="Image will be displayed here once chosen." class=" w3-center img img-thumbnail">
+                                                </div>
+                                                <div class="w3-col l12 s12 m12" id="addedmore_imageDiv"></div>
+                                                <div class="w3-col l12 w3-margin-bottom">
+                                                    <a id="add_moreimage" title="Add new Image" class="btn w3-text-red add_moreProduct w3-small w3-right w3-margin-top"><b>Add image <i class="fa fa-plus"></i></b>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- ---div for images -->
+                                        <div class="col-lg-12 col-xs-12 col-sm-12 w3-margin-bottom">
+                                            <label>Enter Activity: (max. 255 chars)</label>
+                                            <input type="text" name="activity" style="padding: 5px 2px 5px 5px" class="w3-input" id="activity" placeholder="Enter Activity here." maxlength="255">
+                                        </div>
+                                        <div class="col-lg-12 col-sm-12 col-xs-12 w3-margin-bottom ">
+                                            <label>Comments (if any - optional):</label>
+                                            <textarea class="w3-input" name="activity_comment" placeholder="Type here for detailed information" rows="4"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 w3-center" id="btnsubmit">
+                                        <button class="btn w3-button theme_bg" id="addActivityBtn" type="submit"><i class="fa fa-plus"></i> Add Activity </button>
+                                    </div>
+                                </div>
+
+                            </form>
+                            <div id="formOutput" class="w3-margin"></div>              
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- add checklist div ends -->
+
+            <!-- view all document div -->
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-list"></i> Checklist Timeline</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="container x_content">
+                        <div id="checklistmsg"></div>
+                        <div class="w3-col l12 w3-margin-top" style="height: 450px;overflow-y: scroll;">
+                            <!-- The Timeline -->
+                            <ul class="timeline">
+                                <?php
+                                if ($allActivities) {
+                                    $count = '0';
+                                    $direction = 'direction-l';
+                                    foreach ($allActivities as $key) {
+                                        $dtime = new DateTime($key['created_date']);
+                                        $dated = $dtime->format("d M Y h:i a");
+                                        if ($count == '1') {
+                                            $direction = 'direction-r';
+                                            $count = '0';
+                                        } else {
+                                            $direction = 'direction-l';
+                                            $count = '1';
+                                        }
+                                        ?>
+                                        <li>
+                                            <div class="<?php echo $direction; ?>">
+                                                <div class="flag-wrapper">
+                                                    <span class="flag"><?php echo $key['work_item']; ?></span>
+                                                    <span class="time-wrapper"><span class="time"><?php echo $dated; ?></span></span>
+                                                </div>
+                                                <div class="desc w3-small w3-text-grey"><b>by <?php echo $key['created_by']; ?></b></div>
+                                                <div class="desc w3-medium"><i class="fa fa-check-circle"></i> <?php echo $key['activity_name']; ?></div>
+                                                <div class="desc"><?php echo $key['comments']; ?></div>
+                                                <div class="desc">
+                                                    <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" href="<?php echo base_url(); ?>modules/site_inspection/edit_checklist/<?php echo base64_encode($key['activity_id']); ?>"><i class="fa fa-edit"></i> Edit</a>
+                                                    <a class="btn btn-sm w3-text-grey w3-hover-text-black" id="delBtn_<?php echo $key['activity_id']; ?>" style="padding: 2px 5px;background-color: #DDDDDD" onclick="removeActivity('<?php echo base64_encode($key['activity_id']); ?>', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-trash"></i> Delete</a>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <?php
+                                    }
+                                } else {
+                                    ?>
+                                    <?php
+                                }
+                                ?>
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- view all document div ends -->
+        </div>
     </div>
-
-    <div class="clearfix"></div>
-
-    <div class="row">
-      <!-- add work item list div -->
-      <div class="col-md-4 col-sm-12 col-xs-12">
-        <div class="x_panel">
-          <div class="x_title">
-            <h2><i class="fa fa-briefcase"></i> Add Work Item</h2>
-            <ul class="nav navbar-right panel_toolbox">
-              <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-            </ul>
-            <div class="clearfix"></div>
-          </div>
-          <div class="container x_content">
-            <div class="w3-col l12 w3-margin-top">
-              <form id="addWitemForm">
-                <div class="input-group">
-                  <input type="text" name="work_item" id="work_item" autocomplete="off" class="w3-input" placeholder="Enter Work Item here" required>
-                  <div class="input-group-btn">
-                    <button class="btn w3-button theme_bg" id="addWitemBtn" type="submit">
-                      <i class="fa fa-plus"></i>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="w3-text-red w3-col l12" id="errWitemMsg">
-                </div>
-              </form>
-            </div>
-
-            <!-- all work item list div -->
-            <div class="w3-col l12 w3-padding-small" id="allWitemDiv">
-              <div class="w3-col l12 w3-border" style="height: 325px;overflow-y: auto;">
-                <ul style="list-style: none;padding: 0">
-
-                  <?php 
-                  if(empty($allWitems)){
-                    ?>
-                    <li class="w3-border-bottom w3-padding w3-center w3-text-red">
-                      <span>
-                        No Work Item Found
-                      </span>
-                    </li>
-                    <?php 
-                  }else
-                  {
-                    foreach ($allWitems as $item){
-                      ?>
-                      <li class="w3-border-bottom w3-padding">
-                        <div class="w3-row">
-
-                          <div class="w3-col l10 m10 s10">
-                            <span>
-                              <?php echo $item['witem_name']; ?>
-                            </span>
-                          </div>
-                          <div class="w3-col l2 m2 s2">
-                            <a onclick="delWitem('<?php echo $item['witem_id']; ?>')" title="Delete Work Item" class="btn" style="padding: 0"><i class="fa fa-close"></i></a>
-                          </div>
-                        </div>
-                      </li>
-                      <?php 
-                    }
-                  }
-                  ?>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- add work item list div ends -->
-      <!-- add checklist div -->
-      <div class="col-md-8 col-sm-12 col-xs-12">
-        <div class="x_panel">
-          <div class="x_title">
-            <h2><i class="fa fa-check-circle"></i> Daily Checklist</h2>
-            <ul class="nav navbar-right panel_toolbox">
-              <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-            </ul>
-            <div class="clearfix"></div>
-          </div>
-          <div class="container x_content">
-            <div class="w3-col l12 w3-margin-top" id="addActivityDiv">
-              <form id="addChecklistForm">
-                <div class="w3-col l12">
-                  <div class="w3-col l12">
-                    <div class="col-lg-6 col-xs-12 col-sm-12 w3-margin-bottom">
-                      <label>Work Item:</label>
-                      <select class="w3-input" name="work_item_selected" id="work_item_selected">
-                        <option value="0">Choose Work Item first</option>
-                        <?php 
-                        if($allWitems){
-                          foreach ($allWitems as $key) {
-                            echo '<option value="'.$key['witem_name'].'">'.$key['witem_name'].'</option>';
-                          }
-                        }
-                        ?>
-                      </select>
-                    </div>
-                    <!-- ---div for images -->
-                <div class="col-lg-6 w3-padding-tiny">
-                    <div class="w3-col l12 s12 m12">
-                        <div class="w3-col l6 ">
-                            <label>Images:</label>
-                            <input type="file" name="image[]" id="image" class="w3-input w3-border" onchange="readURL(this);">
-                        </div>
-                        <div class="w3-col l6 w3-padding-small w3-margin-top">
-                            <img src="<?php echo base_url(); ?>assets/images/no-image-selected.png" width="auto" id="ImagePreview" height="150px" alt="Image will be displayed here once chosen." class=" w3-center img img-thumbnail">
-                        </div>
-                        <div class="w3-col l12 s12 m12" id="addedmore_imageDiv"></div>
-                        <div class="w3-col l12 w3-margin-bottom">
-                            <a id="add_moreimage" title="Add new Image" class="btn w3-text-red add_moreProduct w3-small w3-right w3-margin-top"><b>Add image <i class="fa fa-plus"></i></b>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <!-- ---div for images -->
-                    <div class="col-lg-12 col-xs-12 col-sm-12 w3-margin-bottom">
-                      <label>Enter Activity: (max. 255 chars)</label>
-                      <input type="text" name="activity" style="padding: 5px 2px 5px 5px" class="w3-input" id="activity" placeholder="Enter Activity here." maxlength="255">
-                    </div>
-                    <div class="col-lg-12 col-sm-12 col-xs-12 w3-margin-bottom ">
-                      <label>Comments (if any - optional):</label>
-                      <textarea class="w3-input" name="activity_comment" placeholder="Type here for detailed information" rows="4"></textarea>
-                    </div>
-                  </div>
-                  <div class="col-lg-12 w3-center" id="btnsubmit">
-                    <button class="btn w3-button theme_bg" id="addActivityBtn" type="submit"><i class="fa fa-plus"></i> Add Activity </button>
-                  </div>
-                </div>
-
-              </form>
-              <div id="formOutput" class="w3-margin"></div>              
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- add checklist div ends -->
-
-      <!-- view all document div -->
-      <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-          <div class="x_title">
-            <h2><i class="fa fa-list"></i> Checklist Timeline</h2>
-            <ul class="nav navbar-right panel_toolbox">
-              <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-            </ul>
-            <div class="clearfix"></div>
-          </div>
-          <div class="container x_content">
-            <div id="checklistmsg"></div>
-            <div class="w3-col l12 w3-margin-top" style="height: 450px;overflow-y: scroll;">
-              <!-- The Timeline -->
-              <ul class="timeline">
-                <?php 
-                if($allActivities){
-                  $count='0';
-                  $direction='direction-l';
-                  foreach ($allActivities as $key) {
-                    $dtime = new DateTime($key['created_date']);
-                    $dated = $dtime->format("d M Y h:i a");
-                    if($count=='1'){
-                      $direction='direction-r';
-                      $count='0';
-                    }
-                    else{
-                      $direction='direction-l';
-                      $count='1';
-                    }
-                    ?>
-                    <li>
-                    <div class="<?php echo $direction; ?>">
-                    <div class="flag-wrapper">
-                    <span class="flag"><?php echo $key['work_item']; ?></span>
-                    <span class="time-wrapper"><span class="time"><?php echo $dated; ?></span></span>
-                    </div>
-                    <div class="desc w3-small w3-text-grey"><b>by <?php echo $key['created_by']; ?></b></div>
-                    <div class="desc w3-medium"><i class="fa fa-check-circle"></i> <?php echo $key['activity_name']; ?></div>
-                    <div class="desc"><?php echo $key['comments']; ?></div>
-                    <div class="desc">
-                      <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" href="<?php echo base_url(); ?>modules/site_inspection/edit_checklist/<?php echo base64_encode($key['activity_id']); ?>"><i class="fa fa-edit"></i> Edit</a>
-                      <a class="btn btn-sm w3-text-grey w3-hover-text-black" id="delBtn_<?php echo $key['activity_id']; ?>" style="padding: 2px 5px;background-color: #DDDDDD" onclick="removeActivity('<?php echo base64_encode($key['activity_id']); ?>', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-trash"></i> Delete</a>
-                    </div>
-                    </div>
-                    </li>
-                    
-                    <?php 
-                  }
-                }
-                else{
-                  ?>
-                  <?php
-                }
-                ?>
-
-              </ul>
-
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- view all document div ends -->
-    </div>
-  </div>
 </div>
-<script src="<?php echo base_url();?>assets/js/module/user/sitecontroller.js"></script>
+<script>
+    $(document).ready(function () {
+        var max_fields = 5;
+        var wrapper = $("#addedmore_imageDiv");
+        var add_button = $("#add_moreimage");
+        var x = 1;
+        $(add_button).click(function (e) {
+            e.preventDefault();
+            if (x < max_fields) {
+                x++;
+                $(wrapper).append('<div>\n\
+                    <div class="w3-col l12 s12 m12 w3-margin-top">\n\
+                    <div class="w3-col l6 w3-padding-small">\n\
+                    <label>Images:</label>\n\
+                    <input type="file" name="image[]" id="image" class="w3-input w3-border" onchange="readURLNEW(this,' + x + ');" required>\n\
+                    </div>\n\
+                    <div class="w3-col l6 w3-padding-small">\n\
+                    <img src="<?php echo base_url(); ?>assets/images/no-image-selected.png" width="auto" id="ImagePreview_' + x + '" height="150px" alt="Image will be displayed here once chosen." class=" w3-center img img-thumbnail" width="auto" height="150px">\n\
+                    </div>\n\
+                    <a href="#" class="delete btn w3-text-black w3-left w3-small" title="remove image">remove <i class="fa fa-remove"></i>\n\
+                    </a>\n\
+                    </div>\n\
+                    </div>'); //add input box
+            } else {
+                $.alert('<label class="w3-label w3-text-red"><i class="fa fa-warning w3-xxlarge"></i> You Reached the maximum limit of adding ' + max_fields + ' fields</label>');   //alert when added more than 4 input fields
+            }
+        });
+        $(wrapper).on("click", ".delete", function (e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+        });
+    });
 
-        <!-- /page content
+
+    // preview images
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#ImagePreview').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+// ------------function preview image end------------------//
+    function readURLNEW(input, id) {
+        //alert(id);
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#ImagePreview_' + id).attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+</script>
+<script src="<?php echo base_url(); ?>assets/js/module/user/sitecontroller.js"></script>
+

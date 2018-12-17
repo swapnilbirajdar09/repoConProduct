@@ -97,9 +97,9 @@ class Sitecontroller_api extends REST_Controller {
     }
 
     // api to update Document
-    public function updateDocument_post() {
+    public function updateChecklist_post() {
         $data=$_POST;
-        $result = $this->sitecontroller_model->updateDocument($data);
+        $result = $this->sitecontroller_model->updateChecklist($data);
         if($result)
         {
             return $this->response($result, 200);
@@ -111,9 +111,9 @@ class Sitecontroller_api extends REST_Controller {
     }
 
     // api to upload file in Document
-    public function uploadFile_post() {
+    public function uploadImageInfo_post() {
         $data=$_POST;
-        $result = $this->sitecontroller_model->uploadFile($data);
+        $result = $this->sitecontroller_model->uploadImageInfo($data);
         if($result)
         {
             return $this->response($result, 200);
@@ -140,9 +140,9 @@ class Sitecontroller_api extends REST_Controller {
     }
 
     // api to remove file in Document
-    public function removeFile_post() {
+    public function removeImageInfo_post() {
         extract($_POST);
-        $result = $this->sitecontroller_model->removeFile($key,$document_id,$author);
+        $result = $this->sitecontroller_model->removeImageInfo($key,$activity_id,$author);
         if($result)
         {
             return $this->response($result, 200);

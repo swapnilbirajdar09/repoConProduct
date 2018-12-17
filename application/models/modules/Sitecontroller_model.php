@@ -96,6 +96,7 @@ class Sitecontroller_model extends CI_Model {
             'activity_name' => $activity,
             'work_item' => $work_item_selected,
             'comments' => $activity_comment,
+            'images' => $images,
             'project_id' => $project_id,
             'created_by' => $author,
             'created_date' => date('Y-m-d H:i:s')
@@ -111,18 +112,18 @@ class Sitecontroller_model extends CI_Model {
     }
 
     // edit document function
-    public function updateDocument($data){
+    public function updateChecklist($data){
         extract($data);
         $update_data = array(
-            'document_title' => $document_title,
-            'document_type' => $document_type,
-            'revision_no' => $revision_number,
+            'work_item' => $work_item_selected,
+            'activity_name' => $activity,
+            'comments' => $activity_comment,
             'modified_by' => $author,
             'modified_date' => date('Y-m-d H:i:s')
         );
         // print_r($insert_data);die();
-        $this->db->where('document_id', base64_decode($document_id));
-        $this->db->update('document_tab', $update_data);
+        $this->db->where('activity_id', base64_decode($activity_id));
+        $this->db->update('checklist_activity_tab', $update_data);
         if($this->db->affected_rows()>0){
             return true;
         }
@@ -132,26 +133,26 @@ class Sitecontroller_model extends CI_Model {
     }
 
     // upload portfolio image
-    public function uploadFile($data){
+    public function uploadImageInfo($data){
         extract($data);
-        $doc_id=base64_decode($document_id);
+        $act_id=base64_decode($activity_id);
         $currentFiles='';
-        $sql = "SELECT document_file FROM document_tab WHERE document_id='$doc_id'";
+        $sql = "SELECT images FROM checklist_activity_tab WHERE activity_id='$act_id'";
         $result_arr = $this->db->query($sql);
         foreach ($result_arr->result_array() as $key) {
-            $currentFiles = $key['document_file'];
+            $currentFiles = $key['images'];
         }
 
         $fileArr=json_decode($currentFiles);
         array_push($fileArr,$filepath);
         $result = array(
-            'document_file' => json_encode($fileArr),
+            'images' => json_encode($fileArr),
             'modified_by' => $author,
             'modified_date' => date('Y-m-d H:i:s')
         );
 
-        $this->db->where('document_id', base64_decode($document_id));
-        $this->db->update('document_tab', $result);
+        $this->db->where('activity_id', base64_decode($activity_id));
+        $this->db->update('checklist_activity_tab', $result);
         if($this->db->affected_rows()==1){
             return true;
         }
@@ -173,11 +174,11 @@ class Sitecontroller_model extends CI_Model {
     }
 
     // remove file
-    public function removeFile($key,$document_id,$author){
-        $sql = "SELECT document_file FROM document_tab WHERE document_id='$document_id'";
+    public function removeImageInfo($key,$activity_id,$author){
+        $sql = "SELECT images FROM checklist_activity_tab WHERE activity_id='$activity_id'";
         $result_arr = $this->db->query($sql);
         foreach ($result_arr->result_array() as $row) {
-            $currentFiles = $row['document_file'];
+            $currentFiles = $row['images'];
         }
 
         $fileArr=json_decode($currentFiles);
@@ -193,13 +194,13 @@ class Sitecontroller_model extends CI_Model {
         unset($fileArr[$key]);
         $fileArr = array_values($fileArr);
         $result = array(
-            'document_file' => json_encode($fileArr),
+            'images' => json_encode($fileArr),
             'modified_by' => $author,
             'modified_date' => date('Y-m-d H:i:s')
         );
 
-        $this->db->where('document_id', $document_id);
-        $this->db->update('document_tab', $result);
+        $this->db->where('activity_id', $activity_id);
+        $this->db->update('checklist_activity_tab', $result);
         if($this->db->affected_rows()==1){
             $response=array(
                 'status'    =>  'success',

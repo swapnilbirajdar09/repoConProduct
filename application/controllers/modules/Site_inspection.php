@@ -150,7 +150,7 @@ class Site_inspection extends CI_Controller {
     public function getAllActivity() {
         $project_id = $this->session->userdata('project_id');
         $path = base_url();
-        $url = $path . 'api/modules/sitecontroller_api/getAllActivity?project_id='.base64_encode($project_id);
+        $url = $path . 'api/modules/sitecontroller_api/getAllActivity?project_id=' . base64_encode($project_id);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
@@ -183,6 +183,47 @@ class Site_inspection extends CI_Controller {
             $user_name = $this->session->userdata('user_name');
             $data['author'] = $user_name;
         }
+
+        $prod_Arr = array();
+        $imageArr = array();
+        //print_r($_POST);
+        //print_r($_FILES);
+        $allowed_types = ['gif', 'jpg', 'png', 'jpeg', 'JPG', 'GIF', 'JPEG', 'PNG'];
+        for ($i = 0; $i < count($_FILES['image']['name']); $i++) {
+            $imagePath = '';
+            $product_image = $_FILES['image']['name'][$i];
+            if (!empty(($_FILES['image']['name'][$i]))) {
+                $extension = pathinfo($_FILES['image']['name'][$i], PATHINFO_EXTENSION);
+
+                $_FILES['userFile']['name'] = $work_item_selected . '_' . $i . '.' . $extension;
+                $_FILES['userFile']['type'] = $_FILES['image']['type'][$i];
+                $_FILES['userFile']['tmp_name'] = $_FILES['image']['tmp_name'][$i];
+                $_FILES['userFile']['error'] = $_FILES['image']['error'][$i];
+                $_FILES['userFile']['size'] = $_FILES['image']['size'][$i];
+
+                $uploadPath = 'assets/modules/site_images/';  //upload images in images/desktop/ folder
+                $config['upload_path'] = $uploadPath;
+                $config['allowed_types'] = 'gif|jpg|png|jpeg'; //allowed types of images           
+                $config['overwrite'] = FALSE;
+                $this->load->library('upload', $config);
+                //load upload file config.
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('userFile')) {
+                    $fileData = $this->upload->data();
+                    $imagePath = 'assets/modules/site_images/' . $fileData['file_name'];
+                } else {
+                    $response = array(
+                        'status' => 'validation',
+                        'message' => $this->upload->display_errors('<div class="alert alert-warning alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong>', '</div>'),
+                    );
+                    echo json_encode($response);
+                    die();
+                }
+            }
+            $imageArr[] = $imagePath;
+        }
+
+        $data['images'] = json_encode($imageArr);
 
         // print_r($data);die();
         $path = base_url();
@@ -225,9 +266,8 @@ class Site_inspection extends CI_Controller {
         return $response;
     }
 
-    
     // edit document fucntion
-    public function updateDocument() {
+    public function updateChecklist() {
         extract($_POST);
         // print_r($_FILES);
         $data = $_POST;
@@ -240,10 +280,10 @@ class Site_inspection extends CI_Controller {
             $data['author'] = $user_name;
         }
         // validate fields
-        if ($document_type == '0') {
+        if ($work_item_selected == '0') {
             $response = array(
                 'status' => 'validation',
-                'message' => '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Document Type first !</div>',
+                'message' => '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Valid Work item Type first !</div>',
                 'field' => 'document_type'
             );
             echo json_encode($response);
@@ -251,7 +291,7 @@ class Site_inspection extends CI_Controller {
         }
 
         $path = base_url();
-        $url = $path . 'api/modules/document_api/updateDocument';
+        $url = $path . 'api/modules/Sitecontroller_api/updateChecklist';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
@@ -285,10 +325,10 @@ class Site_inspection extends CI_Controller {
     }
 
     // upload more files in document edit page
-    public function uploadFile() {
+    public function uploadImageInfo() {
         extract($_POST);
         $data = $_POST;
-        $data['document_id'] = $doc_id;
+        $data['activity_id'] = $activity_id;
         $session_name = $this->session->userdata('usersession_name');
         $session_role = $this->session->userdata('role');
         if ($session_role == 'company_admin') {
@@ -299,16 +339,16 @@ class Site_inspection extends CI_Controller {
         }
         $filepath = '';
 
-        $file_name = $_FILES['doc_file']['name'];
-        if (!empty(($_FILES['doc_file']['name']))) {
-            $extension = pathinfo($_FILES['doc_file']['name'], PATHINFO_EXTENSION);
-            $_FILES['userFile']['name'] = $doc_title . '-' . $doc_type . '_' . time() . '.' . $extension;
-            $_FILES['userFile']['type'] = $_FILES['doc_file']['type'];
-            $_FILES['userFile']['tmp_name'] = $_FILES['doc_file']['tmp_name'];
-            $_FILES['userFile']['error'] = $_FILES['doc_file']['error'];
-            $_FILES['userFile']['size'] = $_FILES['doc_file']['size'];
+        $file_name = $_FILES['activity_file']['name'];
+        if (!empty(($_FILES['activity_file']['name']))) {
+            $extension = pathinfo($_FILES['activity_file']['name'], PATHINFO_EXTENSION);
+            $_FILES['userFile']['name'] = $work_item  . '_' . time() . '.' . $extension;
+            $_FILES['userFile']['type'] = $_FILES['activity_file']['type'];
+            $_FILES['userFile']['tmp_name'] = $_FILES['activity_file']['tmp_name'];
+            $_FILES['userFile']['error'] = $_FILES['activity_file']['error'];
+            $_FILES['userFile']['size'] = $_FILES['activity_file']['size'];
 
-            $uploadPath = 'assets/modules/documents/';  //upload images in images/desktop/ folder
+            $uploadPath = 'assets/modules/site_images/';  //upload images in images/desktop/ folder
 
             $config['upload_path'] = $uploadPath;
             $config['overwrite'] = FALSE;
@@ -319,7 +359,7 @@ class Site_inspection extends CI_Controller {
 
             if ($this->upload->do_upload('userFile')) {
                 $fileData = $this->upload->data();
-                $filepath = 'assets/modules/documents/' . $fileData['file_name'];
+                $filepath = 'assets/modules/site_images/' . $fileData['file_name'];
             } else {
                 $response = array(
                     'status' => 'validation',
@@ -333,7 +373,7 @@ class Site_inspection extends CI_Controller {
         $data['filepath'] = $filepath;
         // print_r($data);die();
         $path = base_url();
-        $url = $path . 'api/modules/document_api/uploadFile';
+        $url = $path . 'api/modules/Sitecontroller_api/uploadImageInfo';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
@@ -403,7 +443,6 @@ class Site_inspection extends CI_Controller {
         }
     }
 
-    
     // remove Activity
     public function removeActivity() {
         extract($_GET);
@@ -468,9 +507,53 @@ class Site_inspection extends CI_Controller {
         }
 
         $data['activityDetails'] = $response;
-        $this->load->view('includes/header',$data);
+        $this->load->view('includes/header', $data);
         $this->load->view('pages/modules/edit_checklist', $data);
         $this->load->view('includes/footer');
     }
 
+    
+//----------------fun for remove image
+    public function removeImageInfo() {
+        extract($_GET);
+        if (isset($activity_id) && $activity_id != '') {
+            $data['key'] = $key;
+            $data['activity_id'] = $activity_id;
+            $session_name = $this->session->userdata('usersession_name');
+            $session_role = $this->session->userdata('role');
+            if ($session_role == 'company_admin') {
+                $data['author'] = 'Administrator';
+            } else {
+                $user_name = $this->session->userdata('user_name');
+                $data['author'] = $user_name;
+            }
+            $path = base_url();
+            $url = $path . 'api/modules/Sitecontroller_api/removeImageInfo';
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            // authenticate API
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+            curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $output = curl_exec($ch);
+            //close cURL resource
+            curl_close($ch);
+            $result = json_decode($output, true);
+            //print_r($output);die();
+            if ($result['status'] == 'warning') {
+                echo $result['message'];
+                die();
+            }
+            if ($result['status'] == 'success') {
+                echo $result['message'];
+            } else {
+                echo $result['message'];
+            }
+        } else {
+            echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> Image not found.</div>';
+        }
+    }
+    
 }
