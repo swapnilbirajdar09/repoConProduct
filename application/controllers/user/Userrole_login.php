@@ -30,12 +30,10 @@ class Userrole_login extends CI_Controller {
 
     // check login authentication-----------------------------------------------------------
     public function user_login() {
-        // get data passed through ANGULAR AJAX
-        $postdata = file_get_contents("php://input");
-        $request = json_decode($postdata, TRUE);
+        // get data passed through ANGULAR AJAX        
         $data = array(
-            'login_username' => $request['username'],
-            'login_password' => $request['password']
+            'login_username' => $_POST['user_email'],
+            'login_password' => $_POST['user_password']
         );
 
         $path = base_url();
@@ -50,7 +48,7 @@ class Userrole_login extends CI_Controller {
         //print_r($response_json);die();
         if ($response['status'] == 500) {
             // failure scope
-            echo '<p class="w3-red w3-padding-small">Sorry, your credentials are incorrect!</p>';
+            echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Login Credentials incorrect.</div>';
         } else {
             // success scope
             //----create session array--------//
@@ -64,7 +62,16 @@ class Userrole_login extends CI_Controller {
             //start session of user if login success
             $this->session->set_userdata($session_data);
             // redirect('user_dashboard');
-            echo '200';
+            echo '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success!</strong> Login Successful.</div>
+            <script>
+            window.setTimeout(function() {
+               $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+                  $(this).remove(); 
+                  });
+                  window.location.href="' . base_url() . 'user_dashboard";
+                  }, 1500);
+                  </script>
+                  ';
             //echo '<p class="w3-green w3-padding-small">Login successfull! Welcome Admin.</p>';
         }
         //print_r($result);
@@ -77,7 +84,7 @@ class Userrole_login extends CI_Controller {
         //if logout success then destroy session and unset session variables
         $this->session->unset_userdata(array('user_name'));
         $this->session->sess_destroy();
-        redirect('user/userrole_login');
+        redirect('login');
     }
 
 }

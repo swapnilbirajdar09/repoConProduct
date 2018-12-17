@@ -248,7 +248,7 @@ $("#subscriberMailForm").on('submit', function(e) {
         });
       }, 5000);
     }
- });
+  });
 return false;  //stop the actual form post !important!
 });
 
@@ -266,27 +266,50 @@ function openHelp(modal_id) {
   modal.addClass('in');
 }
 
+// preview images
+function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $('#ImagePreview').attr('src', e.target.result);
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// ------------function preview image end------------------//
+function readURLNEW(input,id){
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      $('#ImagePreview'+id).attr('src', e.target.result);
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
 // fucntion to delete document
-function removeDocument(doc_id,key) {
+function removeActivity(act_id,key) {
   $.confirm({
-    title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to remove this Document?</span>',
+    title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to remove this Activity?</span>',
     content: '',
     type: 'red',
     buttons: {
       confirm: function () {
         $.ajax({
           type: "GET",
-          url: BASE_URL + "modules/manage_documents/removeDoc",
+          url: BASE_URL + "modules/site_inspection/removeActivity",
           data: {
-            doc_id: doc_id
+            act_id: act_id
           },
           cache: false,
           beforeSend: function(){
-            $('#actionBtn_'+key).html('<i class="fa fa-circle-o-notch fa-spin"></i> Deleting');
+            $('#delBtn_'+key).html('<i class="fa fa-circle-o-notch fa-spin"></i> Deleting');
           },
           success: function(data){
-            $('#table_msg').html(data);
-            $('#actionBtn_'+key).html('Action <span class="caret"></span>');
+            $('#checklistmsg').html(data);
+            $('#delBtn_'+key).html('<i class="fa fa-trash"></i> Delete');
 
             window.setTimeout(function() {
              $(".alert").fadeTo(500, 0).slideUp(500, function(){
@@ -296,8 +319,8 @@ function removeDocument(doc_id,key) {
            }, 1500);
           },
           error:function(data){
-           $('#table_msg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
-           $('#actionBtn_'+key).html('Action <span class="caret"></span>');
+           $('#checklistmsg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
+           $('#delBtn_'+key).html('<i class="fa fa-trash"></i> Delete');
            window.setTimeout(function() {
              $(".alert").fadeTo(500, 0).slideUp(500, function(){
                $(this).remove(); 
@@ -492,6 +515,41 @@ function removeFile(key,document_id) {
     }
   });
 }
+
+// add more imae div
+// $(document).ready(function () {
+//   var max_fields = 5;
+//   var wrapper = $("#addedmore_imageDiv");
+//   var add_button = $("#add_moreimage");
+//   var x = 1;
+  
+//   $(add_button).click(function (e) {
+//     e.preventDefault();
+//     if (x < max_fields) {
+//       x++;
+//       $(wrapper).append('<div>\n\
+//         <div class="w3-col l12 s12 m12 w3-small w3-margin-top">\n\
+//         <div class="w3-col l6 ">\n\
+//         <label>Images:</label>\n\
+//         <input type="file" name="image[]" id="image" class="w3-input w3-border" onchange="readURLNEW(this,'+x+');">\n\
+//         </div>\n\
+//         <div class="w3-col l6 w3-padding-small w3-margin-top">\n\
+//         <img width="auto" id="ImagePreview_'+x+'" height="150px" alt="Image will be displayed here once chosen." class=" w3-center img img-thumbnail">\n\
+//         </div>\n\        
+//         <a href="#" class="delete btn w3-text-black w3-left w3-small" title="remove image">remove <i class="fa fa-remove"></i>\n\
+//         </a>\n\
+//         </div>\n\
+//         </div>'); //add input box
+//     } else {
+//         $.alert('<label class="w3-label w3-text-red"><i class="fa fa-warning w3-xxlarge"></i> You Reached the maximum limit of adding ' + max_fields + ' fields</label>');   //alert when added more than 4 input fields
+//       }
+//     });
+//   $(wrapper).on("click", ".delete", function (e) {
+//     e.preventDefault();
+//     $(this).parent('div').remove();
+//     x--;
+//   })
+// });
 
 // Angular js for all product view
 // var app = angular.module("portfolioApp", ['ngSanitize']); 

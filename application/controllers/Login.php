@@ -21,18 +21,16 @@ class Login extends CI_Controller {
             redirect('user_dashboard');
         }
         //$this->load->view('includes/header');
-        $this->load->view('pages/login');
+        $this->load->view('pages/login_new');
         //$this->load->view('includes/footer');
     }
 
     // check login authentication-----------------------------------------------------------
     public function adminlogin() {
-        // get data passed through ANGULAR AJAX
-        $postdata = file_get_contents("php://input");
-        $request = json_decode($postdata, TRUE);
+        
         $data = array(
-            'login_username' => $request['username'],
-            'login_password' => $request['password']
+            'login_username' => $_POST['admin_email'],
+            'login_password' => $_POST['admin_password']
         );
 
         $path = base_url();
@@ -47,7 +45,7 @@ class Login extends CI_Controller {
         //print_r($response['status']);die();
         if ($response['status'] == 500) {
             // failure scope
-            echo '<p class="w3-red w3-padding-small">Sorry, your credentials are incorrect!</p>';
+            echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Login Credentials incorrect.</div>';
         } else {
             // success scope
             //----create session array--------//
@@ -60,20 +58,29 @@ class Login extends CI_Controller {
             //start session of user if login success
             $this->session->set_userdata($session_data);
             //redirect('admin/dashboard');
-            echo '200';
+            echo '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success!</strong> Login Successful.</div>
+            <script>
+            window.setTimeout(function() {
+               $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+                  $(this).remove(); 
+                  });
+                  window.location.href="' . base_url() . 'user_dashboard";
+                  }, 1500);
+                  </script>
+                  ';
             //echo '<p class="w3-green w3-padding-small">Login successfull! Welcome Admin.</p>';
-        }
+              }
         //print_r($result);
-    }
+          }
 
-    public function logoutAdmin() {
+          public function logoutAdmin() {
         //start session		
-        $admin_name = $this->session->userdata('usersession_name');
-        
-        //if logout success then destroy session and unset session variables
-        $this->session->unset_userdata(array('usersession_name'));
-        $this->session->sess_destroy();
-        redirect('login');
-    }
+            $admin_name = $this->session->userdata('usersession_name');
 
-}
+        //if logout success then destroy session and unset session variables
+            $this->session->unset_userdata(array('usersession_name'));
+            $this->session->sess_destroy();
+            redirect('login');
+        }
+
+    }

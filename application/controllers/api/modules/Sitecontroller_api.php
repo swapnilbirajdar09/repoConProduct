@@ -39,11 +39,11 @@ class Sitecontroller_api extends REST_Controller {
     }
 
 
-        // api to get document details
-    public function getDocumentDetail_get() {
+        // api to get activity details
+    public function getActivityDetail_get() {
         extract($_GET);
-        $document_id=base64_decode($doc_id);
-        $result = $this->sitecontroller_model->getDocumentDetail($document_id);
+        $act_id=base64_decode($activity_id);
+        $result = $this->sitecontroller_model->getActivityDetail($act_id);
         if($result)
         {
             return $this->response($result, 200);
@@ -114,6 +114,21 @@ class Sitecontroller_api extends REST_Controller {
     public function uploadFile_post() {
         $data=$_POST;
         $result = $this->sitecontroller_model->uploadFile($data);
+        if($result)
+        {
+            return $this->response($result, 200);
+        } 
+        else
+        {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    // api to remove activity
+    public function removeActivity_get() {
+        extract($_GET);
+        $activity_id=base64_decode($act_id);
+        $result = $this->sitecontroller_model->removeActivity($activity_id);
         if($result)
         {
             return $this->response($result, 200);

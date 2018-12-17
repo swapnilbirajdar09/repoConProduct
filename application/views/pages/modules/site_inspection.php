@@ -138,7 +138,7 @@
   display: inline;
   
   line-height: 1em;
-  font-size: 0.66666em;
+  font-size: 12px;
   color: rgb(250,80,80);
   vertical-align: middle;
 }
@@ -160,7 +160,7 @@
 .desc {
   margin: 3px 5px;
   
-  font-size: 0.77777em;
+  font-size: 12px;
   font-style: italic;
   line-height: 1.5em;
 }
@@ -385,6 +385,24 @@
                         ?>
                       </select>
                     </div>
+                    <!-- ---div for images -->
+                <div class="col-lg-6 w3-padding-tiny">
+                    <div class="w3-col l12 s12 m12">
+                        <div class="w3-col l6 ">
+                            <label>Images:</label>
+                            <input type="file" name="image[]" id="image" class="w3-input w3-border" onchange="readURL(this);">
+                        </div>
+                        <div class="w3-col l6 w3-padding-small w3-margin-top">
+                            <img src="<?php echo base_url(); ?>assets/images/no-image-selected.png" width="auto" id="ImagePreview" height="150px" alt="Image will be displayed here once chosen." class=" w3-center img img-thumbnail">
+                        </div>
+                        <div class="w3-col l12 s12 m12" id="addedmore_imageDiv"></div>
+                        <div class="w3-col l12 w3-margin-bottom">
+                            <a id="add_moreimage" title="Add new Image" class="btn w3-text-red add_moreProduct w3-small w3-right w3-margin-top"><b>Add image <i class="fa fa-plus"></i></b>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- ---div for images -->
                     <div class="col-lg-12 col-xs-12 col-sm-12 w3-margin-bottom">
                       <label>Enter Activity: (max. 255 chars)</label>
                       <input type="text" name="activity" style="padding: 5px 2px 5px 5px" class="w3-input" id="activity" placeholder="Enter Activity here." maxlength="255">
@@ -418,6 +436,7 @@
             <div class="clearfix"></div>
           </div>
           <div class="container x_content">
+            <div id="checklistmsg"></div>
             <div class="w3-col l12 w3-margin-top" style="height: 450px;overflow-y: scroll;">
               <!-- The Timeline -->
               <ul class="timeline">
@@ -436,19 +455,23 @@
                       $direction='direction-l';
                       $count='1';
                     }
-                    echo '
+                    ?>
                     <li>
-                    <div class="'.$direction.'">
+                    <div class="<?php echo $direction; ?>">
                     <div class="flag-wrapper">
-                    <span class="flag">'.$key['work_item'].'</span>
-                    <span class="time-wrapper"><span class="time"><b>'.$key['created_by'].'</b> '.$dated.'</span></span>
+                    <span class="flag"><?php echo $key['work_item']; ?></span>
+                    <span class="time-wrapper"><span class="time"><?php echo $dated; ?></span></span>
                     </div>
-                    <div class="desc w3-small">'.$key['activity_name'].'</div>
-                    <div class="desc">'.$key['comments'].'</div>
+                    <div class="desc w3-small w3-text-grey"><b>by <?php echo $key['created_by']; ?></b></div>
+                    <div class="desc w3-medium"><i class="fa fa-check-circle"></i> <?php echo $key['activity_name']; ?></div>
+                    <div class="desc"><?php echo $key['comments']; ?></div>
+                    <div class="desc">
+                      <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" href="<?php echo base_url(); ?>modules/site_inspection/edit_checklist/<?php echo base64_encode($key['activity_id']); ?>"><i class="fa fa-edit"></i> Edit</a>
+                      <a class="btn btn-sm w3-text-grey w3-hover-text-black" id="delBtn_<?php echo $key['activity_id']; ?>" style="padding: 2px 5px;background-color: #DDDDDD" onclick="removeActivity('<?php echo base64_encode($key['activity_id']); ?>', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-trash"></i> Delete</a>
+                    </div>
                     </div>
                     </li>
-                    ';
-                    ?>
+                    
                     <?php 
                   }
                 }
@@ -457,7 +480,7 @@
                   <?php
                 }
                 ?>
-                
+
               </ul>
 
             </div>

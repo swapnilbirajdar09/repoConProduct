@@ -59,9 +59,9 @@ class Sitecontroller_model extends CI_Model {
         }
     }
 
-    // get document detials 
-    public function getDocumentDetail($doc_id){
-        $sql = "SELECT * FROM document_tab WHERE document_id='$doc_id'";
+    // get activity detials 
+    public function getActivityDetail($act_id){
+        $sql = "SELECT * FROM checklist_activity_tab WHERE activity_id='$act_id'";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             return false;
@@ -153,6 +153,18 @@ class Sitecontroller_model extends CI_Model {
         $this->db->where('document_id', base64_decode($document_id));
         $this->db->update('document_tab', $result);
         if($this->db->affected_rows()==1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    // delete activity
+    public function removeActivity($activity_id){
+        $sql = "DELETE FROM checklist_activity_tab WHERE activity_id='$activity_id'";
+        $result = $this->db->query($sql);
+        if($this->db->affected_rows()>0){
             return true;
         }
         else{

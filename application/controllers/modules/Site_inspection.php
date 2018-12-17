@@ -404,11 +404,11 @@ class Site_inspection extends CI_Controller {
     }
 
     
-    // remove document
-    public function removeDoc() {
+    // remove Activity
+    public function removeActivity() {
         extract($_GET);
         $path = base_url();
-        $url = $path . 'api/modules/document_api/removeDoc?doc_id=' . $doc_id;
+        $url = $path . 'api/modules/sitecontroller_api/removeActivity?act_id=' . $act_id;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
@@ -423,34 +423,53 @@ class Site_inspection extends CI_Controller {
         curl_close($ch);
         $response = json_decode($output, true);
         if ($response == true) {
-            echo '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success!</strong> Document removed successfully.</div>';
+            echo '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success!</strong> Activity deleted successfully.</div>';
         } else {
-            echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Document deletion failed.</div>';
+            echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Activity deletion failed.</div>';
         }
     }
 
-    // fucntion to display edit document page
-    public function edit_document($param = '') {
+    // fucntion to display edit checklist page
+    public function edit_checklist($param = '') {
         $path = base_url();
-        $url = $path . 'api/modules/document_api/getDocumentDetail?doc_id=' . $param;
+        $url = $path . 'api/modules/sitecontroller_api/getActivityDetail?activity_id=' . $param;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // authenticate API
+// authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPGET, 1);
         $output = curl_exec($ch);
-        //close cURL resource
+//close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
 
-        $data['allDocument_types'] = Site_inspection::getDocumentTypes();
-        $data['documentDetails'] = $response;
-        $this->load->view('includes/header');
-        $this->load->view('pages/modules/edit_documents', $data);
+        $role = $this->session->userdata('role');
+
+        if ($role == 'company_admin') {
+            $data['allWitems'] = Site_inspection::getAllWitems();
+            $data['allActivities'] = Site_inspection::getAllActivity();
+            // // print_r($data);
+            $data['projects'] = Site_inspection::getAllprojects();
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $user_id = $this->session->userdata('user_id');
+            $project_id = $this->session->userdata('project_id');
+            $role = $this->session->userdata('role');
+            $sessionArr = explode('/', $role);
+            $role_id = $sessionArr[0];
+            $role_name = $sessionArr[1];
+            $data['features'] = Site_inspection::getAllFeatuesForUser($user_id, $role_id);
+            $data['allWitems'] = Site_inspection::getAllWitems();
+            $data['allActivities'] = Site_inspection::getAllActivity();
+        }
+
+        $data['activityDetails'] = $response;
+        $this->load->view('includes/header',$data);
+        $this->load->view('pages/modules/edit_checklist', $data);
         $this->load->view('includes/footer');
     }
 
