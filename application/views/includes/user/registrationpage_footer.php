@@ -1,55 +1,7 @@
 <!-- footer section start -->
 <footer class="footer" id="contact">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="contact-form">
-                    <h4>Get in Touch</h4>
-                    <p class="form-message"></p>
-                    <form id="contact-form" action="#" method="POST">
-                        <input type="text" name="name" placeholder="Enter Your Name">
-                        <input type="email" name="email" placeholder="Enter Your Email">
-                        <input type="text" name="subject" placeholder="Your Subject">
-                        <textarea placeholder="Messege" name="message"></textarea>
-                        <button type="submit" name="submit">Send Message</button>
-                    </form>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="contact-address">
-                    <h4>Address</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
-                    <ul>
-                        <li>
-                            <div class="contact-address-icon">
-                                <i class="icofont icofont-headphone-alt"></i>
-                            </div>
-                            <div class="contact-address-info">
-                                <a href="callto:#">+8801712435941</a>
-                                <a href="callto:#">+881934180093</a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="contact-address-icon">
-                                <i class="icofont icofont-envelope"></i>
-                            </div>
-                            <div class="contact-address-info">
-                                <a href="mailto:#">Jsoftbd87gmail.com</a>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="contact-address-icon">
-                                <i class="icofont icofont-web"></i>
-                            </div>
-                            <div class="contact-address-info">
-                                <a href="www.jsoftbd.com">www.jsoftbd.com</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-      
+     
         <div class="row">
             <div class="col-lg-12">
                 <div class="copyright-area">
@@ -93,8 +45,26 @@
         </div>
     </div>
 </div>
-
-
+<!-- jquery main JS -->
+<script src="assets/assets/js/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="assets/assets/js/bootstrap.min.js"></script>
+<!-- Slick nav JS -->
+<script src="assets/assets/js/jquery.slicknav.min.js"></script>
+<!-- Slick JS -->
+<script src="assets/assets/js/slick.min.js"></script>
+<!-- owl carousel JS -->
+<script src="assets/assets/js/owl.carousel.min.js"></script>
+<!-- Popup JS -->
+<script src="assets/assets/js/jquery.magnific-popup.min.js"></script>
+<!-- Counter JS -->
+<script src="assets/assets/js/jquery.counterup.min.js"></script>
+<!-- Counterup waypoints JS -->
+<script src="assets/assets/js/waypoints.min.js"></script>
+<!-- YTPlayer JS -->
+<script src="assets/assets/js/jquery.mb.YTPlayer.min.js"></script>
+<!-- jQuery Easing JS -->
+<script src="assets/assets/js/jquery.easing.1.3.js"></script>
 <!-- Gmap JS -->
 <script src="assets/assets/js/gmap3.min.js"></script>
 <!-- Google map api -->

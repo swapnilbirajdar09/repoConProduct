@@ -11,7 +11,7 @@ class Login_model extends CI_Model {
         extract($data);
         //---get admin details
         // $login_passwordNew = base64_encode($login_password);
-        $sql = "SELECT * FROM company_tab where username = '$login_username' AND password = '$login_password'";
+        $sql = "SELECT * FROM company_tab where username = '$login_username' OR email= '$login_username' AND password = '$login_password'";
         $result = $this->db->query($sql);
         $username = '';
         $password = '';

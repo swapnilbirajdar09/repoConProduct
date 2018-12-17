@@ -8,7 +8,7 @@ class Register_model extends CI_Model {
 
     public function registerUser($data) {
         extract($data);
-        //print_r($data);die();
+      // print_r($data);die();
         $expiry_date = '';
         switch ($package) {
             case '0':
@@ -21,19 +21,27 @@ class Register_model extends CI_Model {
                 $expiry_date = date('Y-m-d', strtotime('+' . $package . ' years'));
                 break;
         }
-
-        $sql = "INSERT INTO company_tab(full_name,username,email,"
+     	$email_exist = Register_model::checkEmailExist($user_email);
+     	if($email_exist)
+     	{
+     		return '500';
+     	}
+     	else{
+     		 $sql = "INSERT INTO company_tab(full_name,username,email,"
                 . "mobile_no,company_name,address,city,state,country,"
                 . "postal_code,package_purchased,password,expiry_date,added_date)"
                 . "VALUES('" . addslashes($user_fullname)."','" . addslashes($user_username)."','$user_email',"
                 . "'$user_mobile','" . addslashes($company_name)."','" . addslashes($user_address)."',"
                 . "'$country','$state','$city',"
                 . "'$postal_code','$package','$user_password','$expiry_date',NOW())";
+
         if ($this->db->query($sql)) {
-            return TRUE;
+            return '200';
         } else {
-            return FALSE;
+            return '700';
         }
+     	}
+       
     }
 
     public function getAllCountries() {
@@ -84,5 +92,20 @@ class Register_model extends CI_Model {
             return $result->result_array();
         }
     }
+
+     public function checkEmailExist($email_id) {
+        $query = null;
+        // ------------ check email exist 
+        $query = $this->db->get_where('company_tab', array(//making selection
+            'email' => $email_id
+        ));
+
+        if ($query->num_rows() <= 0) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
 
 }

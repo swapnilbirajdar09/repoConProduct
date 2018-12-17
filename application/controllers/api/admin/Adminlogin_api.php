@@ -11,7 +11,7 @@ class Adminlogin_api extends REST_Controller {
         $this->load->model('Login_model');
         $this->load->model('admin/Admin_model');
     }
-     //----------fun for login Details------------------------//
+     //----------fun for company login Details------------------------//
     public function adminlogin_post() {
         $data = ($_POST);
         //print_r($data);die();

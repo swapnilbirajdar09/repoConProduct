@@ -29,6 +29,27 @@
         <link rel="stylesheet" type="text/css" href="assets/assets/css/responsive.css" media="all" />
         <!-- Favicon Icon -->
         <link rel="icon" type="image/png" href="assets/assets/img/favcion.png" />
+        <script src="<?php echo base_url(); ?>assets/js/const.js"></script>
+        <!-- jquery main JS -->
+		<script src="assets/assets/js/jquery.min.js"></script>
+		<!-- Bootstrap JS -->
+<script src="assets/assets/js/bootstrap.min.js"></script>
+<!-- Slick nav JS -->
+<script src="assets/assets/js/jquery.slicknav.min.js"></script>
+<!-- Slick JS -->
+<script src="assets/assets/js/slick.min.js"></script>
+<!-- owl carousel JS -->
+<script src="assets/assets/js/owl.carousel.min.js"></script>
+<!-- Popup JS -->
+<script src="assets/assets/js/jquery.magnific-popup.min.js"></script>
+<!-- Counter JS -->
+<script src="assets/assets/js/jquery.counterup.min.js"></script>
+<!-- Counterup waypoints JS -->
+<script src="assets/assets/js/waypoints.min.js"></script>
+<!-- YTPlayer JS -->
+<script src="assets/assets/js/jquery.mb.YTPlayer.min.js"></script>
+<!-- jQuery Easing JS -->
+
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>

@@ -271,7 +271,7 @@
                             <li>Email Read Receipent</li>
                             <li>2 User Free</li>
                         </ul>
-                        <a class="appao-btn" href="<?php echo base_url();?>user/userregister"> Register Free</a>
+                        <a class="appao-btn" href="<?php echo base_url();?>registration"> Register Free</a>
                     </div>
                 </div>
             </div>
@@ -294,7 +294,7 @@
                             <li>Email Read Receipent</li>
                             <li>2 User Free</li>
                         </ul>
-                        <a class="appao-btn" href="<?php echo base_url();?>user/userregister">Register Free</a>
+                        <a class="appao-btn" href="<?php echo base_url();?>registration">Register Free</a>
                     </div>
                 </div>
             </div>
@@ -317,7 +317,7 @@
                             <li>Email Read Receipent</li>
                             <li>2 User Free</li>
                         </ul>
-                        <a class="appao-btn" href="<?php echo base_url();?>user/userregister">Register Free</a>
+                        <a class="appao-btn" href="<?php echo base_url();?>registration">Register Free</a>
                     </div>
                 </div>
             </div>
