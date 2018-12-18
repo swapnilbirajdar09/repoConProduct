@@ -74,6 +74,7 @@ if ($role == 'company_admin') {
                                     <li><a href="<?php echo base_url(); ?>user/roles"><i class="fa fa-user-secret"></i> Create Role </a></li>
                                     <li><a href="<?php echo base_url(); ?>user/createuser"><i class="fa fa-user"></i> Create User </a></li>
                                     <li><a href="<?php echo base_url(); ?>modules/site_inspection"><i class="fa fa-check-circle"></i> Site Inspection </a></li>
+                                    <li><a href="<?php echo base_url(); ?>modules/raisequery_checklist"><i class="fa fa-check-circle"></i> Site Inspection </a></li>
                                     <li><a href="<?php echo base_url(); ?>modules/raisequery_rfi"><i class="fa fa-question"></i> Raise Query (RFI) </a></li>
                                     <li><a href="<?php echo base_url(); ?>modules/manage_documents"><i class="fa fa-file"></i> Manage Document </a></li> 
       <!--                                <li><a href="<?php echo base_url(); ?>admin/dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>

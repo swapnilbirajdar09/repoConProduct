@@ -19,10 +19,9 @@ class User_dashboard extends CI_Controller {
     public function index() {
 
         $role = $this->session->userdata('role');
-
+        //echo $role;die();
         if ($role == 'company_admin') {
             $data['projects'] = User_dashboard::getAllprojects();
-
             $project_id = $this->session->userdata('project_id');
             if ($project_id == '') {
                 //check session variable set or not, otherwise logout
@@ -35,10 +34,10 @@ class User_dashboard extends CI_Controller {
             $sessionArr = explode('/', $role);
             $role_id = $sessionArr[0];
             $role_name = $sessionArr[1];
-
-
             $data['features'] = User_dashboard::getAllFeatuesForUser($user_id, $role_id);
         }
+        //$project_id = $this->session->userdata('project_id');die();
+
         $this->load->view('includes/header', $data);
         $this->load->view('pages/dashboard', $data);
         $this->load->view('includes/footer');

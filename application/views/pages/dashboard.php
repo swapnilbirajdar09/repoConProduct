@@ -51,7 +51,7 @@
     </div> --->
 
 </div>
-
+<?php ?>
 <!-- add skill div end -->          
 <!-- /page content -->
 <!-- script for category -->

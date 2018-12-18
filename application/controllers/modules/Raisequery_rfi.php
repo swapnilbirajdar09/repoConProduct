@@ -27,7 +27,7 @@ class Raisequery_rfi extends CI_Controller {
 
             if ($user_name == '') {
 //     //check session variable set or not, otherwise logout
-                redirect('user/userrole_login');
+                redirect('login');
             }
         }
         $this->load->model('modules/query_model');

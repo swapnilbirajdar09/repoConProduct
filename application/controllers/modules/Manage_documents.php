@@ -28,7 +28,7 @@ class Manage_documents extends CI_Controller {
 
             if ($user_name == '') {
 //     //check session variable set or not, otherwise logout
-                redirect('user/userrole_login');
+                redirect('login');
             }
         }
     }
