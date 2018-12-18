@@ -124,7 +124,7 @@
         </style>
     </head>
 
-    <body class="login" style="background-image: url(<?php echo base_url(); ?>);background-position: center;">
+    <body class="login" style="background-image: url(<?php echo base_url(); ?>assets/modules/login.jpg);background-position: center;">
 
         <!------ Include the above in your HEAD tag ---------->
 

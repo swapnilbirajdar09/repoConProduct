@@ -124,7 +124,7 @@
 </style>
 </head>
 
-<body class="login" style="background-image: url(<?php echo base_url(); ?>);background-position: center;">
+<body class="login" style="background-image: url(<?php echo base_url(); ?>assets/modules/login.jpg);background-position: center;">
 
     <!------ Include the above in your HEAD tag ---------->
 
@@ -178,7 +178,7 @@
                                 <form id="user_login-form" role="form" style="display: none;">
                                     <div id="userOutput"></div>
                                     <div class="form-group">
-                                        <input type="text" name="user_email" id="user_email" tabindex="1" class="form-control" placeholder="Enter your Email Id / Username here" value="">
+                                        <input type="text" name="user_email" id="user_email" tabindex="1" class="form-control" placeholder="Enter your Email Id here" value="">
                                     </div>
                                     <div class="form-group">
                                         <input type="password" name="user_password" id="user_password" tabindex="2" class="form-control" placeholder="Enter your Password here">
