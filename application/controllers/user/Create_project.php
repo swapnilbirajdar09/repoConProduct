@@ -63,6 +63,11 @@ class Create_project extends CI_Controller {
         $response = json_decode($response_json, true);
         //print_r($response_json);die();
         if ($response['status'] == 200) {
+            $session_data = array(
+                'project_id' => base64_decode($response['project_id'])
+            );
+            //start session of user if login success
+            $this->session->set_userdata($session_data);
             $response = array('status' => '200',
                 'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>

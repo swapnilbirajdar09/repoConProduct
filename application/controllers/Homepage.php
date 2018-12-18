@@ -13,7 +13,7 @@ class Homepage extends CI_Controller {
     // main index function
     public function index() {
         //print_r($data);        die();
-          $data['info'] = Homepage::admincontact_details();
+        $data['info'] = Homepage::admincontact_details();
         $this->load->view('includes/user/homepage_header');
         $this->load->view('pages/home');
         $this->load->view('includes/user/homepage_footer',$data);

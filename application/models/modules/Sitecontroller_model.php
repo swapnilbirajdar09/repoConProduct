@@ -93,9 +93,9 @@ class Sitecontroller_model extends CI_Model {
     public function addActivity($data){
         extract($data);
         $insert_data = array(
-            'activity_name' => $activity,
+            'activity_name' => addslashes($activity),
             'work_item' => $work_item_selected,
-            'comments' => $activity_comment,
+            'comments' => addslashes($activity_comment),
             'images' => $images,
             'project_id' => $project_id,
             'created_by' => $author,
@@ -116,8 +116,8 @@ class Sitecontroller_model extends CI_Model {
         extract($data);
         $update_data = array(
             'work_item' => $work_item_selected,
-            'activity_name' => $activity,
-            'comments' => $activity_comment,
+            'activity_name' => addslashes($activity),
+            'comments' => addslashes($activity_comment),
             'modified_by' => $author,
             'modified_date' => date('Y-m-d H:i:s')
         );

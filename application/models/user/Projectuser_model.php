@@ -160,7 +160,8 @@ class Projectuser_model extends CI_Model {
         if ($this->db->query($sql)) {
             $response = array(
                 'status' => 200,
-                'status_message' => 'Project Added Successfully..!');
+                'status_message' => 'Project Added Successfully..!',
+                'project_id' => base64_encode($parent_id));
         } else {
             $response = array(
                 'status' => 500,
