@@ -6,12 +6,12 @@
                 <div class="contact-form">
                     <h4>Get in Touch</h4>
                     <p class="form-message"></p>
-                    <form id="contact-form" action="#" method="POST">
+                    <form id="contact_us_form" name="contact_us_form" action="#" method="POST">
                         <input type="text" name="name" placeholder="Enter Your Name">
                         <input type="email" name="email" placeholder="Enter Your Email">
                         <input type="text" name="subject" placeholder="Your Subject">
                         <textarea placeholder="Messege" name="message"></textarea>
-                        <button type="submit" name="submit">Send Message</button>
+                        <button type="submit" id="submitbtn" name="submit">Send Message</button>
                     </form>
                 </div>
             </div>
@@ -94,6 +94,29 @@
     </div>
 </div>
 
+<script>
+    $(function () {
+        $("#contact_us_form").submit(function () {
+            dataString = $("#contact_us_form").serialize();
+            $("#submitbtn").html('<span class="w3-card w3-padding-small w3-margin-bottom w3-round"><i class="fa fa-spinner fa-spin w3-large"></i> <b>Sending Message. Hang on...</b></span>');
+            $.ajax({
+                type: "POST",
+                url: BASE_URL + "homepage/sendContactEmail",
+                //dataType : 'text',
+                data: dataString,
+                return: false, //stop the actual form post !important!
+                success: function (data) {
+                    console.log(data);                    
+                    $("#submitbtn").html('<span>Send Message</span>');
+                    $("#fpasswd_err").html(data);
+                    $('form :input').val('');
+                }
+            });
+            return false;  //stop the actual form post !important!
+
+        });
+    });
+</script>
 
 <!-- Gmap JS -->
 <script src="assets/assets/js/gmap3.min.js"></script>
