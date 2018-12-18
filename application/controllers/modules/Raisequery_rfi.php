@@ -38,6 +38,11 @@ class Raisequery_rfi extends CI_Controller {
         $role = $this->session->userdata('role');
 
         if ($role == 'company_admin') {
+            $project_id = $this->session->userdata('project_id');
+            if ($project_id == '') {
+                //check session variable set or not, otherwise logout
+                redirect('user/create_project');
+            }
             $data['queries'] = Raisequery_rfi::getAllQueries();
             $data['projects'] = Raisequery_rfi::getAllprojects();
         } else {

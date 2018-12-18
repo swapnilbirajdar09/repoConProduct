@@ -35,6 +35,11 @@ class Raisequery_checklist extends CI_Controller {
     public function index() {
         $role = $this->session->userdata('role');
         if ($role == 'company_admin') {
+            $project_id = $this->session->userdata('project_id');
+            if ($project_id == '') {
+                //check session variable set or not, otherwise logout
+                redirect('user/create_project');
+            }
             $data['activities'] = Raisequery_checklist::getAllQueries();
             $data['projects'] = Raisequery_checklist::getAllprojects();
         } else {

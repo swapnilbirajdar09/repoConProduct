@@ -38,7 +38,11 @@ class Manage_documents extends CI_Controller {
         $role = $this->session->userdata('role');
 
         if ($role == 'company_admin') {
-
+            $project_id = $this->session->userdata('project_id');
+            if ($project_id == '') {
+                //check session variable set or not, otherwise logout
+                redirect('user/create_project');
+            }
             $data['allDocument_types'] = Manage_documents::getDocumentTypes();
             $data['lastRevision_no'] = Manage_documents::getlastRevision();
             $data['allDocuments'] = Manage_documents::getAllDocuments();

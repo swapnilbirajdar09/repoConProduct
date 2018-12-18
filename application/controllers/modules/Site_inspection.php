@@ -39,6 +39,11 @@ class Site_inspection extends CI_Controller {
         $role = $this->session->userdata('role');
 
         if ($role == 'company_admin') {
+            $project_id = $this->session->userdata('project_id');
+            if ($project_id == '') {
+                //check session variable set or not, otherwise logout
+                redirect('user/create_project');
+            }
             $data['allWitems'] = Site_inspection::getAllWitems();
             $data['allActivities'] = Site_inspection::getAllActivity();
             // // print_r($data);
