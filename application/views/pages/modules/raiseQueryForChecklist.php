@@ -5,6 +5,7 @@
             <h3><i class="fa fa-check"></i> Raise Query For Checklist Failure. </h3>
         </div>
     </div> 
+    <?php print_r($activities); ?>
     <div class="w3-col l12 w3-padding-small page_title">
         <div class="w3-col l12 w3-margin-left w3-padding-small w3-center" id="message"></div>
         <form id="raiseQueryForChecklistForm" name="raiseQueryForChecklistForm" method="post">
@@ -13,7 +14,11 @@
                     <div class="w3-col l12 s12 m12 w3-padding-bottom">
                         <label> Activities: <font color ="red"><span id ="pname_star">*</span></font></label><br>
                         <font color ="red"><span id ="product_name_span"></span></font>
-                        <input type="text" name="queryTitle" id="queryTitle" value="" placeholder="Query Title" class="w3-input w3-border w3-margin-bottom" required>
+                        <input list="activities" name="activities">
+                        <datalist id="activities">
+                            <?php foreach ($activities as $key)?>
+                            <option value="Internet Explorer">                            
+                        </datalist> 
                     </div>
                     <div class="w3-col l12 s12 m12 w3-padding-bottom">
                         <label> Query Title: <font color ="red"><span id ="pname_star">*</span></font></label><br>

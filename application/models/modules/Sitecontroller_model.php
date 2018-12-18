@@ -218,4 +218,8 @@ class Sitecontroller_model extends CI_Model {
         }
     }
 
+//    public function getAllActivities($project_id){
+//        
+//    }
+    
 }

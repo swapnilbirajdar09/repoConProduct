@@ -38,7 +38,6 @@ $modifiedtime = new DateTime($activityDetails[0]['modified_date']);
                         </ul>
                         <div class="clearfix"></div>
                     </div>
-<?php// print_r($activityDetails); ?>
                     <div class="container x_content">
                         <div class="col-md-12">
                             <form id="updateCheckListForm" name="updateCheckListForm">

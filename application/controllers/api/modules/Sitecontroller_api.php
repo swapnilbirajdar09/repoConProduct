@@ -2,6 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 require(APPPATH . '/libraries/REST_Controller.php');
+
 class Sitecontroller_api extends REST_Controller {
 
     public function __construct() {
@@ -13,12 +14,9 @@ class Sitecontroller_api extends REST_Controller {
     public function getAllWitems_get() {
         //print_r($_GET);die();
         $result = $this->sitecontroller_model->getAllWitems();
-        if($result)
-        {
+        if ($result) {
             return $this->response($result, 200);
-        } 
-        else
-        {
+        } else {
             return $this->response(NULL, 404);
         }
     }
@@ -26,30 +24,23 @@ class Sitecontroller_api extends REST_Controller {
     // api to get all activities
     public function getAllActivity_get() {
         extract($_GET);
-        $proj_id=base64_decode($project_id);
+        $proj_id = base64_decode($project_id);
         $result = $this->sitecontroller_model->getAllActivity($proj_id);
-        if($result)
-        {
+        if ($result) {
             return $this->response($result, 200);
-        } 
-        else
-        {
+        } else {
             return $this->response(NULL, 404);
         }
     }
 
-
-        // api to get activity details
+    // api to get activity details
     public function getActivityDetail_get() {
         extract($_GET);
-        $act_id=base64_decode($activity_id);
+        $act_id = base64_decode($activity_id);
         $result = $this->sitecontroller_model->getActivityDetail($act_id);
-        if($result)
-        {
+        if ($result) {
             return $this->response($result, 200);
-        } 
-        else
-        {
+        } else {
             return $this->response(NULL, 404);
         }
     }
@@ -58,68 +49,53 @@ class Sitecontroller_api extends REST_Controller {
     public function delWitem_post() {
         extract($_POST);
         $result = $this->sitecontroller_model->delWitem($item_id);
-        if($result)
-        {
+        if ($result) {
             return $this->response($result, 200);
-        } 
-        else
-        {
+        } else {
             return $this->response(NULL, 404);
         }
     }
 
     // api to add Work item
     public function addWitem_post() {
-        $data=$_POST;
+        $data = $_POST;
         $result = $this->sitecontroller_model->addWitem($data);
-        if($result)
-        {
+        if ($result) {
             return $this->response($result, 200);
-        } 
-        else
-        {
+        } else {
             return $this->response(NULL, 404);
         }
     }
 
     // api to add Activity
     public function addActivity_post() {
-        $data=$_POST;
+        $data = $_POST;
         $result = $this->sitecontroller_model->addActivity($data);
-        if($result)
-        {
+        if ($result) {
             return $this->response($result, 200);
-        } 
-        else
-        {
+        } else {
             return $this->response(NULL, 404);
         }
     }
 
     // api to update Document
     public function updateChecklist_post() {
-        $data=$_POST;
+        $data = $_POST;
         $result = $this->sitecontroller_model->updateChecklist($data);
-        if($result)
-        {
+        if ($result) {
             return $this->response($result, 200);
-        } 
-        else
-        {
+        } else {
             return $this->response(NULL, 404);
         }
     }
 
     // api to upload file in Document
     public function uploadImageInfo_post() {
-        $data=$_POST;
+        $data = $_POST;
         $result = $this->sitecontroller_model->uploadImageInfo($data);
-        if($result)
-        {
+        if ($result) {
             return $this->response($result, 200);
-        } 
-        else
-        {
+        } else {
             return $this->response(NULL, 404);
         }
     }
@@ -127,14 +103,11 @@ class Sitecontroller_api extends REST_Controller {
     // api to remove activity
     public function removeActivity_get() {
         extract($_GET);
-        $activity_id=base64_decode($act_id);
+        $activity_id = base64_decode($act_id);
         $result = $this->sitecontroller_model->removeActivity($activity_id);
-        if($result)
-        {
+        if ($result) {
             return $this->response($result, 200);
-        } 
-        else
-        {
+        } else {
             return $this->response(NULL, 404);
         }
     }
@@ -142,13 +115,20 @@ class Sitecontroller_api extends REST_Controller {
     // api to remove file in Document
     public function removeImageInfo_post() {
         extract($_POST);
-        $result = $this->sitecontroller_model->removeImageInfo($key,$activity_id,$author);
-        if($result)
-        {
+        $result = $this->sitecontroller_model->removeImageInfo($key, $activity_id, $author);
+        if ($result) {
             return $this->response($result, 200);
-        } 
-        else
-        {
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    public function getAllActivities() {
+        extract($_GET);
+        $result = $tis->sitecontroller_model->getAllActivity($project_id);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
             return $this->response(NULL, 404);
         }
     }
@@ -160,7 +140,6 @@ class Sitecontroller_api extends REST_Controller {
     //     $result = $this->Register_model->getCountryState($country);
     //     return $this->response($result);
     // }
-    
     // //----------------fun for get all countries details----------------------//
     // public function getStateCity_get() {
     //     //print_r($_GET);die();
@@ -175,5 +154,4 @@ class Sitecontroller_api extends REST_Controller {
     //     $result = $this->Register_model->registerUser($data);
     //     return $this->response($result);
     // }
-
 }

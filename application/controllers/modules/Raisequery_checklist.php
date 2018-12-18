@@ -40,8 +40,8 @@ class Raisequery_checklist extends CI_Controller {
                 //check session variable set or not, otherwise logout
                 redirect('user/create_project');
             }
-            $data['activities'] = Raisequery_checklist::getAllQueries();
             $data['projects'] = Raisequery_checklist::getAllprojects();
+            $data['activities'] = Raisequery_checklist::getAllActivities();
         } else {
             $user_name = $this->session->userdata('user_name');
             $user_id = $this->session->userdata('user_id');
@@ -51,8 +51,9 @@ class Raisequery_checklist extends CI_Controller {
             $role_id = $sessionArr[0];
             $role_name = $sessionArr[1];
             $data['features'] = Raisequery_checklist::getAllFeatuesForUser($user_id, $role_id);
-            //$data['queries'] = Raisequery_checklist::getAllQueries();
+            $data['activities'] = Raisequery_checklist::getAllActivities();
         }
+
         $this->load->view('includes/header', $data);
         $this->load->view('pages/modules/raiseQueryForChecklist', $data);
         $this->load->view('includes/footer');
@@ -87,6 +88,20 @@ class Raisequery_checklist extends CI_Controller {
         $response = json_decode($response_json, true);
         return $response;
     }
-    
-    
+
+    public function getAllActivities() {
+        $project_id = $this->session->userdata('project_id');
+        $path = base_url();
+        $url = $path . 'api/user/Sitecontroller_api/getAllActivities?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
+    }
+
 }
