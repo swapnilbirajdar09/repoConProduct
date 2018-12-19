@@ -13,7 +13,7 @@ class Homepage extends CI_Controller {
     // main index function
     public function index() {
         //print_r($data);        die();
-        $data['info'] = Homepage::admincontact_details();
+          $data['info'] = Homepage::admincontact_details();
         $this->load->view('includes/user/homepage_header');
         $this->load->view('pages/home');
         $this->load->view('includes/user/homepage_footer',$data);
@@ -47,7 +47,7 @@ class Homepage extends CI_Controller {
         $this->email->set_newline("\r\n");
         $this->email->from('support@buddhistparinay.in', "Admin Team");
         $this->email->to('j', 'Admin Team');
-        $this->email->subject("Parinay-Contact Form");
+        $this->email->subject("Construction Manager-Contact Form");
         $this->email->message("<html>"
                 . "<head>"
                 . "</head>"
