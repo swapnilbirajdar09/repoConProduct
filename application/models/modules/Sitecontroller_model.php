@@ -141,6 +141,10 @@ class Sitecontroller_model extends CI_Model {
 
         $fileArr = json_decode($currentFiles);
         array_push($fileArr, $filepath);
+        if(count($fileArr) > 5){
+            return 412;
+            die();
+        }
         $result = array(
             'images' => json_encode($fileArr),
             'modified_by' => $author,
@@ -150,9 +154,9 @@ class Sitecontroller_model extends CI_Model {
         $this->db->where('activity_id', base64_decode($activity_id));
         $this->db->update('checklist_activity_tab', $result);
         if ($this->db->affected_rows() == 1) {
-            return true;
+            return 200;
         } else {
-            return false;
+            return 500;
         }
     }
 

@@ -91,6 +91,8 @@
     $(function () {
         $("#saveRole").submit(function (e) {
             e.preventDefault();
+
+
             $.ajax({
                 type: "POST",
                 url: "<?php echo base_url(); ?>user/roles/saveRoles",
@@ -120,7 +122,13 @@
                                 $('.alert_message').fadeOut('fast');
                             }, 10000); // <-- time in milliseconds
                             break;
-//                    case 'validation':
+                        case 'validation':
+                            //$('#ajax_danger_alert').show();
+                            $('#message').html(data.message);
+                            setTimeout(function () {
+                                $('.alert_message').fadeOut('fast');
+                            }, 10000); // <-- time in milliseconds
+                            break;
                         default:
                             //$('#ajax_validation_alert').show();
                             $('#message').html('<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.!</strong></div>');

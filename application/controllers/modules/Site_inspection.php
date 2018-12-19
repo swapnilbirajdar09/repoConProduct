@@ -347,7 +347,7 @@ class Site_inspection extends CI_Controller {
         $file_name = $_FILES['activity_file']['name'];
         if (!empty(($_FILES['activity_file']['name']))) {
             $extension = pathinfo($_FILES['activity_file']['name'], PATHINFO_EXTENSION);
-            $_FILES['userFile']['name'] = $work_item  . '_' . time() . '.' . $extension;
+            $_FILES['userFile']['name'] = $work_item . '_' . time() . '.' . $extension;
             $_FILES['userFile']['type'] = $_FILES['activity_file']['type'];
             $_FILES['userFile']['tmp_name'] = $_FILES['activity_file']['tmp_name'];
             $_FILES['userFile']['error'] = $_FILES['activity_file']['error'];
@@ -394,10 +394,17 @@ class Site_inspection extends CI_Controller {
         curl_close($ch);
         $result = json_decode($output, true);
 
-        if ($result) {
+        if ($result == 200) {
             $response = array(
                 'status' => 'success',
                 'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> File uploaded successfully.</div>'
+            );
+            echo json_encode($response);
+            die();
+        } elseif ($result == 412) {
+            $response = array(
+                'status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> You Can Upload More Than 5 Images.</div>'
             );
             echo json_encode($response);
             die();
@@ -562,7 +569,6 @@ class Site_inspection extends CI_Controller {
         $this->load->view('includes/footer');
     }
 
-    
 //----------------fun for remove image
     public function removeImageInfo() {
         extract($_GET);
@@ -605,5 +611,5 @@ class Site_inspection extends CI_Controller {
             echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> Image not found.</div>';
         }
     }
-    
+
 }

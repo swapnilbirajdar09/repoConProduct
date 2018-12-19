@@ -74,6 +74,30 @@ class Roles extends CI_Controller {
             $user_name = $this->session->userdata('user_name');
             $data['author'] = $user_name;
         }
+
+//        print_r($data);
+//        die();
+        if (!isset($features)) {
+            $response = array(
+                'status' => 'validation',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Failure!</strong> Please Select Atleast one Feature.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			}, 5000);
+			</script>'
+                    //'<b>Success:</b> You Have Successfully Registered.!'
+            );
+            echo json_encode($response);
+            die();
+        }
+
+
         $data['features'] = json_encode($features);
         $path = base_url();
         $url = $path . 'api/user/Role_api/saveRoles';
