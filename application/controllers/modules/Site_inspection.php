@@ -517,6 +517,51 @@ class Site_inspection extends CI_Controller {
         $this->load->view('includes/footer');
     }
 
+    // fucntion to display view checklist page
+    public function view_checklist($param = '') {
+        $path = base_url();
+        $url = $path . 'api/modules/sitecontroller_api/getActivityDetail?activity_id=' . $param;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+// authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+//close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+
+        $role = $this->session->userdata('role');
+
+        if ($role == 'company_admin') {
+            $data['allWitems'] = Site_inspection::getAllWitems();
+            $data['allActivities'] = Site_inspection::getAllActivity();
+            // // print_r($data);
+            $data['projects'] = Site_inspection::getAllprojects();
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $user_id = $this->session->userdata('user_id');
+            $project_id = $this->session->userdata('project_id');
+            $role = $this->session->userdata('role');
+            $sessionArr = explode('/', $role);
+            $role_id = $sessionArr[0];
+            $role_name = $sessionArr[1];
+            $data['features'] = Site_inspection::getAllFeatuesForUser($user_id, $role_id);
+            $data['allWitems'] = Site_inspection::getAllWitems();
+            $data['allActivities'] = Site_inspection::getAllActivity();
+        }
+
+        $data['activityDetails'] = $response;
+        //print_r($data);die();
+        $this->load->view('includes/header', $data);
+        $this->load->view('pages/modules/view_checklist', $data);
+        $this->load->view('includes/footer');
+    }
+
     
 //----------------fun for remove image
     public function removeImageInfo() {

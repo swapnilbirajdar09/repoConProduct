@@ -56,3 +56,4 @@ $route['modules/manage_documents/edit_document/(:any)'] = "modules/manage_docume
 $route['modules/raisequery_rfi/edit_query/(:any)'] = "modules/raisequery_rfi/edit_query/$1";
 $route['modules/raisequery_checklist/edit_queryChecklist/(:any)'] = "modules/raisequery_checklist/edit_queryChecklist/$1";
 $route['modules/site_inspection/edit_checklist/(:any)'] = "modules/site_inspection/edit_checklist/$1";
+$route['modules/site_inspection/view_checklist/(:any)'] = "modules/site_inspection/view_checklist/$1";

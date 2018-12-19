@@ -464,6 +464,7 @@
                                                 <div class="desc w3-medium"><i class="fa fa-check-circle"></i> <?php echo $key['activity_name']; ?></div>
                                                 <div class="desc"><?php echo $key['comments']; ?></div>
                                                 <div class="desc">
+                                                  <!-- <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" href="<?php echo base_url(); ?>modules/site_inspection/view_checklist/<?php echo base64_encode($key['activity_id']); ?>"><i class="fa fa-edit"></i> View</a> -->
                                                     <?php
                                                     $user_role = $this->session->userdata('role');
                                                     if ($user_role == 'company_admin') {
