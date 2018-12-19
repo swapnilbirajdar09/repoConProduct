@@ -3,9 +3,7 @@
     <!-- top tiles -->
    
     <!-- /top tiles -->
-
-
-    
+   <div class="w3-col l12 w3-margin-left w3-padding-small w3-center" style="margin:10px;" id="message"></div>
     <!-- Div for Add Plant-->
     <div class="row" style="padding-left:10px;">
        <div class="col-md-4 col-sm-12 col-xs-12 w3-margin">
@@ -66,10 +64,10 @@
 				data: dataString,
            return: false,  //stop the actual form post !important!
 
-           success: function(data)
+          success: function(response)
            {
-           
-           	$.alert(data);                       
+           	data = JSON.parse(response)
+            $('#message').html(data.message);                     
            }
          });
          return false;  //stop the actual form post !important!
@@ -90,10 +88,10 @@
                 data: dataString,
                 return: false,  //stop the actual form post !important!
 
-           success: function(data)
+          success: function(response)
            {
-           
-            $.alert(data);                       
+           	data = JSON.parse(response)
+            $('#message').html(data.message);                     
            }
 
        });
@@ -115,9 +113,10 @@
 				data: dataString,
            return: false,  //stop the actual form post !important!
 
-           success: function(data)
+           success: function(response)
            {
-           	$.alert(data);                       
+           	data = JSON.parse(response)
+            $('#message').html(data.message);                     
            }
 
        });

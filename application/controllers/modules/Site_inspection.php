@@ -200,7 +200,7 @@ class Site_inspection extends CI_Controller {
             if (!empty(($_FILES['image']['name'][$i]))) {
                 $extension = pathinfo($_FILES['image']['name'][$i], PATHINFO_EXTENSION);
 
-                $_FILES['userFile']['name'] = $work_item_selected . '_' . $i . '.' . $extension;
+                $_FILES['userFile']['name'] = $work_item_selected . '_' . time() . '.' . $extension;
                 $_FILES['userFile']['type'] = $_FILES['image']['type'][$i];
                 $_FILES['userFile']['tmp_name'] = $_FILES['image']['tmp_name'][$i];
                 $_FILES['userFile']['error'] = $_FILES['image']['error'][$i];

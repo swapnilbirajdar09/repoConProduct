@@ -12,6 +12,12 @@ class Createuser extends CI_Controller {
 
     // main index function
     public function index() {
+        $project_id = $this->session->userdata('project_id');
+
+        if ($project_id == '') {
+            //check session variable set or not, otherwise logout
+            redirect('user/create_project');
+        }
         $data['roles'] = Createuser::getProjectRoles();
         $data['users'] = Createuser::getProjectUsers();
         //print_r($data);        die();
@@ -22,8 +28,7 @@ class Createuser extends CI_Controller {
         $this->load->view('includes/footer');
     }
 
-    
-     public function getAllprojects() {
+    public function getAllprojects() {
         $company_id = $this->session->userdata('company_id');
         $path = base_url();
         $url = $path . 'api/user/Role_api/getAllProjects?company_id=' . $company_id;
