@@ -123,9 +123,9 @@ class Sitecontroller_api extends REST_Controller {
         }
     }
 
-    public function getAllActivities() {
+    public function getAllActivities_get() {
         extract($_GET);
-        $result = $tis->sitecontroller_model->getAllActivity($project_id);
+        $result = $this->sitecontroller_model->getAllActivity($project_id);
         if ($result) {
             return $this->response($result, 200);
         } else {

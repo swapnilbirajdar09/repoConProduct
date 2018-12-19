@@ -24,7 +24,7 @@ class Projectuser_model extends CI_Model {
     public function createNewUser($data) {
         extract($data);
         
-        $sqlSel = "SELECT * FROM user_tab WHERE user_email='$userEmail'";
+        $sqlSel = "SELECT * FROM user_tab WHERE user_email='$userEmail' AND project_id = '$project_id'";
         $res = $this->db->query($sqlSel);
 
         if ($res->num_rows() > 0) {
