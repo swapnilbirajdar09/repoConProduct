@@ -1,6 +1,5 @@
 <!-- page content --> 
-<script src="<?php echo base_url(); ?>assets/dropzone/dropzone.js"></script>
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/dropzone/dropzone.css">
+
 <?php
 //print_r($activityDetails[0]);
 $createdtime = new DateTime($activityDetails[0]['created_date']);
