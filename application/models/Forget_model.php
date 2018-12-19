@@ -77,7 +77,7 @@ class Forget_model extends CI_Model {
             'protocol' => 'smtp',
             'smtp_host' => 'mx1.hostinger.in',
             'smtp_port' => '587',
-            'smtp_user' => 'support@buddhistparinay.in', // change it to yours
+            'smtp_user' => 'support@bizmo-tech.com', // change it to yours
             'smtp_pass' => 'Descartes@1990', // change it to yours
             'mailtype' => 'html',
             'charset' => 'utf-8',
@@ -89,7 +89,7 @@ class Forget_model extends CI_Model {
 
         $this->load->library('email', $config);
         $this->email->set_newline("\r\n");
-        $this->email->from('support@buddhistparinay.in', "Admin Team");
+        $this->email->from('support@bizmo-tech.com', "Admin Team");
         $this->email->to($email_id);
         $this->email->subject("Password Request-Construction Manager");
         $this->email->message('<html>
