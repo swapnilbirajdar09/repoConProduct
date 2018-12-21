@@ -1,87 +1,12 @@
 <title>Construction Manager | Create Project</title>
+<?php 
+// get project session
+$projSession = $this->session->userdata('project_id');
+$projArr=explode('|', base64_decode($projSession));
+$project_id=$projArr[0];
+$project_name=strtoupper($projArr[1]);
+?>
 <!-- page content -->
-<div class="right_col" role="main">
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="">
-                <div class="row x_title">
-                    <div class="col-md-6">
-                        <h3><i class="fa fa-plus"></i> Create Project</h3>
-                    </div>
-                </div>             
-                <form id="create_project" name="create_project" method="post">
-                    <div class="w3-col l12 page_title">
-                        <div class="w3-col l12 w3-margin-left w3-padding-small w3-center" id="message"></div>
-                        <!-- Alert for Validating Ajax Profile Edit Section -->
-                        <div class="col-lg-3 col-md-4 alert_message" id="ajax_validation_alert" style="display: none; position: fixed; top: 15px; right: 0; z-index: 9999">
-                            <div class="alert alert-warning  fade show alert-dismissible" role="alert">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <span class="ajax_validation_alert"></span>
-                            </div>
-                        </div>
-                        <!-- Alert for Validating Ajax Profile Edit Section -->
-                        <!-- Alerts for Member actions -->
-                        <div class="col-lg-3 col-md-4 alert_message" id="ajax_success_alert" style="display: none; position: fixed; top: 15px; right: 0; z-index: 9999">
-                            <div class="alert alert-success  fade show alert-dismissible" role="alert">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <!-- Success Alert Content -->
-                                <span class="ajax_success_alert"></span>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-4 alert_message" id="ajax_danger_alert" style="display: none; position: fixed; top: 15px; right: 0; z-index: 9999">
-                            <div class="alert alert-danger  fade show alert-dismissible" role="alert">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <!-- Success Alert Content -->
-                                <span class="ajax_danger_alert"></span>
-                            </div>
-                        </div>
-                        <!-- warning alerts -->
-                        <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom">
-                            <div class="form-group">
-                                <label for="customer_name">Project Name <b class="w3-text-red w3-medium">*</b> </label>
-                                <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Enter Project Name Here" required>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-sm-12 col-xs-12 w3-margin-bottom" >
-                            <div class="form-group w3-col l12">
-                                <label for="stock_plant">Project Description <b class="w3-text-red w3-medium">*</b> </label>
-                                <textarea class="w3-input w3-border w3-margin-bottom" placeholder="Enter Project  Description Here" name="projectDesc" id="projectDesc" rows="5" cols="50" style="resize: none;" required></textarea>
-                            </div>                          
-                        </div> 
-                        <div class="w3-col l12 form-group w3-center w3-padding-top">
-                            <button id="project_done" class="w3-button w3-margin-top theme_bg" type="submit" > Create Project </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-	$(function(){
-		$("#create_project").submit(function(){
-			dataString = $("#create_project").serialize();
-			//alert(dataString);
-			$.ajax({
-				type: "POST",
-				url: "<?php echo base_url(); ?>user/create_project/create_Newproject",
-				data: dataString,
-           return: false,  //stop the actual form post !important!
-
-           success: function(response)
-           {
-           	data = JSON.parse(response)
-            $('#message').html(data.message);                       
-        }
-    });
-         return false;  //stop the actual form post !important!
-
-     });
-	});
-</script>
-
-
 <div class="right_col" role="main" ng-app="genericApp" ng-cloak ng-controller="genericCtrl">
     <div class="">
         <div class="page-title">
@@ -95,7 +20,6 @@
         <div class="row">
             <!-- create new project div -->
             <div class="col-md-12 col-sm-12 col-xs-12">
-                
                 <div class="x_panel">
                     <div class="x_title">
                         <h2><i class="fa fa-diamond"></i> Create new Project</h2>
@@ -117,18 +41,18 @@
                                 <div class="col-md-12 col-sm-12 col-xs-12 w3-margin-bottom" >
                                     <div class="form-group w3-col l12">
                                         <label for="projectDesc">Project Description (optional): </label>
-                                        <textarea class="w3-input w3-margin-bottom" placeholder="Enter Project  Description Here" name="projectDesc" id="projectDesc" rows="5" cols="50" style="resize: none;" required></textarea>
+                                        <textarea class="w3-input w3-margin-bottom" placeholder="Type a short description about project" name="projectDesc" id="projectDesc" rows="5" cols="50" style="resize: none;"></textarea>
                                     </div>                          
                                 </div> 
-                                <div class="col-md-12 w3-center w3-margin-bottom">
-                                    <button id="project_done" class="btn w3-hover-grey theme_bg" type="submit" > Create Project </button>
+                                <div class="col-md-12 w3-margin-bottom">
+                                    <button id="project_done" class="btn w3-hover-grey theme_bg" type="submit" > Create new Project </button>
                                 </div>
-                                <div class="w3-text-red w3-col l12" id="errProjectMsg">
+                                <div class="w3-col l12" id="errProjectMsg">
                                 </div>
                             </form>
                         </div>
                         <div class="col-md-6 col-sm-12 col-xs-12">
-                            
+
                             <div class="col-md-12 col-sm-12 col-xs-12 w3-padding" style="overflow-y: auto;background-color: #F7F7F7">
                                 <label>All Projects: </label>
                                 <ul style="list-style: none;padding: 0">
@@ -147,14 +71,16 @@
                                             ?>
                                             <li class="w3-border-bottom w3-padding">
                                                 <div class="w3-row">
-                                                    <div class="w3-col l10 m10 s10">
-                                                        <span>
-                                                            <?php echo strtoupper($proj['project_name']); ?>
-                                                        </span>
-                                                    </div>
-                                                    <div class="w3-col l2 m2 s2">
-                                                        <a onclick="delWitem('<?php echo $proj['project_id']; ?>')" title="Delete Project" class="btn badge"><i class="fa fa-close"></i> Delete</a>
-                                                    </div>
+                                                    <span>
+                                                        <?php echo strtoupper($proj['project_name']); ?>
+                                                    </span>
+                                                    <?php 
+                                                    if($proj['project_id']==$project_id){
+                                                        ?>
+                                                        <i>(Active Session)</i>
+                                                        <?php
+                                                    }
+                                                    ?>                                                    
                                                 </div>
                                             </li>
                                             <?php
@@ -163,51 +89,10 @@
                                     ?>
                                 </ul>
                             </div>
-                            
                         </div>
-                        
-                    </div>
-
-                    <!-- all work item list div -->
-                    <div class="w3-col l6 w3-padding-small" id="allWitemDiv">
-                        <div class="w3-col l12 w3-border" style="height: 325px;overflow-y: auto;">
-                            <ul style="list-style: none;padding: 0">
-
-                                <?php
-                                if (empty($allWitems)) {
-                                    ?>
-                                    <li class="w3-border-bottom w3-padding w3-center w3-text-red">
-                                        <span>
-                                            No Work Item Found
-                                        </span>
-                                    </li>
-                                    <?php
-                                } else {
-                                    foreach ($allWitems as $item) {
-                                        ?>
-                                        <li class="w3-border-bottom w3-padding">
-                                            <div class="w3-row">
-
-                                                <div class="w3-col l10 m10 s10">
-                                                    <span>
-                                                        <?php echo $item['witem_name']; ?>
-                                                    </span>
-                                                </div>
-                                                <div class="w3-col l2 m2 s2">
-                                                    <a onclick="delWitem('<?php echo $item['witem_id']; ?>')" title="Delete Work Item" class="btn" style="padding: 0"><i class="fa fa-close"></i></a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <?php
-                                    }
-                                }
-                                ?>
-                            </ul>
-                        </div>
-                    </div>
+                    </div>                    
                 </div>
-            </div>
-            
+            </div>            
         </div>
         <!-- create new project div ends -->
 
@@ -398,7 +283,7 @@
                                             if ($user_role == 'company_admin' || $user_name == $key['created_by']) {
                                                 ?>
                                                 <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" href="<?php echo base_url(); ?>modules/site_inspection/edit_checklist/<?php echo base64_encode($key['activity_id']); ?>"><i class="fa fa-edit"></i> Edit</a>
-                                                
+
                                                 <a class="btn btn-sm w3-text-grey w3-hover-text-black" id="delBtn_<?php echo $key['activity_id']; ?>" style="padding: 2px 5px;background-color: #DDDDDD" onclick="removeActivity('<?php echo base64_encode($key['activity_id']); ?>', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-trash"></i> Delete</a>
                                             <?php }?>
                                         </div>

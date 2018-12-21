@@ -180,7 +180,7 @@ if ($role == 'company_admin') {
                                         if ($projects['status'] != 500) {
                                             foreach ($projects['status_message'] as $key) {
                                                 ?>
-                                                <li <?php if($key['project_id']==$project_id){ echo 'class="active"'; } ?>><a href="<?php echo base_url(); ?>user_dashboard/startSesstionByProjectID?project_id=<?php echo base64_encode($key['project_id']); ?>"><?php echo strtoupper($key['project_name']); ?></a></li>
+                                                <li <?php if($key['project_id']==$project_id){ echo 'class="active"'; } ?>><a href="<?php echo base_url(); ?>user_dashboard/startSesstionByProjectID?project_id=<?php echo base64_encode($key['project_id'].'|'.$key['project_name']); ?>"><?php echo strtoupper($key['project_name']); ?></a></li>
                                                 <?php
                                             }
                                         } else {

@@ -73,7 +73,7 @@ $("#addProjectForm").on('submit', function(e) {
     cache: false, // To unable request pages to be cached
     processData: false,
     beforeSend: function(){
-      $('#errProjectMsg').html('<span class="w3-small w3-padding-small theme_text w3-margin-bottom w3-round"><i class="fa fa-circle-o-notch fa-spin w3-large"></i> <b>Adding category...</b></span>');
+      $('#errProjectMsg').html('<i class="fa fa-circle-o-notch fa-spin w3-large"></i> Creating Project...');
       $('#project_done').attr('disabled',true);
     },
     success: function(data){

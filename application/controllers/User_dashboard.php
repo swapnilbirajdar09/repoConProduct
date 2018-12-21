@@ -74,9 +74,8 @@ class User_dashboard extends CI_Controller {
 
     public function startSesstionByProjectID() {
         extract($_GET);
-        $proj_id = base64_decode($project_id);
         $session_data = array(
-            'project_id' => $proj_id
+            'project_id' => $project_id
         );
         //start session of user if login success
         $this->session->set_userdata($session_data);
