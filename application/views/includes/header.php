@@ -168,9 +168,13 @@ if ($role == 'company_admin') {
                                     </ul>
                                 </li>
                                 <li class="">
-                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                        Select Projects <b><?php //echo $session_name;                               ?>  </b>
-                                        <span class=" fa fa-angle-down"></span>
+                                    <?php 
+                                    $curr_project='Select Project';
+                                    if(isset($project_id) && $project_id!=''){
+
+                                    }
+                                    ?>
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><b><?php echo $curr_project; ?></b> <span class=" fa fa-angle-down"></span>
                                     </a>
                                     <?php
                                     // print_r($projects);
