@@ -1,8 +1,24 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+class Permission_model extends CI_Model {
 
+    public function __construct() {
+        parent::__construct();
+    }
+
+    public function getAllGrades() {
+        $sql = "SELECT * FROM grade_tab";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
+
+}
