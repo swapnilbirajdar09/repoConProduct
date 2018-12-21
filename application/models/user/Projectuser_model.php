@@ -161,7 +161,8 @@ class Projectuser_model extends CI_Model {
             $response = array(
                 'status' => 200,
                 'status_message' => 'Project Added Successfully..!',
-                'project_id' => base64_encode($parent_id));
+                'project_id' => base64_encode($parent_id.'|'.$projectName)
+            );
         } else {
             $response = array(
                 'status' => 500,

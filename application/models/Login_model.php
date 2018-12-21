@@ -17,6 +17,7 @@ class Login_model extends CI_Model {
         $password = '';
         $company_id = '';
         $project_id = '';
+        $project_name = '';
         // $role_name = '';
         if ($result->num_rows() <= 0) {
             $response = array(
@@ -35,12 +36,13 @@ class Login_model extends CI_Model {
             $resultsel = $this->db->query($sqlSelect);
             foreach ($resultsel->result_array() as $val) {
                 $project_id = $val['project_id'];
+                $project_name = $val['project_name'];
             }
             $response = array(
                 'status' => 200,
                 'company_id' => $company_id,
                 'admin_name' => $username,
-                'project_id' => $project_id
+                'project_id' => base64_encode($project_id.'|'.$project_name)
             );
         }
 

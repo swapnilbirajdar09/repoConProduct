@@ -39,7 +39,10 @@ class Site_inspection extends CI_Controller {
         $role = $this->session->userdata('role');
 
         if ($role == 'company_admin') {
-            $project_id = $this->session->userdata('project_id');
+            // get project session
+            $projSession = $this->session->userdata('project_id');
+            $projArr=explode('|', base64_decode($projSession));
+            $project_id=$projArr[0];
             if ($project_id == '') {
                 //check session variable set or not, otherwise logout
                 redirect('user/create_project');
