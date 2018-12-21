@@ -9,7 +9,10 @@ class Raisequery_rfi extends CI_Controller {
         parent::__construct();
         // load common model
         $role = $this->session->userdata('role');
-
+// get project session
+            $projSession = $this->session->userdata('project_id');
+            $projArr=explode('|', base64_decode($projSession));
+            $project_id=$projArr[0];
         if ($role == 'company_admin') {
             $admin_name = $this->session->userdata('usersession_name');
             if ($admin_name == '') {
@@ -20,7 +23,7 @@ class Raisequery_rfi extends CI_Controller {
             $user_name = $this->session->userdata('user_name');
             $user_id = $this->session->userdata('user_id');
             $project_id = $this->session->userdata('project_id');
-            $role = $this->session->userdata('role');
+          //  $role = $this->session->userdata('role');
             $sessionArr = explode('/', $role);
             $role_id = $sessionArr[0];
             $role_name = $sessionArr[1];
@@ -30,32 +33,39 @@ class Raisequery_rfi extends CI_Controller {
                 redirect('login');
             }
         }
-        $this->load->model('modules/query_model');
+       // $this->load->model('modules/query_model');
     }
 
     // main index function
     public function index() {
         $role = $this->session->userdata('role');
-
+// get project session
+            $projSession = $this->session->userdata('project_id');
+            $projArr=explode('|', base64_decode($projSession));
+            $project_id=$projArr[0];
         if ($role == 'company_admin') {
-            $project_id = $this->session->userdata('project_id');
+           // $project_id = $this->session->userdata('project_id');
             if ($project_id == '') {
                 //check session variable set or not, otherwise logout
                 redirect('user/create_project');
             }
+           $data['allrole_types'] = Raisequery_rfi::getRoleName();
+
             $data['queries'] = Raisequery_rfi::getAllQueries();
             $data['projects'] = Raisequery_rfi::getAllprojects();
         } else {
             $user_name = $this->session->userdata('user_name');
             $user_id = $this->session->userdata('user_id');
-            $project_id = $this->session->userdata('project_id');
+          //  $project_id = $this->session->userdata('project_id');
             $role = $this->session->userdata('role');
             $sessionArr = explode('/', $role);
             $role_id = $sessionArr[0];
             $role_name = $sessionArr[1];
+             $data['allrole_types'] = Raisequery_rfi::getRoleName();
             $data['features'] = Raisequery_rfi::getAllFeatuesForUser($user_id, $role_id);
             $data['queries'] = Raisequery_rfi::getAllQueries();
         }
+        
         $this->load->view('includes/header', $data);
         $this->load->view('pages/modules/requestForInfo', $data);
         $this->load->view('includes/footer');
@@ -134,7 +144,12 @@ class Raisequery_rfi extends CI_Controller {
             }
             $imageArr[] = $imagePath;
         }
-        $data['project_id'] = $this->session->userdata('project_id');
+    //    $data['project_id'] = $this->session->userdata('project_id');
+        // get project session
+            $projSession = $this->session->userdata('project_id');
+            $projArr=explode('|', base64_decode($projSession));
+            $project_id=$projArr[0];
+            $data['project_id'] = $project_id;
         if ($imagePath == '') {
             $data['images'] = '';
         } else {
@@ -157,8 +172,8 @@ class Raisequery_rfi extends CI_Controller {
         $response_json = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response_json, true);
-//        print_r($response_json);
-//        die();
+      // print_r($response_json);
+      /// die();
         if ($response['status'] == 'success') {
             $response = array('status' => 'success',
                 'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
@@ -201,6 +216,26 @@ class Raisequery_rfi extends CI_Controller {
                      </script>');
         }
         echo json_encode($response);
+    }
+
+// get role types
+    public function getRoleName() {
+        $path = base_url();
+        $url = $path . 'api/modules/Rfiquery_api/getRoleName';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+// authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+//close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        return $response;
     }
 
 //------------fun for get all queries
@@ -292,7 +327,11 @@ class Raisequery_rfi extends CI_Controller {
         } else {
             $user_name = $this->session->userdata('user_name');
             $user_id = $this->session->userdata('user_id');
-            $project_id = $this->session->userdata('project_id');
+         //   $project_id = $this->session->userdata('project_id');
+            // get project session
+            $projSession = $this->session->userdata('project_id');
+            $projArr=explode('|', base64_decode($projSession));
+            $project_id=$projArr[0];
             $role = $this->session->userdata('role');
             $sessionArr = explode('/', $role);
             $role_id = $sessionArr[0];
@@ -349,8 +388,8 @@ class Raisequery_rfi extends CI_Controller {
 
 //--------------fun for update query Details
     public function updateQueryDetails() {
-        extract($_POST);
-        $data = $_POST;
+       extract($_GET);
+        
         $session_name = $this->session->userdata('usersession_name');
         $session_role = $this->session->userdata('role');
         if ($session_role == 'company_admin') {
@@ -359,37 +398,50 @@ class Raisequery_rfi extends CI_Controller {
             $user_name = $this->session->userdata('user_name');
             $data['author'] = $user_name;
         }
-
         $path = base_url();
-        $url = $path . 'api/modules/rfiquery_api/updateQueryDetails';
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        // authenticate API
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        //close cURL resource
+        $url = $path . 'api/modules/rfiquery_api/updateQueryDetails?query_id=' . $query_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
         curl_close($ch);
-        $response = json_decode($output, true);
-
-        if ($response) {
+        $response = json_decode($response_json, true);
+      //  print_r($response_json);die();
+       if ($response['status'] == 'success') {
             $response = array(
                 'status' => 'success',
-                'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> Details updated successfully.</div>'
+                'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Success!</strong> Status Updated successfully.
+                </div>
+                <script>
+                window.setTimeout(function() {
+                 $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                     $(this).remove(); 
+                     });
+                     location.reload();
+                     }, 1000);
+                     </script>'
             );
-            echo json_encode($response);
-            die();
         } else {
             $response = array(
                 'status' => 'error',
-                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Perhaps you have not changed any value.</div>'
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Failure!</strong>Status Updation Failed.
+                </div>
+                <script>
+                window.setTimeout(function() {
+                 $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                     $(this).remove(); 
+                     });
+                     }, 5000);
+                     </script>'
             );
-            echo json_encode($response);
-            die();
         }
+        echo json_encode($response);
     }
 
 //----------------fun for remove image

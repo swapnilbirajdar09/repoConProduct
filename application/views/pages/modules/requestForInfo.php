@@ -21,6 +21,22 @@
                         <font color ="red"><span id ="product_description_span"></span></font>
                         <textarea class="w3-input w3-border w3-margin-bottom" placeholder="Query Description" name="queryDescription" id="queryDescription" rows="5" cols="50" style="resize: none;" required></textarea>
                     </div>
+                       <div class="w3-col l12 s12 m12 w3-padding-bottom">
+                          <label>Raised To : <font color ="red"><span id ="pdescription_star">*</span></font></label>
+                         <select class="w3-input" name="role_type" id="role_type" style="border-bottom-color: #CCCCCC">
+                          <option value="0" class="w3-light-grey">Select Role</option>
+                           <?php
+                           //print_r($allrole_types);die();
+                             if ($allrole_types) {
+                              foreach ($allrole_types as $key) {
+                            ?>
+                            <option value="<?php echo $key['role_name']; ?>"><?php echo $key['role_name']; ?></option>
+                            <?php
+                              }
+                             }
+                            ?>
+                          </select>
+                       </div>
                     <!-- kk -->                            
                 </div>
                 <!-- ---div for images -->
@@ -50,7 +66,7 @@
     <div class="w3-col l12 w3-padding-small w3-margin-top page_title">
         <div class="x_panel">
             <div class="x_title">
-                <h2><i class="fa fa-list"></i> All Documents</h2>
+                <h2><i class="fa fa-list"></i> All Queries</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                 </ul>
@@ -64,7 +80,7 @@
                             <tr >
                                 <th class="text-center">Sr.No</th>
                                 <th class="text-center">Query Title</th>
-                                <th class="text-center">Query Description</th>                               
+                                <th class="text-center">Query Raised To</th>                        
                                 <th class="text-center"></th>
                             </tr>
                         </thead>
@@ -78,7 +94,7 @@
                                     <tr class="w3-center">
                                         <td style=" vertical-align: middle;"><?php echo $i; ?></td>
                                         <td style=" vertical-align: middle;"><?php echo $val['query_title']; ?></td>
-                                        <td style=" vertical-align: middle; width: 450px;"><p><?php echo $val['query_description']; ?></p></td>                                        
+                                        <td style=" vertical-align: middle; width: 450px;"><p><?php echo $val['raised_to']; ?></p></td>                                        
                                         <td style=" vertical-align: middle;">
                                             <div class="btn-group">
                                                 <button data-toggle="dropdown" id="actionBtn_<?php echo $val['query_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
@@ -96,11 +112,11 @@
                                                     }
                                                     if ($user_role == 'company_admin' || $user_name == $val['created_by']) {
                                                         ?>
-                                                        <li><a title="edit query" class="btn btn-xs text-left" href="<?php echo base_url(); ?>modules/raisequery_rfi/edit_query/<?php echo base64_encode($val['query_id']); ?>">Edit Query</a>
+                                                        <li><a title="edit query" class="btn btn-xs text-left" onclick="updateQuery('<?php echo $val['query_id']; ?>');" >Resolved</a>
                                                         </li>
-                                                        <li>
+                                                   <!--     <li>
                                                             <a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
-                                                        </li>
+                                                        </li> -->
                                                         <?php
                                                     }
                                                     ?>
@@ -109,10 +125,10 @@
                                             </div>
                                         </td>
                                     </tr>  
-                                    <!-- Modal to edit product -->
+                                    <!-- Modal to View Query -->
                                 <div class="modal fade bs-example-modal-lg" id="RFIModal_<?php echo $val['query_id']; ?>" role="dialog" aria-hidden="true">
                                     <div class="modal-dialog modal-md ">
-                                        <!-- Modal content starts -->
+                                        <!-- Modal content View Query -->
                                         <div class="modal-content">
 
                                             <div class="modal-header">
@@ -130,10 +146,16 @@
                                                             <p>                                        
                                                                 <?php echo $val['query_description']; ?>
                                                             </p>
-                                                        </div>                            
+                                                        </div>    
+                                                         <div class="w3-col l12 w3-padding w3-medium">
+                                                            <label>Query Raised To : </label>
+                                                            <p>                                        
+                                                                <?php echo $val['raised_to']; ?>
+                                                            </p>
+                                                        </div>                        
                                                         <div class="w3-col l12 w3-margin-bottom w3-padding w3-medium">
 
-                                                            <?php
+                                                          <?php
                                                             if ($val['images'] != '[]' && $val['images'] != '') {
                                                                 $image_arr = json_decode($val['images']);
                                                                 $count = 1;
@@ -160,10 +182,10 @@
                                                             }
                                                             ?>
                                                         </div>
-                                                        <div class="col-lg-12 w3-medium">
+                                                      <div class="col-lg-12 w3-medium">
                                                             <hr>
                                                             <label>Comments: </label>
-                                                            <form id="rfiReply_form_<?php echo $val['query_id']; ?>">
+                                                        <form id="rfiReply_form_<?php echo $val['query_id']; ?>">
                                                                 <div class="w3-col l12 w3-round w3-light-grey w3-padding w3-margin-bottom">
                                                                     <textarea name="comment_posted" id="comment_posted_<?php echo $val['query_id']; ?>" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
                                                                     <input type="hidden" id="query_id" name="query_id" value="<?php echo $val['query_id']; ?>">

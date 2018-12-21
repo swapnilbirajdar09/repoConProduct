@@ -10,11 +10,12 @@ class Rfiquery_model extends CI_Model {
 //----------fun for save the query details
     public function raiseQuery($data) {
         extract($data);
-        $sql = "INSERT INTO rfi_query_tab(project_id,query_title,query_description,"
-                . "images,resolved_by,created_by,"
+       // print_r($data);
+        $sql = "INSERT INTO rfi_query_tab(project_id,query_title,query_description,raised_to,"
+                . "images,resolved_by,resolved_status,created_by,"
                 . "created_date)"
-                . "VALUES('$project_id','" . addslashes($queryTitle) . "','" . addslashes($queryDescription) . "',"
-                . "'$images','','$created_by',NOW())";
+                . "VALUES('$project_id','" . addslashes($queryTitle) . "','" . addslashes($queryDescription) . "','$role_type',"
+                . "'$images','','0','$created_by',NOW())";
         if ($this->db->query($sql)) {
             $response = array('status' => 'success',
                 'status_message' => 'Query Raised Successfully.');
@@ -25,9 +26,19 @@ class Rfiquery_model extends CI_Model {
         return $response;
     }
 
+//-------fun for get all role
+ public function getRoleName() {
+        $sql = "SELECT * FROM role_tab";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            return false;
+        } else {
+            return $result->result_array();
+        }
+    }
 //--------------fun for get all queries
     public function getAllQueries() {
-        $sql = "SELECT * FROM rfi_query_tab";
+        $sql = "SELECT * FROM rfi_query_tab where status='1' AND resolved_status ='0'";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(
@@ -75,22 +86,31 @@ class Rfiquery_model extends CI_Model {
 
   
 
-    public function updateQueryDetails($data) {
-        extract($data);
-        $update_data = array(
-            'query_title' => addslashes($query_title),
-            'query_description' => addslashes($queryDescription),
-            'modified_by' => $author,
-            'modified_date' => date('Y-m-d H:i:s')
-        );
+    public function updateQueryDetails($query_id) {
+       // extract($data);
+     //   $update_data = array(
+           // 'query_title' => addslashes($query_title),
+           // 'query_description' => addslashes($queryDescription),
+          //  'modified_by' => $author,
+          //  'modified_date' => date('Y-m-d H:i:s')
+          //  'resolved_status' => '1'
+   //     );
+
+        $sql = "UPDATE rfi_query_tab SET resolved_status = '1' WHERE query_id = '$query_id'";
+          $this->db->query($sql);
         // print_r($insert_data);die();
-        $this->db->where('query_id', base64_decode($query_id));
-        $this->db->update('rfi_query_tab', $update_data);
+      //  $this->db->where('query_id', base64_decode($query_id));
+      //  $this->db->update('rfi_query_tab', $update_data);
         if ($this->db->affected_rows() > 0) {
-            return true;
+            $response = array(
+                'status' => 'success',
+                'status_message' => 'Role Deleted Successfully.');
         } else {
-            return false;
+            $response = array(
+                'status' => 'error',
+                'status_message' => 'Role Not Deleted Successfully.');
         }
+        return $response;
     }
 //-------fun for remove image
     public function removeImage($key, $query_id, $author) {

@@ -19,6 +19,19 @@ class Rfiquery_api extends REST_Controller {
         return $this->response($result);
     }
 
+    //------get all role
+ public function getRoleName_get() {
+        //print_r($_GET);die();
+        $result = $this->rfiquery_model->getRoleName();
+        if($result)
+        {
+            return $this->response($result, 200);
+        } 
+        else
+        {
+            return $this->response(NULL, 404);
+        }
+    }
 //---------------fun for get all queries
     public function getAllQueries_get() {
         $result = $this->rfiquery_model->getAllQueries();
@@ -59,14 +72,10 @@ class Rfiquery_api extends REST_Controller {
         }
     }
 
-    public function updateQueryDetails_post() {
-        $data = $_POST;
-        $result = $this->rfiquery_model->updateQueryDetails($data);
-        if ($result) {
-            return $this->response($result, 200);
-        } else {
-            return $this->response(NULL, 404);
-        }
+    public function updateQueryDetails_get() {
+        extract($_GET);
+        $result = $this->rfiquery_model->updateQueryDetails($query_id);
+        return $this->response($result);
     }
 
     // api to remove file in Document
