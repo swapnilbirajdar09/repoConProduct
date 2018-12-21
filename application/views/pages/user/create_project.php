@@ -69,7 +69,7 @@ $project_name=strtoupper($projArr[1]);
                                     } else {
                                         foreach ($projects['status_message'] as $proj) {
                                             ?>
-                                            <li class="w3-border-bottom w3-padding">
+                                            <li class="w3-border-bottom w3-padding" title="<?php echo $proj['project_description']; ?>">
                                                 <div class="w3-row">
                                                     <span>
                                                         <?php echo strtoupper($proj['project_name']); ?>
@@ -92,9 +92,37 @@ $project_name=strtoupper($projArr[1]);
                         </div>
                     </div>                    
                 </div>
-            </div>            
+            </div>     
+
+            <!-- set slab cycle div -->
+            <div class="col-md-4 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-briefcase"></i> Set Slab Cycles (in days)</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="container x_content">
+                    <div class="w3-col l12 w3-margin-top">
+                        <form id="addSSCForm">
+                            <div class="input-group">
+                                <input type="number" name="slab_cycle_count" id="slab_cycle_count" autocomplete="off" class="w3-input" min="0" placeholder="Enter Slab Cycle count" required>
+                                <div class="input-group-btn">
+                                    <button class="btn w3-button theme_bg" id="addSSCBtn" type="submit">
+                                        <i class="fa fa-refresh"></i> Update
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="w3-text-red w3-col l12" id="errSSCMsg">
+                            </div>
+                        </form>
+                    </div>                    
+                </div>
+            </div>
         </div>
-        <!-- create new project div ends -->
+        </div>
 
         <!-- add work item list div -->
         <div class="col-md-4 col-sm-12 col-xs-12">
