@@ -39,15 +39,21 @@ class Roles_model extends CI_Model {
 
     public function saveRoles($data) {
         extract($data);
-        //print_r($data);die();
-        $role_name = strtoupper($role_name);
-        //$json = json_encode($features);
-        $sql = "INSERT INTO role_tab(project_id,role_name,features_assign,created_date,created_by)"
-                . "VALUES('$project_id','" . addslashes($role_name) . "','$features',NOW(),'$author')";
-        if ($this->db->query($sql)) {
-            return TRUE;
+//print_r($data);die();
+//$role_name = strtoupper($role_name);
+//$json = json_encode($features);
+        $sqlSel = "SELECT * FROM role_tab WHERE role_name = '$role_name' AND project_id = '$project_id'";
+        $result = $this->db->query($sqlSel);
+        if ($result->num_rows() < 0) {
+            return 700;
         } else {
-            return FALSE;
+            $sql = "INSERT INTO role_tab(project_id,role_name,grade_id,created_date,created_by)"
+                    . "VALUES('$project_id','" . addslashes($role_name) . "','$grade',NOW(),'$author')";
+            if ($this->db->query($sql)) {
+                return 200;
+            } else {
+                return 500;
+            }
         }
     }
 

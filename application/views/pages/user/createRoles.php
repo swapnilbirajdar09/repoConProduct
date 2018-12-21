@@ -15,25 +15,39 @@
                     <div class="col-md-6 col-xs-12 col-sm-12 page_title w3-border-right">
                         <div class="col-md-12 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
-                                <label for="customer_name">Role Name <b class="w3-text-red w3-medium">*</b> :</label>
-                                <input type="text" class="form-control" id="role_name" name="role_name" placeholder="Enter username" required>
+                                <label for="role-name">Role Name <b class="w3-text-red w3-medium">*</b> :</label>
+                                <select class="w3-input" name="role_name" id="role_name" style="border-bottom-color: #CCCCCC">
+                                    <option value="0" class="w3-light-grey">Select Role</option>
+                                    <option value="Architectural Consultant" class="w3-light-grey">Architectural Consultant</option>
+                                    <option value="PM Consultant" class="w3-light-grey">PM Consultant</option>
+                                    <option value="Structural Consultant" class="w3-light-grey">Structural Consultant</option>
+                                    <option value="MEP Consultant" class="w3-light-grey">MEP Consultant</option>
+                                    <option value="Licensing" class="w3-light-grey">Licensing</option>
+                                    <option value="Landscape Consultant" class="w3-light-grey">Landscape Consultant</option>
+                                    <option value="Lighting Consultant" class="w3-light-grey">Lighting Consultant</option>
+                                    <option value="Support Team" class="w3-light-grey">Support Team</option>
+                                    <option value="Contractor" class="w3-light-grey">Contractor</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12 w3-margin-bottom">
                             <div class="form-group">
-                                <label for="featureslist">Features <b class="w3-text-red w3-medium"></b> </label><br>
-                                <?php
-                                //print_r($features);
-                                if ($features['status'] != 500) {
-                                    foreach ($features['status_message'] as $key) {
-                                        ?>
-                                        <input type="checkbox" id="features" name="features[]" value="<?php echo $key['feature_id']; ?>"> <?php echo $key['feature_name']; ?><br>
-                                        <?php
-                                    }
-                                } else {
-                                    ?>  
-                                    <center><span>No Features Are Available.</span></center>
-                                <?php } ?>
+                                <label for="gradelist">Grades <b class="w3-text-red w3-medium"></b> </label>
+                                <select class="w3-input" name="grade" id="grade" style="border-bottom-color: #CCCCCC">
+                                    <option value="0" class="w3-light-grey">Choose Grade</option>
+                                    <?php
+                                    //print_r($features);
+                                    if ($grades['status'] != 500) {
+                                        foreach ($grades['status_message'] as $key) {
+                                            ?>
+                                            <option value="<?php echo $key['grade_id']; ?>"> Grade <?php echo $key['grade']; ?></option>
+                                            <?php
+                                        }
+                                    } else {
+                                        ?>  
+                                        <option>No Features Are Available.</option>>
+                                    <?php } ?>
+                                </select>
                             </div>
                         </div>
                         <div class="w3-col l12 form-group w3-center w3-padding-top">
@@ -91,8 +105,6 @@
     $(function () {
         $("#saveRole").submit(function (e) {
             e.preventDefault();
-
-
             $.ajax({
                 type: "POST",
                 url: "<?php echo base_url(); ?>user/roles/saveRoles",

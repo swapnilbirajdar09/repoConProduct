@@ -23,7 +23,7 @@
                                     if ($features['status'] != 500) {
                                         foreach ($features['status_message'] as $key) {
                                             ?>
-                                            <option value="0" id="features" name="features" value="<?php echo $key['feature_id']; ?>"><?php echo $key['feature_name']; ?></option>
+                                            <option value="<?php echo $key['feature_id']; ?>"><?php echo $key['feature_name']; ?></option>
                                             <?php
                                         }
                                     } else {

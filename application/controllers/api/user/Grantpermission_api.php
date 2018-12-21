@@ -18,4 +18,17 @@ class Grantpermission_api extends REST_Controller {
         return $this->response($result);
     }
 
+    //-------fun for grantPrivilege
+    public function grantPrivilege_post() {
+        extract($_POST);
+        $data = $_POST;
+        //print_r($_POST);die();
+        $result = $this->permission_model->grantPrivilege($data);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
 }

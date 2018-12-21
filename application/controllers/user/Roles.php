@@ -18,7 +18,9 @@ class Roles extends CI_Controller {
     public function index() {
 //        $company_id = $this->session->userdata('company_id');
 //        $data['projects'] = Roles::getAllProjects($company_id);
-        $project_id = $this->session->userdata('project_id');
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         if ($project_id == '') {
             //check session variable set or not, otherwise logout
             redirect('user/create_project');
@@ -26,10 +28,25 @@ class Roles extends CI_Controller {
         $data['features'] = Roles::getAllFeatures();
         $data['roles'] = Roles::getAllRoles();
         $data['projects'] = Roles::getAllprojects();
+        $data['grades'] = Roles::getAllGrades();
 
         $this->load->view('includes/header', $data);
         $this->load->view('pages/user/createRoles', $data);
         $this->load->view('includes/footer');
+    }
+
+    public function getAllGrades() {
+        $path = base_url();
+        $url = $path . 'api/user/Grantpermission_api/getAllGrades';
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
     }
 
     public function getAllProjects() {
@@ -63,10 +80,14 @@ class Roles extends CI_Controller {
 
     public function saveRoles() {
         extract($_POST);
-
         $data = $_POST;
-        // $project_id = $this->session->userdata('project_id');
-        $data['project_id'] = $this->session->userdata('project_id');
+
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+
+        $data['project_id'] = $project_id;
+
         $session_role = $this->session->userdata('role');
         if ($session_role == 'company_admin') {
             $data['author'] = 'Administrator';
@@ -77,12 +98,12 @@ class Roles extends CI_Controller {
 
 //        print_r($data);
 //        die();
-        if (!isset($features)) {
+        if ($role_name == '0' ) {
             $response = array(
                 'status' => 'validation',
                 'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Failure!</strong> Please Select Atleast one Feature.
+			<strong>Failure!</strong> Please Select Valid Role Name.
 			</div>
 			<script>
 			window.setTimeout(function() {
@@ -97,8 +118,27 @@ class Roles extends CI_Controller {
             die();
         }
 
+        if ($grade == '0') {
+            $response = array(
+                'status' => 'validation',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Failure!</strong> Please Select Valid Grade.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			}, 5000);
+			</script>'
+                    //'<b>Success:</b> You Have Successfully Registered.!'
+            );
+            echo json_encode($response);
+            die();
+        }
 
-        $data['features'] = json_encode($features);
+        //$data['features'] = json_encode($features);
         $path = base_url();
         $url = $path . 'api/user/Role_api/saveRoles';
         $ch = curl_init($url);
@@ -109,7 +149,7 @@ class Roles extends CI_Controller {
         curl_close($ch);
         $response = json_decode($response_json, true);
         //print_r($response_json);die();
-        if ($response) {
+        if ($response == 200) {
             $response = array(
                 'status' => 'success',
                 'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
@@ -125,6 +165,22 @@ class Roles extends CI_Controller {
 			}, 1000);
 			</script>'
                     //'<b>Success:</b> You Have Successfully Registered.!'
+            );
+        }elseif($response == 700) {
+            $response = array(
+                'status' => 'validation',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Failure!</strong> Selected Role Is Already Exist For This Project.
+			</div>
+			<script>
+			window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function(){
+			$(this).remove(); 
+			});
+			}, 5000);
+			</script>'
+                    //'<b>Error:</b> You Have Not Registered Successfully!'
             );
         } else {
             $response = array(
@@ -148,8 +204,9 @@ class Roles extends CI_Controller {
 
     public function getAllRoles() {
         // $project_id = $this->session->userdata('project_id');
-        $project_id = $this->session->userdata('project_id');
-
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         $path = base_url();
         $url = $path . 'api/user/Role_api/getAllRoles?project_id=' . $project_id;
         //create a new cURL resource
