@@ -17,4 +17,11 @@ class Dashboard_api extends REST_Controller {
         return $this->response($result);
     }
 
+//-----------fun for update query status
+     public function updateQueryStatus_get() {
+        extract($_GET);
+        $result = $this->Dashboard_model->updateQueryStatus($query_id);
+        return $this->response($result);
+    }
+
   }

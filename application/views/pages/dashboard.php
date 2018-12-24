@@ -53,13 +53,14 @@
     <div class="w3-col l12 w3-padding-small w3-margin-top page_title">
         <div class="x_panel">
             <div class="x_title">
-                <h2><i class="fa fa-list"></i> All Queries</h2>
+                <h2><i class="fa fa-list"></i> All Pending Queries</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                 </ul>
                 <div class="clearfix"></div>
             </div>
             <div class="container x_content">
+            	<div class="w3-col l12 w3-margin-left w3-padding-small w3-center" id="message"></div>
                 <div id="table_msg"></div>
                 <div class="w3-col l12 w3-padding w3-small" id="allDocumentDiv">
                     <table id="datatable" class="table table-striped table-bordered">
@@ -99,7 +100,7 @@
                                                     }
                                                     if ($user_role == 'company_admin' || $user_name == $val['created_by']) {
                                                         ?>
-                                                        <li><a title="edit query" class="btn btn-xs text-left" onclick="updateQuery('<?php echo $val['query_id']; ?>');" >Approved</a>
+                                                        <li><a title="edit query" class="btn btn-xs text-left" onclick="updateQueryStatus('<?php echo $val['query_id']; ?>');" >Approved</a>
                                                         </li>
                                                    <!--     <li>
                                                             <a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
@@ -169,7 +170,7 @@
                                                             }
                                                             ?>
                                                         </div>
-                                                      <div class="col-lg-12 w3-medium">
+                                                   <!--   <div class="col-lg-12 w3-medium">
                                                             <hr>
                                                             <label>Comments: </label>
                                                         <form id="rfiReply_form_<?php echo $val['query_id']; ?>">
@@ -184,7 +185,7 @@
                                                             <div class="w3-col l12 w3-small comment_list" id="comment_list_<?php echo $val['query_id']; ?>">
 
                                                             </div>
-                                                        </div>
+                                                        </div> -->
                                                     </div>
                                                 </div>
                                                 <!-- Modal container ends -->
@@ -213,7 +214,58 @@
 
 </div>
 <?php ?>
-<!-- add skill div end -->          
+<script>
+//--------update query
+function updateQueryStatus(query_id) {
+    $.confirm({
+        title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to Change Status to Approved Of this Query?</span>',
+        content: '',
+        type: 'red',
+        buttons: {
+            confirm: function () {
+                $.ajax({
+                    type: "GET",
+                    url: BASE_URL + "user_dashboard/updateQueryStatus",
+                    data: {
+                        query_id: query_id
+                    },
+                    cache: false,
+                    success: function (response) {
+                      // alert(response);
+                        var data = JSON.parse(response);
+                        switch (data.status) {
+                            case 'success':
+                                $('#message').html(data.message);
+                                break;
+                            case 'error':
+                                $('#message').html(data.message);
+                                break;
+                            default:
+                                $('#message').html('<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.!</strong></div>');
+                                setTimeout(function () {
+                                    $('.alert_message').fadeOut('fast');
+                                }, 8000); // <-- time in milliseconds
+                                break;
+                        }
+                    }
+                });
+            },
+            cancel: function () {
+            }
+        }
+    });
+}
+</script>
+<script>
+// ----function to open modal product------//
+function openHelp(modal_id) {
+    var modal = $('#RFIModal_' + modal_id);
+    modal.addClass('in');
+    getComments(modal_id);
+    $('.comment_msg').html('');
+
+}
+</script>         
 <!-- /page content -->
 <!-- script for category -->
 

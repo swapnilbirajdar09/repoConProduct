@@ -22,4 +22,23 @@ class Dashboard_model extends CI_Model {
         return $response;
     }
 
+    //---fun for update query status
+
+    public function updateQueryStatus($query_id) {
+      
+        $sql = "UPDATE rfi_query_tab SET status = '1' WHERE query_id = '$query_id'";
+          $this->db->query($sql);
+       
+        if ($this->db->affected_rows() > 0) {
+            $response = array(
+                'status' => 'success',
+                'status_message' => 'Role Deleted Successfully.');
+        } else {
+            $response = array(
+                'status' => 'error',
+                'status_message' => 'Role Not Deleted Successfully.');
+        }
+        return $response;
+    }
+
  }
