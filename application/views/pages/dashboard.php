@@ -89,7 +89,7 @@
                                                 </button>
                                                 <ul role="menu" class="dropdown-menu pull-right">              
                                                     <li>
-                                                        <a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['query_id']; ?>" onclick="openHelp('<?php echo $val['query_id']; ?>')">View Query</a>
+                                                        <a title="View Query" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['query_id']; ?>" onclick="openHelp('<?php echo $val['query_id']; ?>')">View Query</a>
                                                     </li>
                                                     <?php
                                                     $user_role = $this->session->userdata('role');
@@ -100,7 +100,9 @@
                                                     }
                                                     if ($user_role == 'company_admin' || $user_name == $val['created_by']) {
                                                         ?>
-                                                        <li><a title="edit query" class="btn btn-xs text-left" onclick="updateQueryStatus('<?php echo $val['query_id']; ?>');" >Approved</a>
+                                                        <li><a title="Approve Query" class="btn btn-xs text-left" onclick="updateQueryStatus('<?php echo $val['query_id']; ?>');" >Approve Query</a>
+                                                        </li>
+                                                         <li><a title="Reject Query" class="btn btn-xs text-left" onclick="RejectQueryStatus('<?php echo $val['query_id']; ?>');" >Reject Query</a>
                                                         </li>
                                                    <!--     <li>
                                                             <a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
@@ -265,7 +267,49 @@ function openHelp(modal_id) {
     $('.comment_msg').html('');
 
 }
-</script>         
+</script> 
+<script>
+//--------Reject query
+function RejectQueryStatus(query_id) {
+    $.confirm({
+        title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to Reject this Query?</span>',
+        content: '',
+        type: 'red',
+        buttons: {
+            confirm: function () {
+                $.ajax({
+                    type: "GET",
+                    url: BASE_URL + "user_dashboard/RejectQueryStatus",
+                    data: {
+                        query_id: query_id
+                    },
+                    cache: false,
+                    success: function (response) {
+                      // alert(response);
+                        var data = JSON.parse(response);
+                        switch (data.status) {
+                            case 'success':
+                                $('#message').html(data.message);
+                                break;
+                            case 'error':
+                                $('#message').html(data.message);
+                                break;
+                            default:
+                                $('#message').html('<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.!</strong></div>');
+                                setTimeout(function () {
+                                    $('.alert_message').fadeOut('fast');
+                                }, 8000); // <-- time in milliseconds
+                                break;
+                        }
+                    }
+                });
+            },
+            cancel: function () {
+            }
+        }
+    });
+}
+</script>        
 <!-- /page content -->
 <!-- script for category -->
 

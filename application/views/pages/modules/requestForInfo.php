@@ -5,7 +5,7 @@
             <h3><i class="fa fa-check"></i> Raise Query For Information(RFI) </h3>
         </div>
     </div> 
-    <div class="w3-col l12 w3-padding-small page_title">
+    <div class="row w3-padding-small page_title">
         <div class="w3-col l12 w3-margin-left w3-padding-small w3-center" id="message"></div>
         <form id="raiseQueryForm" name="raiseQueryForm" method="post">
             <div class="w3-col l12 s12 m12 w3-margin-top">
@@ -63,10 +63,11 @@
             </div>
         </form>
     </div>
-    <div class="w3-col l12 w3-padding-small w3-margin-top page_title">
+    <div class="row">
+    	<div class="w3-col l12 w3-padding-small w3-margin-top page_title">
         <div class="x_panel">
             <div class="x_title">
-                <h2><i class="fa fa-list"></i> All Queries</h2>
+                <h2><i class="fa fa-list"></i> All Approved Queries</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                 </ul>
@@ -80,7 +81,8 @@
                             <tr >
                                 <th class="text-center">Sr.No</th>
                                 <th class="text-center">Query Title</th>
-                                <th class="text-center">Query Raised To</th>                        
+                                <th class="text-center">Query Raised To</th> 
+                                <th class="text-center">Created Date</th>                        
                                 <th class="text-center"></th>
                             </tr>
                         </thead>
@@ -93,15 +95,16 @@
                                     ?>
                                     <tr class="w3-center">
                                         <td style=" vertical-align: middle;"><?php echo $i; ?></td>
-                                        <td style=" vertical-align: middle;"><?php echo $val['query_title']; ?></td>
-                                        <td style=" vertical-align: middle; width: 450px;"><p><?php echo $val['raised_to']; ?></p></td>                                        
+                                        <td style=" vertical-align: middle; width: 350px;"><?php echo $val['query_title']; ?></td>
+                                        <td style=" vertical-align: middle; width: 200px;"><p><?php echo $val['raised_to']; ?></p></td>  
+                                          <td style=" vertical-align: middle; width: 450px;"><p><?php echo date('d F Y', strtotime($val['created_date'])) ?></p></td>                                    
                                         <td style=" vertical-align: middle;">
                                             <div class="btn-group">
                                                 <button data-toggle="dropdown" id="actionBtn_<?php echo $val['query_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
                                                 </button>
                                                 <ul role="menu" class="dropdown-menu pull-right">              
                                                     <li>
-                                                        <a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['query_id']; ?>" onclick="openHelp('<?php echo $val['query_id']; ?>')">View Query</a>
+                                                        <a title="View Query" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['query_id']; ?>" onclick="openHelp('<?php echo $val['query_id']; ?>')">View Query</a>
                                                     </li>
                                                     <?php
                                                     $user_role = $this->session->userdata('role');
@@ -112,7 +115,7 @@
                                                     }
                                                     if ($user_role == 'company_admin' || $user_name == $val['created_by']) {
                                                         ?>
-                                                        <li><a title="edit query" class="btn btn-xs text-left" onclick="updateQuery('<?php echo $val['query_id']; ?>');" >Resolved</a>
+                                                        <li><a title="Resolved query" class="btn btn-xs text-left" onclick="updateQuery('<?php echo $val['query_id']; ?>');" >Resolved</a>
                                                         </li>
                                                    <!--     <li>
                                                             <a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
@@ -223,16 +226,18 @@
             </div>
         </div>
     </div>
+    </div>
+
 </div>
 <script src="<?php echo base_url(); ?>assets/js/module/user/requestForInfo.js"></script>
 <script>
-                                                                $(document).ready(function () {
-                                                                    var max_fields = 5;
-                                                                    var wrapper = $("#addedmore_imageDiv");
-                                                                    var add_button = $("#add_moreimage");
-                                                                    var x = 1;
-                                                                    $(add_button).click(function (e) {
-                                                                        e.preventDefault();
+                                                        $(document).ready(function () {
+                                                        var max_fields = 5;
+                                                        var wrapper = $("#addedmore_imageDiv");
+                                                         var add_button = $("#add_moreimage");
+                                                          var x = 1;
+                                                         $(add_button).click(function (e) {
+                                                                  e.preventDefault();
                                                                         if (x < max_fields) {
                                                                             x++;
                                                                             $(wrapper).append('<div>\n\

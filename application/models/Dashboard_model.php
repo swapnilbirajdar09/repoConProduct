@@ -22,7 +22,7 @@ class Dashboard_model extends CI_Model {
         return $response;
     }
 
-    //---fun for update query status
+    //---fun for update query status ,, status changed to 1 for approved query
 
     public function updateQueryStatus($query_id) {
       
@@ -41,4 +41,23 @@ class Dashboard_model extends CI_Model {
         return $response;
     }
 
+    //---reject query status change to 2
+
+
+    public function RejectQueryStatus($query_id) {
+      
+        $sql = "UPDATE rfi_query_tab SET status = '2' WHERE query_id = '$query_id'";
+          $this->db->query($sql);
+       
+        if ($this->db->affected_rows() > 0) {
+            $response = array(
+                'status' => 'success',
+                'status_message' => 'Role Deleted Successfully.');
+        } else {
+            $response = array(
+                'status' => 'error',
+                'status_message' => 'Role Not Deleted Successfully.');
+        }
+        return $response;
+    }
  }

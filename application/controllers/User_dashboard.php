@@ -154,5 +154,61 @@ class User_dashboard extends CI_Controller {
         echo json_encode($response);
     }
 
-
+//-----reject query
+     public function RejectQueryStatus() {
+       extract($_GET);
+        
+        $session_name = $this->session->userdata('usersession_name');
+        $session_role = $this->session->userdata('role');
+        if ($session_role == 'company_admin') {
+            $data['author'] = 'Administrator';
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $data['author'] = $user_name;
+        }
+        $path = base_url();
+        $url = $path . 'api/Dashboard_api/RejectQueryStatus?query_id=' . $query_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+      //  print_r($response_json);die();
+       if ($response['status'] == 'success') {
+            $response = array(
+                'status' => 'success',
+                'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Success!</strong> Query Rejected successfully.
+                </div>
+                <script>
+                window.setTimeout(function() {
+                 $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                     $(this).remove(); 
+                     });
+                     location.reload();
+                     }, 1000);
+                     </script>'
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Failure!</strong>Query Rejection Failed.
+                </div>
+                <script>
+                window.setTimeout(function() {
+                 $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                     $(this).remove(); 
+                     });
+                     }, 5000);
+                     </script>'
+            );
+        }
+        echo json_encode($response);
+    }
 }
