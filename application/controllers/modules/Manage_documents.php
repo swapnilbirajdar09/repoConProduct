@@ -10,7 +10,9 @@ class Manage_documents extends CI_Controller {
 // load common model
 // $this->load->model('modules/product_model');
         $role = $this->session->userdata('role');
-
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         if ($role == 'company_admin') {
             $admin_name = $this->session->userdata('usersession_name');
             if ($admin_name == '') {
@@ -20,7 +22,7 @@ class Manage_documents extends CI_Controller {
         } else {
             $user_name = $this->session->userdata('user_name');
             $user_id = $this->session->userdata('user_id');
-            $project_id = $this->session->userdata('project_id');
+            //$project_id = $this->session->userdata('project_id');
             $role = $this->session->userdata('role');
             $sessionArr = explode('/', $role);
             $role_id = $sessionArr[0];
@@ -36,9 +38,10 @@ class Manage_documents extends CI_Controller {
 // main index function
     public function index() {
         $role = $this->session->userdata('role');
-
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         if ($role == 'company_admin') {
-            $project_id = $this->session->userdata('project_id');
             if ($project_id == '') {
                 //check session variable set or not, otherwise logout
                 redirect('user/create_project');
@@ -46,12 +49,11 @@ class Manage_documents extends CI_Controller {
             $data['allDocument_types'] = Manage_documents::getDocumentTypes();
             $data['lastRevision_no'] = Manage_documents::getlastRevision();
             $data['allDocuments'] = Manage_documents::getAllDocuments();
-// print_r($data);
+            $data['roles'] = Manage_documents::getAllRoles();
             $data['projects'] = Manage_documents::getAllprojects();
         } else {
             $user_name = $this->session->userdata('user_name');
             $user_id = $this->session->userdata('user_id');
-            $project_id = $this->session->userdata('project_id');
             $role = $this->session->userdata('role');
             $sessionArr = explode('/', $role);
             $role_id = $sessionArr[0];
@@ -60,10 +62,29 @@ class Manage_documents extends CI_Controller {
             $data['lastRevision_no'] = Manage_documents::getlastRevision();
             $data['allDocuments'] = Manage_documents::getAllDocuments();
             $data['allDocument_types'] = Manage_documents::getDocumentTypes();
+            $data['roles'] = Manage_documents::getAllRoles();
         }
         $this->load->view('includes/header', $data);
         $this->load->view('pages/modules/manage_documents', $data);
         $this->load->view('includes/footer');
+    }
+
+    public function getAllRoles() {
+        // $project_id = $this->session->userdata('project_id');
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $path = base_url();
+        $url = $path . 'api/user/Role_api/getAllRoles?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
     }
 
     public function getAllFeatuesForUser($user_id, $role_id) {
@@ -98,12 +119,16 @@ class Manage_documents extends CI_Controller {
     public function upload() {
         extract($_POST);
 // print_r($_FILES);
-        $project_id = $this->session->userdata('project_id');
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+
         $data = $_POST;
+
         $data['project_id'] = $project_id;
         $session_name = $this->session->userdata('usersession_name');
 
-        $session_role = $this->session->userdata('company_admin');
+        $session_role = $this->session->userdata('role');
         if ($session_role == 'company_admin') {
 
             $data['author'] = 'Administrator';
@@ -116,8 +141,17 @@ class Manage_documents extends CI_Controller {
         if ($document_type == '0') {
             $response = array(
                 'status' => 'validation',
-                'message' => '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Document Type first !</div>',
+                'message' => '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Document Type First !</div>',
                 'field' => 'document_type'
+            );
+            echo json_encode($response);
+            die();
+        }
+        if ($shared_with == '0') {
+            $response = array(
+                'status' => 'validation',
+                'message' => '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Role First !</div>',
+                'field' => 'shared_with'
             );
             echo json_encode($response);
             die();
@@ -163,12 +197,12 @@ class Manage_documents extends CI_Controller {
             $imageArr[] = $imagePath;
         }
         $data['images'] = json_encode($imageArr);
-
+        $data['shared_with'] = json_encode($shared_with);
+        //print_r($data);die();
         $path = base_url();
         $url = $path . 'api/modules/document_api/addDocument';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-
 // authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
@@ -220,7 +254,9 @@ class Manage_documents extends CI_Controller {
 
 // get last revision number for current project
     public function getlastRevision() {
-        $project_id = $this->session->userdata('project_id');
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         $path = base_url();
         $url = $path . 'api/modules/document_api/getlastRevision?project_id=' . $project_id;
         $ch = curl_init();
@@ -469,7 +505,9 @@ class Manage_documents extends CI_Controller {
 
 // get all documents for project
     public function getAllDocuments() {
-        $project_id = $this->session->userdata('project_id');
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         $path = base_url();
         $url = $path . 'api/modules/document_api/getAllDocuments?project_id=' . $project_id;
         $ch = curl_init();
@@ -486,6 +524,31 @@ class Manage_documents extends CI_Controller {
         curl_close($ch);
         $response = json_decode($output, true);
         return $response;
+    }
+
+//---------request for deletion
+    public function sendRequestForDeletion() {
+        extract($_GET);
+        //print_r($_GET);die();
+        $path = base_url();
+        $url = $path . 'api/modules/document_api/sendRequestForDeletion?doc_id=' . $doc_id.'&reason='.$reason;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+// authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+//close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        //print_r($output);die();
+        if ($response == true) {
+            echo '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success!</strong> Request Sent successfully.</div>';
+        } else {
+            echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Request Sending Failed.</div>';
+        }
     }
 
 // remove document
@@ -551,7 +614,7 @@ class Manage_documents extends CI_Controller {
         }
 
 
-        $this->load->view('includes/header',$data);
+        $this->load->view('includes/header', $data);
         $this->load->view('pages/modules/edit_documents', $data);
         $this->load->view('includes/footer');
     }

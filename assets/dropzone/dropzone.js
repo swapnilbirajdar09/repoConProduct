@@ -510,6 +510,17 @@ var Dropzone = function (_Emitter) {
                     return false;
                 }
                 
+                var checkedNum = $('input[name="shared_with[]"]:checked').length;
+                //alert(checkedNum);return false;
+                if (checkedNum == 0) {
+                    $('#response_msg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Please Choose Atleast One Role  !</div>');
+                    $("#document_type").focus();
+                    setTimeout(function() {
+                        $('.alert').fadeOut('fast');
+                        }, 8000); // <-- time in milliseconds
+                    return false;
+                }
+                
                 myDropzone.processQueue();
 
             });
@@ -535,7 +546,7 @@ var Dropzone = function (_Emitter) {
       $('#uploadDocBtn').prop('disabled', false);
       $('#uploadDocBtn').html('<i class="fa fa-upload"></i> Click here to Upload Documents');
 
-      // console.log(response);return false;
+       //console.log(response);return false;
       var data=JSON.parse(response);
       // response message
       switch(data.status){

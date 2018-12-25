@@ -20,16 +20,19 @@ class User_dashboard extends CI_Controller {
 
         $role = $this->session->userdata('role');
         //echo $role;die();
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         if ($role == 'company_admin') {
             $data['projects'] = User_dashboard::getAllprojects();
-            $project_id = $this->session->userdata('project_id');
+            //$project_id = $this->session->userdata('project_id');
             if ($project_id == '') {
                 //check session variable set or not, otherwise logout
                 redirect('user/create_project');
             }
         } else {
             $user_id = $this->session->userdata('user_id');
-            $project_id = $this->session->userdata('project_id');
+            //$project_id = $this->session->userdata('project_id');
             $role = $this->session->userdata('role');
             $sessionArr = explode('/', $role);
             $role_id = $sessionArr[0];
@@ -38,9 +41,29 @@ class User_dashboard extends CI_Controller {
         }
         //$project_id = $this->session->userdata('project_id');die();
         $data['queries'] = User_dashboard::getAllQueries_dashboard();
+        $data['allDocuments'] = User_dashboard::allDocuments();
+
         $this->load->view('includes/header', $data);
         $this->load->view('pages/dashboard', $data);
         $this->load->view('includes/footer');
+    }
+
+    public function allDocuments() {
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $path = base_url();
+        $url = $path . 'api/Dashboard_api/allDocuments?project_id='.$project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        //print_r($response_json);die();
+        return $response;
     }
 
     public function getAllprojects() {
@@ -73,6 +96,7 @@ class User_dashboard extends CI_Controller {
         //print_r($response_json);die();
         return $response;
     }
+
     public function getAllFeatuesForUser($user_id, $role_id) {
         $path = base_url();
         $url = $path . 'api/user/User_api/getAllFeatuesForUser?user_id=' . $user_id . '&role_id=' . $role_id;
@@ -97,9 +121,9 @@ class User_dashboard extends CI_Controller {
         redirect('user_dashboard');
     }
 
-     public function updateQueryStatus() {
-       extract($_GET);
-        
+    public function updateQueryStatus() {
+        extract($_GET);
+
         $session_name = $this->session->userdata('usersession_name');
         $session_role = $this->session->userdata('role');
         if ($session_role == 'company_admin') {
@@ -118,8 +142,8 @@ class User_dashboard extends CI_Controller {
         $response_json = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response_json, true);
-      //  print_r($response_json);die();
-       if ($response['status'] == 'success') {
+        //  print_r($response_json);die();
+        if ($response['status'] == 'success') {
             $response = array(
                 'status' => 'success',
                 'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
@@ -155,9 +179,9 @@ class User_dashboard extends CI_Controller {
     }
 
 //-----reject query
-     public function RejectQueryStatus() {
-       extract($_GET);
-        
+    public function RejectQueryStatus() {
+        extract($_GET);
+
         $session_name = $this->session->userdata('usersession_name');
         $session_role = $this->session->userdata('role');
         if ($session_role == 'company_admin') {
@@ -176,8 +200,8 @@ class User_dashboard extends CI_Controller {
         $response_json = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response_json, true);
-      //  print_r($response_json);die();
-       if ($response['status'] == 'success') {
+        //  print_r($response_json);die();
+        if ($response['status'] == 'success') {
             $response = array(
                 'status' => 'success',
                 'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round">
@@ -211,4 +235,5 @@ class User_dashboard extends CI_Controller {
         }
         echo json_encode($response);
     }
+
 }

@@ -25,10 +25,8 @@ class Dashboard_model extends CI_Model {
     //---fun for update query status ,, status changed to 1 for approved query
 
     public function updateQueryStatus($query_id) {
-      
         $sql = "UPDATE rfi_query_tab SET status = '1' WHERE query_id = '$query_id'";
-          $this->db->query($sql);
-       
+        $this->db->query($sql);
         if ($this->db->affected_rows() > 0) {
             $response = array(
                 'status' => 'success',
@@ -45,10 +43,8 @@ class Dashboard_model extends CI_Model {
 
 
     public function RejectQueryStatus($query_id) {
-      
         $sql = "UPDATE rfi_query_tab SET status = '2' WHERE query_id = '$query_id'";
-          $this->db->query($sql);
-       
+        $this->db->query($sql);
         if ($this->db->affected_rows() > 0) {
             $response = array(
                 'status' => 'success',
@@ -60,4 +56,21 @@ class Dashboard_model extends CI_Model {
         }
         return $response;
     }
- }
+
+    //---------fu for all document
+    public function allDocuments($project_id) {
+        $sql = "SELECT * FROM document_tab WHERE project_id = '$project_id' AND status='1' AND delete_reason != '' ";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
+
+}

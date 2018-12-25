@@ -17,16 +17,25 @@ class Dashboard_api extends REST_Controller {
         return $this->response($result);
     }
 
+    //--------------fun for all document
+    public function allDocuments_get() {
+        extract($_GET);
+        $result = $this->Dashboard_model->allDocuments($project_id);
+        return $this->response($result);
+    }
+
 //-----------fun for update query status
-     public function updateQueryStatus_get() {
+    public function updateQueryStatus_get() {
         extract($_GET);
         $result = $this->Dashboard_model->updateQueryStatus($query_id);
         return $this->response($result);
     }
+
 //-----------fun for Reject query 
-     public function RejectQueryStatus_get() {
+    public function RejectQueryStatus_get() {
         extract($_GET);
         $result = $this->Dashboard_model->RejectQueryStatus($query_id);
         return $this->response($result);
     }
-  }
+
+}

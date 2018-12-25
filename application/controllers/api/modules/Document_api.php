@@ -93,7 +93,20 @@ class Document_api extends REST_Controller {
             return $this->response(NULL, 404);
         }
     }
-
+//---------api for send req for deletion
+    public function sendRequestForDeletion_get(){
+        extract($_GET);
+        $document_id=base64_decode($doc_id);
+        $result = $this->document_model->sendRequestForDeletion($document_id,$reason);
+        if($result)
+        {
+            return $this->response($result, 200);
+        } 
+        else
+        {
+            return $this->response(NULL, 404);
+        }
+    }
     // api to remove document
     public function removeDoc_get() {
         extract($_GET);
