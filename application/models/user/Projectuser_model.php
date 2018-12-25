@@ -172,4 +172,34 @@ class Projectuser_model extends CI_Model {
     }
     
 
+    // update slab cycle
+    public function addSlabCycle($data){
+        extract($data);
+        $update_data = array(
+            'slab_cycles' => $slab_cycle_count,
+            'modified_by' => 'Administrator',
+            'modified_date' => date('Y-m-d H:i:s')
+        );
+        // print_r($data);die();
+        $this->db->where('project_id', $project_id);
+        $this->db->update('project_tab', $update_data);
+        if($this->db->affected_rows()>0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    // get slab cycle of project id
+    public function getSlabCycle($project_id){
+        $sql = "SELECT slab_cycles FROM project_tab WHERE project_id='$project_id'";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            return false;
+        } else {
+            return $result->result_array();
+        }
+    }
+
 }

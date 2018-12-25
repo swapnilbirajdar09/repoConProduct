@@ -313,6 +313,55 @@ function removeActivity(act_id,key) {
   });
 }
 
+// fucntion to mark activity dne or undone
+function mark(act_id,status,key) {
+  var prompt='<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to mark this activity <b>Undone</b>?</span>';
+  var url=BASE_URL + "modules/site_inspection/markChecklistUndone";
+  if(status=='done'){
+    var prompt='<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to mark this activity <b>Done</b>?</span>';
+  var url=BASE_URL + "modules/site_inspection/markChecklistDone";
+  }
+  $.confirm({
+    title: prompt,
+    content: '',
+    type: 'red',
+    buttons: {
+      confirm: function () {
+        $.ajax({
+          type: "GET",
+          url: url,
+          data: {
+            act_id: act_id
+          },
+          cache: false,
+          beforeSend: function(){
+          },
+          success: function(data){
+            $('#checklistmsg').html(data);
+
+            window.setTimeout(function() {
+             $(".alert").fadeTo(500, 0).slideUp(500, function(){
+               $(this).remove(); 
+             });
+             window.location.reload();
+           }, 1500);
+          },
+          error:function(data){
+           $('#checklistmsg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
+           window.setTimeout(function() {
+             $(".alert").fadeTo(500, 0).slideUp(500, function(){
+               $(this).remove(); 
+             });
+           }, 5000);
+         }
+       });
+      },
+      cancel: function () {
+      }
+    }
+  });
+}
+
 // update changes of document
 $("#editDocument_form").on('submit', function(e) {
  e.preventDefault(); 

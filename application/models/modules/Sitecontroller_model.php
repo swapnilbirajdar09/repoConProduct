@@ -7,8 +7,8 @@ class Sitecontroller_model extends CI_Model {
     }
 
     // get all work item types
-    public function getAllWitems() {
-        $sql = "SELECT * FROM work_list_tab ORDER BY witem_id DESC";
+    public function getAllWitems($project_id) {
+        $sql = "SELECT * FROM work_list_tab WHERE project_id='$project_id' ORDER BY witem_id DESC";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             return false;
@@ -19,7 +19,18 @@ class Sitecontroller_model extends CI_Model {
 
     // get all activites
     public function getAllActivity($project_id) {
-        $sql = "SELECT * FROM checklist_activity_tab WHERE project_id='$project_id' ORDER BY activity_id DESC";
+        $sql = "SELECT * FROM checklist_activity_tab WHERE project_id='$project_id' ORDER BY day";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            return false;
+        } else {
+            return $result->result_array();
+        }
+    }
+
+    // get slab cycle details
+    public function getSlabCycleDetails($project_id,$witem_id) {
+        $sql = "SELECT * FROM work_list_tab, checklist_activity_tab WHERE work_list_tab.witem_id=checklist_activity_tab.work_item AND checklist_activity_tab.project_id='$project_id' AND checklist_activity_tab.work_item='$witem_id' ORDER BY day";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             return false;
@@ -90,11 +101,11 @@ class Sitecontroller_model extends CI_Model {
     // add new activity function
     public function addActivity($data) {
         extract($data);
+        // print_r($data);die();
         $insert_data = array(
             'activity_name' => addslashes($activity),
             'work_item' => $work_item_selected,
-            'comments' => addslashes($activity_comment),
-            'images' => $images,
+            'day' => $day_selected,
             'project_id' => $project_id,
             'created_by' => $author,
             'created_date' => date('Y-m-d H:i:s')
@@ -120,6 +131,40 @@ class Sitecontroller_model extends CI_Model {
         );
         // print_r($insert_data);die();
         $this->db->where('activity_id', base64_decode($activity_id));
+        $this->db->update('checklist_activity_tab', $update_data);
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // mark checklist as done
+    public function markChecklistDone($act_id,$author) {
+        $update_data = array(
+            'status' => '1',
+            'modified_by' => $author,
+            'modified_date' => date('Y-m-d H:i:s')
+        );
+        // print_r($insert_data);die();
+        $this->db->where('activity_id', $act_id);
+        $this->db->update('checklist_activity_tab', $update_data);
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // mark checklist as undone
+    public function markChecklistUndone($act_id,$author) {
+        $update_data = array(
+            'status' => '0',
+            'modified_by' => $author,
+            'modified_date' => date('Y-m-d H:i:s')
+        );
+        // print_r($insert_data);die();
+        $this->db->where('activity_id', $act_id);
         $this->db->update('checklist_activity_tab', $update_data);
         if ($this->db->affected_rows() > 0) {
             return true;

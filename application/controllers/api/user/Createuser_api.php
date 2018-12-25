@@ -45,4 +45,18 @@ class Createuser_api extends REST_Controller {
         return $this->response($result);
     }
 
+    // update slab cycle
+    public function addSlabCycle_post() {
+        extract($_POST);
+        $data = $_POST;
+        $result = $this->projectuser_model->addSlabCycle($data);
+        return $this->response($result);
+    }
+
+    public function getSlabCycle_get() {
+        extract($_GET);
+        $result = $this->projectuser_model->getSlabCycle($project_id);
+        return $this->response($result);
+    }    
+
 }

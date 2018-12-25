@@ -3,6 +3,19 @@
 var app = angular.module("genericApp", ['ngSanitize']); 
 app.controller("genericCtrl", function($scope,$http,$window) {
 
+// fetch checklist/slab cycle details on chnage
+$scope.fetchChecklistDetails = function(){   
+  $scope.checklistDetails='<div class="col-md-12 w3-center w3-margin"><span class="w3-xlarge"><i class="fa fa-refresh fa-spin"></i> Fetching details. Please wait...</span></div>';
+  $http({
+   method: 'get',
+   url: BASE_URL+'user/create_project/getSlabCycleDetails',
+   params: {witemid: $scope.checklist_workitem},
+ }).then(function successCallback(response) {
+  $scope.checklistDetails = response.data;
+}, function errorCallback(response) {
+    $scope.checklistDetails='<div class="alert alert-danger w3-margin-top alert-dismissible fade in w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error!</strong> Something went wrong. Reload the page and try again</div>';
+  });
+}
 
 // remove architect from db
 $scope.removeArch = function (arch_id) {
@@ -98,6 +111,43 @@ $("#addProjectForm").on('submit', function(e) {
 return false;  //stop the actual form post !important!
 });
 
+
+// set slab cycle days
+$("#addSSCForm").on('submit', function(e) {
+ e.preventDefault(); 
+ $.ajax({
+    url: BASE_URL+"user/create_project/addSlabCycle", // point to server-side PHP script
+    data: new FormData(this),
+    type: 'POST',
+    contentType: false, // The content type used when sending data to the server.
+    cache: false, // To unable request pages to be cached
+    processData: false,
+    beforeSend: function(){
+      $('#errSSCMsg').html('<i class="fa fa-refresh fa-spin"></i> Updating...');
+      $('#addSSCBtn').attr('disabled',true);
+    },
+    success: function(data){
+      $('#addSSCBtn').removeAttr('disabled');
+      $('#errSSCMsg').html(data);        
+      window.setTimeout(function() {
+       $(".alert").fadeTo(500, 0).slideUp(500, function(){
+         $(this).remove(); 
+       });
+     }, 1500);   
+    },
+    error:function(data){
+     $('#errSSCMsg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
+     $('#addSSCBtn').removeAttr('disabled');
+     window.setTimeout(function() {
+       $(".alert").fadeTo(500, 0).slideUp(500, function(){
+         $(this).remove(); 
+       });
+     }, 5000);
+   }
+ });
+return false;  //stop the actual form post !important!
+});
+
 // add new work item
 $("#addWitemForm").on('submit', function(e) {
  e.preventDefault(); 
@@ -139,7 +189,16 @@ return false;  //stop the actual form post !important!
 
 // add new product
 $("#addChecklistForm").on('submit', function(e) {
- e.preventDefault();  
+ e.preventDefault(); 
+ if($("#work_item_selected").val()=='0'){
+  $('#formOutput').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning!</strong> Please select <b>Work Item / Building</b>.</div>');
+ return false;
+ }
+ if($("#day_selected").val()=='0'){
+  $('#formOutput').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning!</strong> Please select <b>Appropriate Day</b>.</div>');
+ return false;
+ }
+
  $.ajax({
     url: BASE_URL+"modules/site_inspection/addActivity", // point to server-side PHP script
     data: new FormData(this),
@@ -171,91 +230,6 @@ $("#addChecklistForm").on('submit', function(e) {
      }, 5000);
    }
  });
-return false;  //stop the actual form post !important!
-});
-
-
-// add new architect
-$("#addArchitectForm").on('submit', function(e) {
- e.preventDefault(); 
- $.ajaxSetup({
-  headers: {
-    'X-CSRF-Token': $('#_token').val()
-  }
-});
- $.ajax({
-    url: "/addArch", // point to server-side PHP script
-    data: new FormData(this),
-    type: 'POST',
-    contentType: false, // The content type used when sending data to the server.
-    cache: false, // To unable request pages to be cached
-    processData: false,
-    beforeSend: function(){
-      $('#archSubmit').html('<span class="w3-card w3-padding-small theme_text w3-margin-bottom w3-round"><i class="fa fa-spinner fa-spin w3-large"></i> <b>Adding Architect...</b></span>');
-    },
-    success: function(data){
-      $('#archOutput').html(data);
-      $('#archSubmit').html('<button class="btn theme_bg w3-center" type="submit"><i class="fa fa-plus"></i>  Add Architect </button>');
-
-      window.setTimeout(function() {
-       $(".alert").fadeTo(500, 0).slideUp(500, function(){
-         $(this).remove(); 
-       });
-       location.reload();
-     }, 1500);
-    },
-    error:function(data){
-     $('#archOutput').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
-     $('#archSubmit').html('<button class="btn theme_bg w3-center" type="submit"><i class="fa fa-plus"></i>  Add Architect </button>');
-     window.setTimeout(function() {
-       $(".alert").fadeTo(500, 0).slideUp(500, function(){
-         $(this).remove(); 
-       });
-     }, 5000);
-   }
- });
-return false;  //stop the actual form post !important!
-});
-
-// add new architect
-$("#subscriberMailForm").on('submit', function(e) {
- e.preventDefault(); 
- $.ajaxSetup({
-  headers: {
-    'X-CSRF-Token': $('#_token').val()
-  }
-});
- $.ajax({
-    url: "upload/uploadMailFile", // point to server-side PHP script
-    data: new FormData(this),
-    type: 'POST',
-    contentType: false, // The content type used when sending data to the server.
-    cache: false, // To unable request pages to be cached
-    processData: false,
-    beforeSend: function(){
-      $("#addMailFormatBtn").attr("disabled", true);
-      $('#addMailFormatBtn').html('<i class="fa fa-spinner fa-spin w3-medium"></i> Uploading...');
-    },
-    success: function(data){
-      $('#errMailerMsg').html(data);
-      $('#addMailFormatBtn').removeAttr("disabled");
-      $('#addMailFormatBtn').html('<i class="fa fa-upload"></i>');
-      window.setTimeout(function() {
-        window.location.reload();
-      }, 1500);
-    },
-    error:function(data){
-      $('#addMailFormatBtn').removeAttr("disabled");
-      $('#errMailerMsg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
-
-      $('#addMailFormatBtn').html('<i class="fa fa-upload"></i>');
-      window.setTimeout(function() {
-        $(".alert").fadeTo(500, 0).slideUp(500, function(){
-          $(this).remove(); 
-        });
-      }, 5000);
-    }
-  });
 return false;  //stop the actual form post !important!
 });
 
@@ -454,49 +428,29 @@ $("#uploadFileForm").on('submit', function(e) {
 return false;  //stop the actual form post !important!
 });
 
-// remove woork item
-function removeFile(key,document_id) {
-  $.confirm({
-    title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to remove this File?</span>',
-    content: '',
-    type: 'red',
-    buttons: {
-      confirm: function () {
-        $.ajax({
-          type: "GET",
-          url: BASE_URL+"modules/manage_documents/removeFile",
-          data: {
-            key: key,
-            document_id: document_id
-          },
-          cache: false,
-          beforeSend: function(){
-            $('#fileBtn_'+key).html('<i class="fa fa-circle-o-notch fa-spin w3-medium"></i>');
-          },
-          success: function(data){
-            $('#file_msg').html(data);
-            $('#fileBtn_'+key).html('<i class="fa fa-times"></i>');
-
-            window.setTimeout(function() {
-             $(".alert").fadeTo(500, 0).slideUp(500, function(){
-               $(this).remove(); 
-             });
-             window.location.reload();
-           }, 1500);
-          },
-          error:function(data){
-           $('#file_msg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
-           $('#fileBtn_'+key).html('<i class="fa fa-times"></i>');
-           window.setTimeout(function() {
-             $(".alert").fadeTo(500, 0).slideUp(500, function(){
-               $(this).remove(); 
-             });
-           }, 5000);
-         }
-       });
-      },
-      cancel: function () {
-      }
-    }
-  });
+// script to delete work item form list
+function delWitem(witem_id)
+{
+ $.confirm({
+  title: '<label class="w3-large w3-text-red"><i class="fa fa-envelope"></i> Please confirm your action.</label>',
+  content: '<span class="w3-medium">Do You really want to delete this Work Item permanantly?</span>',
+  type: 'red',
+  buttons: {
+    confirm: function () {
+      $.ajax({
+        type:'get',
+        url:BASE_URL+"modules/site_inspection/delWitem?item_id="+witem_id,                                    
+        success:function(response) {
+          $('#errWitemMsg').html(response);  
+          window.setTimeout(function() {
+           $(".alert").fadeTo(500, 0).slideUp(500, function(){
+             $(this).remove(); 
+           });
+           location.reload();
+         }, 1000);                                  }
+        });
+    },
+    cancel: function () {}
+  }
+});
 }

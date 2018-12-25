@@ -12,8 +12,8 @@ class Sitecontroller_api extends REST_Controller {
 
     // api to get all work item types
     public function getAllWitems_get() {
-        //print_r($_GET);die();
-        $result = $this->sitecontroller_model->getAllWitems();
+        extract($_GET);
+        $result = $this->sitecontroller_model->getAllWitems($project_id);
         if ($result) {
             return $this->response($result, 200);
         } else {
@@ -126,6 +126,43 @@ class Sitecontroller_api extends REST_Controller {
     public function getAllActivities_get() {
         extract($_GET);
         $result = $this->sitecontroller_model->getAllActivity($project_id);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
+
+    // get slab cycle details details
+    public function getSlabCycleDetails_get(){
+        extract($_GET);
+
+        $result = $this->sitecontroller_model->getSlabCycleDetails($project_id,$witemid);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    // mark checklist as done
+    public function markChecklistDone_get(){
+        extract($_GET);
+        $act_id=base64_decode($activity_id);
+        $result = $this->sitecontroller_model->markChecklistDone($act_id,$author);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    // mark checklist as undone
+    public function markChecklistUndone_get(){
+        extract($_GET);
+        $act_id=base64_decode($activity_id);
+        $result = $this->sitecontroller_model->markChecklistUndone($act_id,$author);
         if ($result) {
             return $this->response($result, 200);
         } else {

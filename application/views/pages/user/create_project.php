@@ -96,244 +96,190 @@ $project_name=strtoupper($projArr[1]);
 
             <!-- set slab cycle div -->
             <div class="col-md-4 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_title">
-                    <h2><i class="fa fa-briefcase"></i> Set Slab Cycles (in days)</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="container x_content">
-                    <div class="w3-col l12 w3-margin-top">
-                        <form id="addSSCForm">
-                            <div class="input-group">
-                                <input type="number" name="slab_cycle_count" id="slab_cycle_count" autocomplete="off" class="w3-input" min="0" placeholder="Enter Slab Cycle count" required>
-                                <div class="input-group-btn">
-                                    <button class="btn w3-button theme_bg" id="addSSCBtn" type="submit">
-                                        <i class="fa fa-refresh"></i> Update
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="w3-text-red w3-col l12" id="errSSCMsg">
-                            </div>
-                        </form>
-                    </div>                    
-                </div>
-            </div>
-        </div>
-        </div>
-
-        <!-- add work item list div -->
-        <div class="col-md-4 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_title">
-                    <h2><i class="fa fa-briefcase"></i> Add Work Item</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="container x_content">
-                    <div class="w3-col l12 w3-margin-top">
-                        <form id="addWitemForm">
-                            <div class="input-group">
-                                <input type="text" name="work_item" id="work_item" autocomplete="off" class="w3-input" placeholder="Enter Work Item here" required>
-                                <div class="input-group-btn">
-                                    <button class="btn w3-button theme_bg" id="addWitemBtn" type="submit">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="w3-text-red w3-col l12" id="errWitemMsg">
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- all work item list div -->
-                    <div class="w3-col l12 w3-padding-small" id="allWitemDiv">
-                        <div class="w3-col l12 w3-border" style="height: 325px;overflow-y: auto;">
-                            <ul style="list-style: none;padding: 0">
-
-                                <?php
-                                if (empty($allWitems)) {
-                                    ?>
-                                    <li class="w3-border-bottom w3-padding w3-center w3-text-red">
-                                        <span>
-                                            No Work Item Found
-                                        </span>
-                                    </li>
-                                    <?php
-                                } else {
-                                    foreach ($allWitems as $item) {
-                                        ?>
-                                        <li class="w3-border-bottom w3-padding">
-                                            <div class="w3-row">
-
-                                                <div class="w3-col l10 m10 s10">
-                                                    <span>
-                                                        <?php echo $item['witem_name']; ?>
-                                                    </span>
-                                                </div>
-                                                <div class="w3-col l2 m2 s2">
-                                                    <a onclick="delWitem('<?php echo $item['witem_id']; ?>')" title="Delete Work Item" class="btn" style="padding: 0"><i class="fa fa-close"></i></a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <?php
-                                    }
-                                }
-                                ?>
+                <div class="w3-col l12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2><i class="fa fa-briefcase"></i> Set Slab Cycles (in days)</h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                             </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="container x_content">
+                            <div class="w3-col l12 w3-margin-top">
+                                <form id="addSSCForm">
+                                    <div class="input-group">
+                                        <input type="number" name="slab_cycle_count" id="slab_cycle_count" autocomplete="off" class="w3-input" min="0" placeholder="Enter Slab Cycle count" value="<?php if($slab_cycle[0]['slab_cycles']!='0'){echo $slab_cycle[0]['slab_cycles'];} ?>" required>
+                                        <div class="input-group-btn">
+                                            <button class="btn w3-button theme_bg" id="addSSCBtn" type="submit">
+                                                <i class="fa fa-refresh"></i> Update
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="w3-text-red w3-col l12" id="errSSCMsg">
+                                    </div>
+                                </form>
+                            </div>                    
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- add work item list div ends -->
-        <!-- add checklist div -->
-        <div class="col-md-8 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_title">
-                    <h2><i class="fa fa-check-circle"></i> Daily Checklist</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="container x_content">
-                    <div class="w3-col l12 w3-margin-top" id="addActivityDiv">
-                        <form id="addChecklistForm">
-                            <div class="w3-col l12">
-                                <div class="w3-col l12">
-                                    <div class="col-lg-6 col-xs-12 col-sm-12 w3-margin-bottom">
-                                        <label>Work Item:</label>
-                                        <select class="w3-input" name="work_item_selected" id="work_item_selected">
-                                            <option value="0">Choose Work Item first</option>
-                                            <?php
-                                            if ($allWitems) {
-                                                foreach ($allWitems as $key) {
-                                                    echo '<option value="' . $key['witem_name'] . '">' . $key['witem_name'] . '</option>';
-                                                }
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                    <!-- ---div for images -->
-                                    <div class="col-lg-6 w3-padding-tiny">
-                                        <div class="w3-col l12 s12 m12">
-                                            <div class="w3-col l6 ">
-                                                <label>Images:</label>
-                                                <input type="file" name="image[]" id="image" class="w3-input w3-border" onchange="readURL(this);">
-                                            </div>
-                                            <div class="w3-col l6 w3-padding-small w3-margin-top">
-                                                <img src="<?php echo base_url(); ?>assets/images/no-image-selected.png" width="auto" id="ImagePreview" height="150px" alt="Image will be displayed here once chosen." class=" w3-center img img-thumbnail">
-                                            </div>
-                                            <div class="w3-col l12 s12 m12" id="addedmore_imageDiv"></div>
-                                            <div class="w3-col l12 w3-margin-bottom">
-                                                <a id="add_moreimage" title="Add new Image" class="btn w3-text-red add_moreProduct w3-small w3-right w3-margin-top"><b>Add image <i class="fa fa-plus"></i></b>
-                                                </a>
-                                            </div>
+                <div class="w3-col l12">
+
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2><i class="fa fa-briefcase"></i> Add Work Item / Building </h2>
+                            <ul class="nav navbar-right panel_toolbox">
+                                <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="container x_content">
+                            <div class="w3-col l12 w3-margin-top">
+                                <form id="addWitemForm">
+                                    <div class="input-group">
+                                        <input type="text" name="work_item" id="work_item" autocomplete="off" class="w3-input" placeholder="Enter Work Item / Building here" required>
+                                        <div class="input-group-btn">
+                                            <button class="btn w3-button theme_bg" id="addWitemBtn" type="submit">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
                                         </div>
                                     </div>
-                                    <!-- ---div for images -->
-                                    <div class="col-lg-12 col-xs-12 col-sm-12 w3-margin-bottom">
-                                        <label>Enter Activity: (max. 255 chars)</label>
-                                        <input type="text" name="activity" style="padding: 5px 2px 5px 5px" class="w3-input" id="activity" placeholder="Enter Activity here." maxlength="255">
+
+                                    <div class="w3-text-red w3-col l12" id="errWitemMsg">
                                     </div>
-                                    <div class="col-lg-12 col-sm-12 col-xs-12 w3-margin-bottom ">
-                                        <label>Comments (if any - optional):</label>
-                                        <textarea class="w3-input" name="activity_comment" placeholder="Type here for detailed information" rows="4"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12 w3-center" id="btnsubmit">
-                                    <button class="btn w3-button theme_bg" id="addActivityBtn" type="submit"><i class="fa fa-plus"></i> Add Activity </button>
-                                </div>
+                                </form>
                             </div>
 
-                        </form>
-                        <div id="formOutput" class="w3-margin"></div>              
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- add checklist div ends -->
+                            <!-- all work item list div -->
+                            <div class="w3-col l12 w3-padding-small" id="allWitemDiv">
+                                <div class="w3-col l12 w3-border" style="max-height: 250px;overflow-y: auto;">
+                                    <ul style="list-style: none;padding: 0">
 
-        <!-- view all document div -->
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_title">
-                    <h2><i class="fa fa-list"></i> Checklist Timeline</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="container x_content">
-                    <div id="checklistmsg"></div>
-                    <div class="w3-col l12 w3-margin-top" style="height: 450px;overflow-y: scroll;">
-                        <!-- The Timeline -->
-                        <ul class="timeline">
-                            <?php
-                            if ($allActivities) {
-                                $count = '0';
-                                $direction = 'direction-l';
-                                foreach ($allActivities as $key) {
-                                    $dtime = new DateTime($key['created_date']);
-                                    $dated = $dtime->format("d M Y h:i a");
-                                    if ($count == '1') {
-                                        $direction = 'direction-r';
-                                        $count = '0';
-                                    } else {
-                                        $direction = 'direction-l';
-                                        $count = '1';
-                                    }
-                                    ?>
-                                    <li>
-                                        <div class="<?php echo $direction; ?>">
-                                            <div class="flag-wrapper">
-                                                <span class="flag"><?php echo $key['work_item']; ?></span>
-                                                <span class="time-wrapper"><span class="time"><?php echo $dated; ?></span></span>
-                                            </div>
-                                            <div class="desc w3-small w3-text-grey"><b>by <?php echo $key['created_by']; ?></b></div>
-                                            <div class="desc w3-medium"><i class="fa fa-check-circle"></i> <?php echo $key['activity_name']; ?></div>
-                                            <div class="desc"><?php echo $key['comments']; ?></div>
-                                            <div class="desc">
-                                              <!-- <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" href="<?php echo base_url(); ?>modules/site_inspection/view_checklist/<?php echo base64_encode($key['activity_id']); ?>"><i class="fa fa-edit"></i> View</a> -->
-                                              <?php
-                                              $user_role = $this->session->userdata('role');
-                                              if ($user_role == 'company_admin') {
-                                                $user_name = $this->session->userdata('usersession_name');
-                                            } else {
-                                                $user_name = $this->session->userdata('user_name');
-                                            }
-                                            if ($user_role == 'company_admin' || $user_name == $key['created_by']) {
+                                        <?php
+                                        if (empty($allWitems)) {
+                                            ?>
+                                            <li class="w3-border-bottom w3-padding w3-center w3-text-red">
+                                                <span>
+                                                    No Work Item Found
+                                                </span>
+                                            </li>
+                                            <?php
+                                        } else {
+                                            foreach ($allWitems as $item) {
                                                 ?>
-                                                <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" href="<?php echo base_url(); ?>modules/site_inspection/edit_checklist/<?php echo base64_encode($key['activity_id']); ?>"><i class="fa fa-edit"></i> Edit</a>
+                                                <li class="w3-border-bottom w3-padding">
+                                                    <div class="w3-row">
 
-                                                <a class="btn btn-sm w3-text-grey w3-hover-text-black" id="delBtn_<?php echo $key['activity_id']; ?>" style="padding: 2px 5px;background-color: #DDDDDD" onclick="removeActivity('<?php echo base64_encode($key['activity_id']); ?>', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-trash"></i> Delete</a>
-                                            <?php }?>
+                                                        <div class="w3-col l10 m10 s10">
+                                                            <span>
+                                                                <?php echo $item['witem_name']; ?>
+                                                            </span>
+                                                        </div>
+                                                        <div class="w3-col l2 m2 s2">
+                                                            <a onclick="delWitem('<?php echo $item['witem_id']; ?>')" title="Delete Work Item" class="btn" style="padding: 0"><i class="fa fa-close"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+            </div>
+
+            <!-- add work item list div -->
+            <div class="col-md-8 col-sm-12 col-xs-12">
+
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2><i class="fa fa-check-circle"></i> Add Checklist</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="container x_content">
+                        <div class="w3-col l12 w3-margin-top" id="addActivityDiv">
+                            <form id="addChecklistForm">
+                                <div class="w3-col l12">
+                                    <div class="w3-col l12">
+                                        <div class="col-lg-6 col-xs-12 col-sm-12 w3-margin-bottom">
+                                            <label>Work Item / Building:</label>
+                                            <select class="w3-input" name="work_item_selected" id="work_item_selected">
+                                                <option value="0" class="w3-light-grey">Choose Work Item / Building first</option>
+                                                <?php
+                                                if ($allWitems) {
+                                                    foreach ($allWitems as $key) {
+                                                        echo '<option value="' . $key['witem_id'] . '">' . $key['witem_name'] . '</option>';
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 col-xs-12 col-sm-12 w3-margin-bottom">
+                                            <label>Select Day:</label>
+                                            <select class="w3-input" name="day_selected" id="day_selected">
+                                                <option value="0" class="w3-light-grey">Choose any one day</option>
+                                                <?php
+                                                if($slab_cycle[0]['slab_cycles']!='0' && $slab_cycle[0]['slab_cycles']!='') {
+                                                    for ($i=1; $i <= $slab_cycle[0]['slab_cycles']; $i++) { 
+                                                        echo '<option value="'.$i.'"> Day-'.$i.'</option>';
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                            <?php 
+                                            if($slab_cycle[0]['slab_cycles']=='0' || $slab_cycle[0]['slab_cycles']=='') {
+                                                echo '<label class="w3-text-red"><i class="fa fa-chevron-left"></i> NOTE: Please set Slab Cycle first!</label>';
+                                            }
+                                            ?>
+                                        </div>
+
+                                        <div class="col-lg-12 col-xs-12 col-sm-12 w3-margin-bottom">
+                                            <label>Enter Activity: (max. 255 chars)</label>
+                                            <input type="text" name="activity" style="padding: 5px 2px 5px 5px" class="w3-input" id="activity" placeholder="Enter Activity here." maxlength="255" required>
                                         </div>
                                     </div>
-                                </li>
+                                    <div class="col-lg-12 w3-center" id="btnsubmit">
+                                        <button class="btn w3-button theme_bg" id="addActivityBtn" type="submit"><i class="fa fa-plus"></i> Add Activity </button>
+                                    </div>
+                                </div>
 
-                                <?php
-                            }
-                        } else {
-                            ?>
-                            <?php
-                        }
-                        ?>
+                            </form>
+                            <div id="formOutput" class="w3-margin"></div> 
 
-                    </ul>
+                            <br>
+                            <div class="row">
+                                <hr>
+                                <label>Choose Checklist / Slab Cycle to fetch Details:</label>
+                                <select class="w3-input w3-light-grey" ng-model='checklist_workitem' ng-change='fetchChecklistDetails()' name="checklist_workitem" id="checklist_workitem">
+                                    <?php
+                                    if ($allWitems) {
+                                        foreach ($allWitems as $key) {
+                                            echo '<option value="' . $key['witem_id'] . '">' . $key['witem_name'] . ' Slab Cycle</option>';
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                               
+                                <div class="col-md-12" id="checklistDetails" ng-bind-html="checklistDetails"></div>
+                                <br>
+                            </div>
 
+                        </div>
+                    </div>
                 </div>
+
             </div>
-        </div>
+        </div>      
     </div>
-    <!-- view all document div ends -->
-</div>
 </div>
 </div>
 <script src="<?php echo base_url(); ?>assets/js/module/user/genericsetting.js"></script>
