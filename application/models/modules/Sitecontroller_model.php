@@ -107,6 +107,7 @@ class Sitecontroller_model extends CI_Model {
             'work_item' => $work_item_selected,
             'day' => $day_selected,
             'project_id' => $project_id,
+            'comments' => '',
             'created_by' => $author,
             'created_date' => date('Y-m-d H:i:s')
         );
@@ -176,89 +177,85 @@ class Sitecontroller_model extends CI_Model {
     // upload portfolio image
     public function uploadImageInfo($data) {
         extract($data);
-        $act_id = base64_decode($activity_id);
         $currentFiles = '';
-        $sql = "SELECT images FROM checklist_activity_tab WHERE activity_id='$act_id'";
+        $sql = "SELECT images FROM checklist_activity_tab WHERE activity_id='$activity_id'";
         $result_arr = $this->db->query($sql);
         foreach ($result_arr->result_array() as $key) {
             $currentFiles = $key['images'];
         }
+        $fileArr=array();
 
-        $fileArr = json_decode($currentFiles);
-        array_push($fileArr, $filepath);
-        if(count($fileArr) > 5){
-            return 412;
-            die();
+        if($currentFiles=='' || $currentFiles=='[]'){
+            $fileArr[]=$filepath;
         }
-        $result = array(
-            'images' => json_encode($fileArr),
-            'modified_by' => $author,
-            'modified_date' => date('Y-m-d H:i:s')
-        );
+        else{
+         $fileArr = json_decode($currentFiles);
+         array_push($fileArr, $filepath); 
+     }
 
-        $this->db->where('activity_id', base64_decode($activity_id));
-        $this->db->update('checklist_activity_tab', $result);
-        if ($this->db->affected_rows() == 1) {
-            return 200;
-        } else {
-            return 500;
-        }
+
+     $result = array(
+        'images' => json_encode($fileArr),
+        'comments' => addslashes($checklist_comment),
+        'modified_by' => $author,
+        'modified_date' => date('Y-m-d H:i:s')
+    );
+
+     $this->db->where('activity_id', $activity_id);
+     $this->db->update('checklist_activity_tab', $result);
+     if ($this->db->affected_rows() == 1) {
+        return true;
+    } else {
+        return false;
     }
+}
 
     // delete activity
-    public function removeActivity($activity_id) {
-        $sql = "DELETE FROM checklist_activity_tab WHERE activity_id='$activity_id'";
-        $result = $this->db->query($sql);
-        if ($this->db->affected_rows() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+public function removeActivity($activity_id) {
+    $sql = "DELETE FROM checklist_activity_tab WHERE activity_id='$activity_id'";
+    $result = $this->db->query($sql);
+    if ($this->db->affected_rows() > 0) {
+        return true;
+    } else {
+        return false;
     }
+}
 
     // remove file
-    public function removeImageInfo($key, $activity_id, $author) {
-        $sql = "SELECT images FROM checklist_activity_tab WHERE activity_id='$activity_id'";
-        $result_arr = $this->db->query($sql);
-        foreach ($result_arr->result_array() as $row) {
-            $currentFiles = $row['images'];
-        }
-
-        $fileArr = json_decode($currentFiles);
-        if (count($fileArr) == 1) {
-            $response = array(
-                'status' => 'false',
-                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> Cannot remove File. Atleast one file should be uploaded.</div>'
-            );
-            return $response;
-            die();
-        }
-        // unset key value
-        unlink($fileArr[$key]);
-        unset($fileArr[$key]);
-        $fileArr = array_values($fileArr);
-        $result = array(
-            'images' => json_encode($fileArr),
-            'modified_by' => $author,
-            'modified_date' => date('Y-m-d H:i:s')
-        );
-
-        $this->db->where('activity_id', $activity_id);
-        $this->db->update('checklist_activity_tab', $result);
-        if ($this->db->affected_rows() == 1) {
-            $response = array(
-                'status' => 'success',
-                'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> File was successfully deleted.</div>'
-            );
-            return $response;
-        } else {
-            $response = array(
-                'status' => 'failure',
-                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> File was not deleted.</div>'
-            );
-            return $response;
-        }
+public function removeImageInfo($key, $activity_id, $author) {
+    $sql = "SELECT images FROM checklist_activity_tab WHERE activity_id='$activity_id'";
+    $result_arr = $this->db->query($sql);
+    foreach ($result_arr->result_array() as $row) {
+        $currentFiles = $row['images'];
     }
+
+    $fileArr = json_decode($currentFiles);
+            // unset key value
+    unlink($fileArr[$key]);
+    unset($fileArr[$key]);
+    $fileArr = array_values($fileArr);
+    $result = array(
+        'images' => json_encode($fileArr),
+        'modified_by' => $author,
+        'modified_date' => date('Y-m-d H:i:s')
+    );
+
+    $this->db->where('activity_id', $activity_id);
+    $this->db->update('checklist_activity_tab', $result);
+    if ($this->db->affected_rows() == 1) {
+        $response = array(
+            'status' => 'success',
+            'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> File was successfully deleted.</div>'
+        );
+        return $response;
+    } else {
+        $response = array(
+            'status' => 'failure',
+            'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> File was not deleted.</div>'
+        );
+        return $response;
+    }
+}
 
 //    public function getAllActivities($project_id){
 //        

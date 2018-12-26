@@ -326,7 +326,7 @@
                             if (isset($checklistDetails) && $checklistDetails) {
                                 ?>
                                 <div class="col-md-4 col-md-offset-4 col-xs-12 col-sm-12 w3-center w3-margin-bottom w3-xlarge w3-light-grey ">
-                                    <span class="w3-padding"><?php echo $key['witem_name']; ?> CHECKLIST</span>
+                                    <span class="w3-padding"><?php echo $checklistDetails[0]['witem_name']; ?> CHECKLIST</span>
                                 </div>
                                 <br><br>
                                 <!-- The Timeline -->
@@ -336,7 +336,7 @@
                                     $count = '0';
                                     $direction = 'direction-l';
                                     foreach ($checklistDetails as $key) {
-                                        $dtime = new DateTime($key['created_date']);
+                                        $dtime = new DateTime($key['modified_date']);
                                         $dated = $dtime->format("d M Y h:i a");
                                         if ($count == '1') {
                                             $direction = 'direction-r';
@@ -352,9 +352,8 @@
                                                     <span class="flag" title="Slab Cycle Checklist">SSC: <span class="w3-large">Day <?php echo $key['day']; ?></span></span><br>
                                                 </div>
                                                 <div class="desc w3-medium"><i class="fa fa-check-circle"></i> <?php echo $key['activity_name']; ?></div>
-                                                <div class="desc"><?php echo $key['comments']; ?></div>
+                                                <div class="desc"><i class="fa fa-quote-left"></i> <?php echo $key['comments']; ?> <i class="fa fa-quote-right"></i></div>
                                                 <div class="desc">
-                                                  <!-- <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" href="<?php echo base_url(); ?>modules/site_inspection/view_checklist/<?php echo base64_encode($key['activity_id']); ?>"><i class="fa fa-edit"></i> View</a> -->
                                                   <?php
                                                   $user_role = $this->session->userdata('role');
                                                   if ($user_role == 'company_admin') {
@@ -364,40 +363,147 @@
                                                 }
                                                 if ($key['status']=='0' || $key['status']=='2') {
                                                     ?>
-                                                    <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" id="markBtn_<?php echo $key['activity_id']; ?>" onclick="mark('<?php echo base64_encode($key['activity_id']); ?>', 'done', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-check-circle"></i> Mark as Done</a>
+                                                    <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" id="markBtn_<?php echo $key['activity_id']; ?>" data-toggle="modal" data-target="#ActModal_<?php echo $key['activity_id']; ?>" onclick="openHelp('ActModal_<?php echo $key['activity_id']; ?>')"><i class="fa fa-check-circle"></i> Mark as Done</a>
                                                 <?php }
                                                 else{
-                                                ?> 
-                                                <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" id="markBtn_<?php echo $key['activity_id']; ?>" onclick="mark('<?php echo base64_encode($key['activity_id']); ?>', 'undone', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-times-circle"></i> Unmark as Done</a>
+                                                    ?> 
+                                                    <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" id="markBtn_<?php echo $key['activity_id']; ?>" onclick="mark('<?php echo base64_encode($key['activity_id']); ?>', 'undone', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-times-circle"></i> Unmark as Done</a>
                                                 <?php } ?>                                                   
-                                                    <a class="btn btn-sm w3-text-grey w3-hover-text-black" id="delBtn_<?php echo $key['activity_id']; ?>" style="padding: 2px 5px;background-color: #DDDDDD" onclick="removeActivity('<?php echo base64_encode($key['activity_id']); ?>', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-warning"></i> Report Issue</a>
+                                                <a class="btn btn-sm w3-text-grey w3-hover-text-black" id="delBtn_<?php echo $key['activity_id']; ?>" style="padding: 2px 5px;background-color: #DDDDDD" onclick="removeActivity('<?php echo base64_encode($key['activity_id']); ?>', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-warning"></i> Report Issue</a>
                                                 
                                             </div>
                                         </div>
                                     </li>
+                                    <!--Modal to upload images and comment--> 
+                                    <div class="modal fade bs-example-modal-lg" id="ActModal_<?php echo $key['activity_id']; ?>" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-md ">
+                                            <!--Modal content starts -->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <h4 class="modal-title">
+                                                        <i class="fa fa-check-circle"></i> <?php echo $key['activity_name']; ?> <span class="badge w3-grey w3-text-white w3-small"><?php echo $key['witem_name']; ?></span>
+                                                    </h4>
+                                                </div>
+                                                <!--Modal body starts -->
+                                                <div class="modal-body">
+                                                    <!--Modal container starts -->
+                                                    <div class="container"> 
+                                                        <div class="col-md-12">
+                                                            <div class="w3-col l5 w3-left w3-small w3-text-grey">
+                                                                <span title="Slab Cycle Checklist">SSC: <b>Day <?php echo $key['day']; ?></b></span>
+                                                            </div>
+                                                            <div class="w3-col l7 w3-right w3-small w3-text-grey">
+                                                                <span class="w3-right">Last modified by <b><?php echo $key['modified_by']; ?></b> on <b><?php echo $dated; ?></b></span>
+                                                            </div>                                                     
+                                                            <br><br>
+                                                            <div class="w3-col l12 w3-margin-bottom w3-margin-top" style="display: inline;">
 
-                                    <?php
-                                }
-                           
-                            ?>
-                        </ul>
-                        <?php
-                    }
-                        else {
-                            ?>
-                            <div class="col-md-12 col-xs-12 col-sm-12 w3-text-grey">
-                                <span><i class="fa fa-warning w3-large"></i> <b>Warning!</b> No Checklist Available for selected Work Item / Building.</span>
-                            </div>
-                            <?php
-                        }
-                        ?>
+                                                                <?php
+                                                                if ($key['status']=='0' || $key['status']=='2') {
+                                                                    ?>
+                                                                    <a class="btn btn-md btn-block btn-success" onclick="mark('<?php echo base64_encode($key['activity_id']); ?>', 'done', '<?php echo $key['activity_id']; ?>')"> <i class="fa fa-check-square"></i> Mark this Checklist as Done</a>
+                                                                <?php }
+                                                                else{
+                                                                    ?> 
+                                                                    <a class="btn btn-md btn-block btn-danger" onclick="mark('<?php echo base64_encode($key['activity_id']); ?>', 'undone', '<?php echo $key['activity_id']; ?>')"> <i class="fa fa-check-square"></i> Unmark this Checklist as Done</a>
+                                                                <?php } ?> 
+                                                                <hr>
+                                                            </div>
+                                                        </div>
+                                                        <a class="btn" data-toggle="collapse" data-target="#uploadImageDiv_<?php echo $key['activity_id']; ?>"><i class="fa fa-chevron-circle-down"></i> Upload Images here</a>
+                                                        <div id="uploadImageDiv_<?php echo $key['activity_id']; ?>" class="collapse">
+                                                           <div class="col-md-12">                                     
+                                                            <div class="w3-col l12 w3-padding-small" style="background-color: #F7F7F7">
 
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- view all document div ends -->
+                                                                <h4><i class="fa fa-file-image-o"></i> Upload Images</h4>
+                                                                <form id="uploadChecklistImage_<?php echo $key['activity_id']; ?>" onsubmit="checklistImageForm('<?php echo $key['activity_id']; ?>')" enctype="multipart/form-data">
+                                                                    <input type="hidden" name="activity_id_upload" value="<?php echo base64_encode($key['activity_id']); ?>">
+                                                                    <div class="col-lg-6">
+                                                                       <label>Select Image: <font color ="red"><span id ="simage_star">* (less than 10MB)</span></font></label>
+                                                                       <input type="file" name="checklist_image" id="checklist_image_<?php echo $key['activity_id']; ?>" class="w3-input w3-margin-bottom w3-border" style="padding:5px" required>                 
+                                                                   </div>
+                                                                   <div class="col-lg-6">
+                                                                    <label>Comment (If any): </label>
+                                                                    <textarea name="checklist_comment" class="w3-input w3-margin-bottom w3-border" rows="3" placeholder="Enter comment here, if any"><?php echo $key['comments'];?></textarea>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                  <button type="submit" title="upload file" id="uploadFilebtn_<?php echo $key['activity_id']; ?>" class="btn theme_bg" ><i class="fa fa-upload"></i> Save and Upload Image</button>
+                                                              </div>
+                                                          </form>
+                                                          <div id="uploadImageMsg_<?php echo $key['activity_id']; ?>"></div>
+                                                      </div>
+                                                  </div>
+                                                  <div class="col-lg-12">
+                                                      <hr>
+                                                      <div class="w3-col l12 w3-padding-small">
+                                                          <h4><i class="fa fa-picture-o"></i> Uploaded Images</h4>
+                                                      </div>
+                                                      <div class="w3-col l12 w3-margin-bottom" id="allImagesDiv_<?php echo $key['activity_id']; ?>">
+                                                          <?php
+                                                          if ($key['images'] != '' && $key['images'] != '[]') {
+                                                            $image_arr = json_decode($key['images']);
+                                                            foreach ($image_arr as $img => $file) {
+                                                              $arr = explode('/', $file);
+                                                              ?>
+                                                              <div class="col-md-4 col-sm-12 col-xs-12" style="vertical-align: middle;">
+                                                                <div class="image view view-first" style="height: 150px;">
+                                                                  <img style="width: 100%;height: 100%;vertical-align: middle;" class="img img-thumbnail" src="<?php echo base_url() . $file; ?>" alt="image">
+                                                                  <div class="mask no-caption">
+                                                                    <div class="tools" style="margin: 20px 0">
+                                                                      <a class="btn w3-small" target="_blank" title="View image" href="<?php echo base_url(); ?><?php echo $file; ?>" style="padding:4px;display: inline-block;" ><i class="fa fa-download"></i> View Image</a>
+                                                                  </div>
+                                                                  <div class="tools" style="margin: 20px 0">
+                                                                      <a class="btn w3-small" onclick="removeImageInfo('<?php echo $img; ?>', '<?php echo $key['activity_id']; ?>')" id="image_<?php echo $key['activity_id']; ?>" title="Delete image" style="padding:4px;display: inline-block;" ><i class="fa fa-close"></i> Delete Image</a>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                      <?php
+                                                  }
+                                              } else {
+                                                ?>
+                                                <div class="w3-col l12"> 
+                                                  <center><label><i class="fa fa-warning"></i> No Images uploaded !</label></center>
+                                              </div>
+                                          <?php } ?>
+                                          <div id="deleteImageMsg_<?php echo $key['activity_id']; ?>"></div>
+                                      </div>
+                                  </div> 
+                              </div>
+
+                          </div>
+                          <!--Modal container ends -->
+                      </div>
+                      <!--Modal Body ends -->
+                  </div>
+                  <!--Modal contenet ends -->
+              </div>
+          </div>
+          <!--Modal ends here -->
+          <?php
+      }
+
+      ?>
+  </ul>
+  <?php
+}
+else {
+    ?>
+    <div class="col-md-12 col-xs-12 col-sm-12 w3-text-grey">
+        <span><i class="fa fa-warning w3-large"></i> <b>Warning!</b> No Checklist Available for selected Work Item / Building.</span>
     </div>
+    <?php
+}
+?>
+
+</div>
+</div>
+</div>
+</div>
+<!-- view all document div ends -->
+</div>
 </div>
 </div>
 <script>

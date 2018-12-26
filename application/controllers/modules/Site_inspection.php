@@ -336,7 +336,7 @@ class Site_inspection extends CI_Controller {
             echo '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> Checklist Status marked as <b>Done</b>.</div>';
             die();
         } else {
-            
+
             echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Checklist Status was not changed.</div>';
             die();
         }
@@ -373,17 +373,17 @@ class Site_inspection extends CI_Controller {
             echo '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> Checklist Status marked as <b>Undone</b>.</div>';
             die();
         } else {
-            
+
             echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Checklist Status was not changed.</div>';
             die();
         }
     }
 
-    // upload more files in document edit page
+    // upload checklist images
     public function uploadImageInfo() {
         extract($_POST);
         $data = $_POST;
-        $data['activity_id'] = $activity_id;
+        $data['activity_id'] = base64_decode($activity_id_upload);
         $session_name = $this->session->userdata('usersession_name');
         $session_role = $this->session->userdata('role');
         if ($session_role == 'company_admin') {
@@ -393,48 +393,42 @@ class Site_inspection extends CI_Controller {
             $data['author'] = $user_name;
         }
         $filepath = '';
-
-        $file_name = $_FILES['activity_file']['name'];
-        if (!empty(($_FILES['activity_file']['name']))) {
-            $extension = pathinfo($_FILES['activity_file']['name'], PATHINFO_EXTENSION);
-            $_FILES['userFile']['name'] = $work_item . '_' . time() . '.' . $extension;
-            $_FILES['userFile']['type'] = $_FILES['activity_file']['type'];
-            $_FILES['userFile']['tmp_name'] = $_FILES['activity_file']['tmp_name'];
-            $_FILES['userFile']['error'] = $_FILES['activity_file']['error'];
-            $_FILES['userFile']['size'] = $_FILES['activity_file']['size'];
+        $file_name = $_FILES['checklist_image']['name'];
+        if (!empty(($_FILES['checklist_image']['name']))) {
+            $extension = pathinfo($_FILES['checklist_image']['name'], PATHINFO_EXTENSION);
+            $_FILES['userFile']['name'] = 'Activity_IU0'.$data['activity_id'].'_'.time().'.'.$extension;
+            $_FILES['userFile']['type'] = $_FILES['checklist_image']['type'];
+            $_FILES['userFile']['tmp_name'] = $_FILES['checklist_image']['tmp_name'];
+            $_FILES['userFile']['error'] = $_FILES['checklist_image']['error'];
+            $_FILES['userFile']['size'] = $_FILES['checklist_image']['size'];
 
             $uploadPath = 'assets/modules/site_images/';  //upload images in images/desktop/ folder
 
             $config['upload_path'] = $uploadPath;
-            $config['overwrite'] = FALSE;
-            $config['allowed_types'] = '*'; //allowed types of files
+            $config['overwrite'] = TRUE;
+            $config['max_size'] = '10000';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg'; //allowed types of files
             $this->load->library('upload', $config);  //load upload file config.
             $this->upload->initialize($config);
             $image_path = '';
 
             if ($this->upload->do_upload('userFile')) {
                 $fileData = $this->upload->data();
-                $filepath = 'assets/modules/site_images/' . $fileData['file_name'];
+                $filepath = 'assets/modules/site_images/'.$fileData['file_name'];
             } else {
                 $response = array(
                     'status' => 'validation',
-                    'message' => $this->upload->display_errors('<div class="alert alert-warning alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong>', '</div>'),
-                    'field' => 'doc_file'
+                    'message' => $this->upload->display_errors('<div class="alert alert-warning alert-dismissible fade in w3-margin-top"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong>', '</div>')
                 );
                 echo json_encode($response);
                 die();
             }
         }
         $data['filepath'] = $filepath;
-        // print_r($data);die();
         $path = base_url();
         $url = $path . 'api/modules/Sitecontroller_api/uploadImageInfo';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-
-        // authenticate API
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -443,7 +437,6 @@ class Site_inspection extends CI_Controller {
         //close cURL resource
         curl_close($ch);
         $result = json_decode($output, true);
-
         if ($result == 200) {
             $response = array(
                 'status' => 'success',
@@ -451,14 +444,8 @@ class Site_inspection extends CI_Controller {
             );
             echo json_encode($response);
             die();
-        } elseif ($result == 412) {
-            $response = array(
-                'status' => 'error',
-                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> You Can Upload More Than 5 Images.</div>'
-            );
-            echo json_encode($response);
-            die();
-        } else {
+        }
+        else {
             $response = array(
                 'status' => 'error',
                 'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> File was not uploaded.</div>'
@@ -641,6 +628,7 @@ class Site_inspection extends CI_Controller {
 //----------------fun for remove image
     public function removeImageInfo() {
         extract($_GET);
+        // print_r($_GET);die();
         if (isset($activity_id) && $activity_id != '') {
             $data['key'] = $key;
             $data['activity_id'] = $activity_id;
@@ -652,6 +640,7 @@ class Site_inspection extends CI_Controller {
                 $user_name = $this->session->userdata('user_name');
                 $data['author'] = $user_name;
             }
+
             $path = base_url();
             $url = $path . 'api/modules/Sitecontroller_api/removeImageInfo';
             $ch = curl_init();
@@ -666,7 +655,7 @@ class Site_inspection extends CI_Controller {
             //close cURL resource
             curl_close($ch);
             $result = json_decode($output, true);
-            //print_r($output);die();
+            // print_r($output);die();
             if ($result['status'] == 'warning') {
                 echo $result['message'];
                 die();

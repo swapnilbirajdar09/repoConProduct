@@ -27,6 +27,107 @@ function delWitem(witem_id)
 });
 }
 
+// function to upload images for checklist
+function checklistImageForm(activity_id){
+  var formData = new FormData($('#uploadChecklistImage_'+activity_id)[0]);
+  $.ajax({
+    url: BASE_URL+"modules/site_inspection/uploadImageInfo", // point to server-side PHP script
+    data: formData,
+    type: 'POST',
+    contentType: false, // The content type used when sending data to the server.
+    cache: false, // To unable request pages to be cached
+    processData: false,
+    beforeSend: function(){
+      $('#uploadFilebtn_'+activity_id).html('<i class="fa fa-circle-o-notch fa-spin w3-large"></i> Uploading...');
+      $('#uploadFilebtn_'+activity_id).attr('disabled',true);
+    },
+    success: function(response){
+      var data =JSON.parse(response);
+      $('#uploadFilebtn_'+activity_id).html('<i class="fa fa-upload"></i> Save and Upload Image');
+      $('#uploadFilebtn_'+activity_id).removeAttr('disabled');
+      $('#uploadImageMsg_'+activity_id).html(data.message);  
+     // response message
+     switch(data.status){
+      case 'success':
+      setTimeout(function() {
+        window.location.reload();
+              }, 1500); // <-- time in milliseconds 
+      break;
+
+      case 'error':
+      setTimeout(function() {
+        $('.alert_message').fadeOut('fast');
+            }, 10000); // <-- time in milliseconds
+      break;
+
+      case 'validation':
+      setTimeout(function() {
+        $('.alert_message').fadeOut('fast');
+            }, 8000); // <-- time in milliseconds
+      break;
+    }
+  },
+  error:function(data){
+    $('#uploadFilebtn_'+activity_id).html('<i class="fa fa-upload"></i> Save and Upload Image');
+    $('#uploadImageMsg_'+activity_id).html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
+    $('#uploadFilebtn_'+activity_id).removeAttr('disabled');
+    window.setTimeout(function() {
+     $(".alert").fadeTo(500, 0).slideUp(500, function(){
+       $(this).remove(); 
+     });
+   }, 5000);
+  }
+});
+  return false;
+}
+
+// remove files from gallery
+function removeImageInfo(key, activity_id) {
+  $.confirm({
+    title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to remove this Image?</span>',
+    content: '',
+    type: 'red',
+    buttons: {
+      confirm: function () {
+        $.ajax({
+          type: "GET",
+          url: BASE_URL + "modules/site_inspection/removeImageInfo",
+          data: {
+            key: key,
+            activity_id: activity_id
+          },
+          cache: false,
+          beforeSend: function () {
+            $('#image_' + key).html('<i class="fa fa-circle-o-notch fa-spin w3-medium"></i>');
+          },
+          success: function (data) {
+            $('#deleteImageMsg_'+activity_id).html(data);
+            $('#image_' + key).html('<i class="fa fa-close"></i>');
+
+            window.setTimeout(function () {
+              $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+              });
+              window.location.reload();
+            }, 1500);
+          },
+          error: function (data) {
+            $('#deleteImageMsg_'+activity_id).html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
+            $('#image_' + key).html('<i class="fa fa-close"></i>');
+            window.setTimeout(function () {
+              $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+              });
+            }, 5000);
+          }
+        });
+      },
+      cancel: function () {
+      }
+    }
+  });
+}
+
 // Angular js for all product view
 var app = angular.module("siteApp", ['ngSanitize']); 
 app.controller("siteCtrl", function($scope,$http,$window) {
@@ -168,90 +269,6 @@ return false;  //stop the actual form post !important!
 });
 
 
-// add new architect
-$("#addArchitectForm").on('submit', function(e) {
- e.preventDefault(); 
- $.ajaxSetup({
-  headers: {
-    'X-CSRF-Token': $('#_token').val()
-  }
-});
- $.ajax({
-    url: "/addArch", // point to server-side PHP script
-    data: new FormData(this),
-    type: 'POST',
-    contentType: false, // The content type used when sending data to the server.
-    cache: false, // To unable request pages to be cached
-    processData: false,
-    beforeSend: function(){
-      $('#archSubmit').html('<span class="w3-card w3-padding-small theme_text w3-margin-bottom w3-round"><i class="fa fa-spinner fa-spin w3-large"></i> <b>Adding Architect...</b></span>');
-    },
-    success: function(data){
-      $('#archOutput').html(data);
-      $('#archSubmit').html('<button class="btn theme_bg w3-center" type="submit"><i class="fa fa-plus"></i>  Add Architect </button>');
-
-      window.setTimeout(function() {
-       $(".alert").fadeTo(500, 0).slideUp(500, function(){
-         $(this).remove(); 
-       });
-       location.reload();
-     }, 1500);
-    },
-    error:function(data){
-     $('#archOutput').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
-     $('#archSubmit').html('<button class="btn theme_bg w3-center" type="submit"><i class="fa fa-plus"></i>  Add Architect </button>');
-     window.setTimeout(function() {
-       $(".alert").fadeTo(500, 0).slideUp(500, function(){
-         $(this).remove(); 
-       });
-     }, 5000);
-   }
- });
-return false;  //stop the actual form post !important!
-});
-
-// add new architect
-$("#subscriberMailForm").on('submit', function(e) {
- e.preventDefault(); 
- $.ajaxSetup({
-  headers: {
-    'X-CSRF-Token': $('#_token').val()
-  }
-});
- $.ajax({
-    url: "upload/uploadMailFile", // point to server-side PHP script
-    data: new FormData(this),
-    type: 'POST',
-    contentType: false, // The content type used when sending data to the server.
-    cache: false, // To unable request pages to be cached
-    processData: false,
-    beforeSend: function(){
-      $("#addMailFormatBtn").attr("disabled", true);
-      $('#addMailFormatBtn').html('<i class="fa fa-spinner fa-spin w3-medium"></i> Uploading...');
-    },
-    success: function(data){
-      $('#errMailerMsg').html(data);
-      $('#addMailFormatBtn').removeAttr("disabled");
-      $('#addMailFormatBtn').html('<i class="fa fa-upload"></i>');
-      window.setTimeout(function() {
-        window.location.reload();
-      }, 1500);
-    },
-    error:function(data){
-      $('#addMailFormatBtn').removeAttr("disabled");
-      $('#errMailerMsg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
-
-      $('#addMailFormatBtn').html('<i class="fa fa-upload"></i>');
-      window.setTimeout(function() {
-        $(".alert").fadeTo(500, 0).slideUp(500, function(){
-          $(this).remove(); 
-        });
-      }, 5000);
-    }
-  });
-return false;  //stop the actual form post !important!
-});
-
 });
 
 // ----function to open modal product------//
@@ -319,7 +336,7 @@ function mark(act_id,status,key) {
   var url=BASE_URL + "modules/site_inspection/markChecklistUndone";
   if(status=='done'){
     var prompt='<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to mark this activity <b>Done</b>?</span>';
-  var url=BASE_URL + "modules/site_inspection/markChecklistDone";
+    var url=BASE_URL + "modules/site_inspection/markChecklistDone";
   }
   $.confirm({
     title: prompt,
@@ -549,7 +566,7 @@ function removeFile(key,document_id) {
 //   var wrapper = $("#addedmore_imageDiv");
 //   var add_button = $("#add_moreimage");
 //   var x = 1;
-  
+
 //   $(add_button).click(function (e) {
 //     e.preventDefault();
 //     if (x < max_fields) {
