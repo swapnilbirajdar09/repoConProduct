@@ -59,8 +59,9 @@ class Createuser extends CI_Controller {
     }
 
     public function getProjectRoles() {
-        $project_id = $this->session->userdata('project_id');
-
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         $path = base_url();
         $url = $path . 'api/user/Createuser_api/getProjectRoles?project_id=' . $project_id;
         //create a new cURL resource

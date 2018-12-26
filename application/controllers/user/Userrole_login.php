@@ -56,8 +56,8 @@ class Userrole_login extends CI_Controller {
                 'project_id' => $response['project_id'],
                 'user_id' => $response['user_id'],
                 'role' => $response['role'],
-                'user_name' => $response['userrole_name']
-                    // 'company_id' => $response['company_id']
+                'user_name' => $response['userrole_name'],
+                'grade_id' => $response['grade_id']
             );
             //start session of user if login success
             $this->session->set_userdata($session_data);
@@ -72,9 +72,7 @@ class Userrole_login extends CI_Controller {
                   }, 1500);
                   </script>
                   ';
-            //echo '<p class="w3-green w3-padding-small">Login successfull! Welcome Admin.</p>';
         }
-        //print_r($result);
     }
 
     public function logOutUser() {

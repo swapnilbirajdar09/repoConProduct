@@ -14,9 +14,7 @@ class Settings_model extends CI_Model {
     //-------UPDATE ADMIN EMAIL FUNCTION--------------//
     public function updateEmail($data) {
         extract($data);
-
         $sql = "UPDATE company_tab SET email='$email' WHERE company_id='$company_id'";
-
         if ($this->db->query($sql)) {
             $response = array(
                 'status' => 200,
@@ -33,7 +31,6 @@ class Settings_model extends CI_Model {
     public function updateUname($data) {
         extract($data);
         $sql = "UPDATE company_tab SET username='$uname' WHERE company_id='$company_id'";
-
         if ($this->db->query($sql)) {
             $response = array(
                 'status' => 200,
@@ -52,7 +49,6 @@ class Settings_model extends CI_Model {
         extract($data);
         //print_r($data);
         $sql = "UPDATE company_tab SET password='$pass' WHERE company_id ='$company_id'";
-
         if ($this->db->query($sql)) {
             $response = array(
                 'status' => 200,
@@ -68,9 +64,7 @@ class Settings_model extends CI_Model {
     public function getUserDetails($company_id) {
         //extract($data);
         $query = "SELECT * FROM company_tab WHERE company_id='$company_id'";
-
         $result = $this->db->query($query);
-
         if ($result->num_rows() <= 0) {
             $response = array(
                 'status' => 500,
@@ -83,43 +77,25 @@ class Settings_model extends CI_Model {
         return $response;
     }
 
-    public function getAllFeatuesForUser($user_id,$role_id) {
-        $query = "SELECT * FROM user_tab,role_tab WHERE user_tab.role_id = role_tab.role_id "
-                . "AND user_tab.user_id='$user_id' AND user_tab.role_id = '$role_id'";
-        //echo $query;die();
+    public function getAllFeatuesForUser($user_id, $role_id) {
+        $query = "SELECT * FROM features_tab";
         $result = $this->db->query($query);
-        $currentFiles = '';
-        $arr = array();
         if ($result->num_rows() <= 0) {
             $response = array(
                 'status' => 500,
                 'status_message' => 'No data found.');
         } else {
-            foreach ($result->result_array() as $key) {
-                //print_r($key);die();
-                $currentFiles = json_decode($key['features_assign']);
-            }
-            $feature = [];
-
-            foreach ($currentFiles as $key) {
-                $sql = "SELECT * FROM features_tab WHERE feature_id = '$key'";
-                $resultsel = $this->db->query($sql);
-                $feature [] = $resultsel->result_array();
-            }
-
             $response = array(
                 'status' => 200,
-                'status_message' => $feature);
+                'status_message' => $result->result_array());
         }
         return $response;
     }
 
 //---update email from user tab--//
-      public function updateUserRoleEmail($data) {
+    public function updateUserRoleEmail($data) {
         extract($data);
-
         $sql = "UPDATE user_tab SET user_email='$email' WHERE user_id='$user_id'";
-
         if ($this->db->query($sql)) {
             $response = array(
                 'status' => 200,
@@ -133,12 +109,10 @@ class Settings_model extends CI_Model {
     }
 
     //----fetch details from user tab ---//
-      public function getUserRoleDetails($user_id) {
+    public function getUserRoleDetails($user_id) {
         //extract($data);
         $query = "SELECT * FROM user_tab WHERE user_id='$user_id'";
-
         $result = $this->db->query($query);
-
         if ($result->num_rows() <= 0) {
             $response = array(
                 'status' => 500,
@@ -151,11 +125,10 @@ class Settings_model extends CI_Model {
         return $response;
     }
 
-     //----update username from user tab ---//
+    //----update username from user tab ---//
     public function updateUserRoleUname($data) {
         extract($data);
         $sql = "UPDATE user_tab SET user_name='$uname' WHERE user_id='$user_id'";
-
         if ($this->db->query($sql)) {
             $response = array(
                 'status' => 200,
@@ -167,12 +140,12 @@ class Settings_model extends CI_Model {
         }
         return $response;
     }
-  //----update Password from user tab ---//
-      public function updateUserRolePass($data) {
+
+    //----update Password from user tab ---//
+    public function updateUserRolePass($data) {
         extract($data);
         //print_r($data);
         $sql = "UPDATE user_tab SET password='$pass' WHERE user_id ='$user_id'";
-
         if ($this->db->query($sql)) {
             $response = array(
                 'status' => 200,

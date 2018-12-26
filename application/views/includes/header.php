@@ -18,6 +18,7 @@ if ($role == 'company_admin') {
     $user_name = $this->session->userdata('user_name');
     $user_id = $this->session->userdata('user_id');
     $role = $this->session->userdata('role');
+    $grade_id = $this->session->userdata('grade_id');
 
     $sessionArr = explode('/', $role);
     $role_id = $sessionArr[0];
@@ -43,7 +44,6 @@ if ($role == 'company_admin') {
         <link href="<?php echo base_url(); ?>assets/build/css/dhtmlxcalendar.css" rel="stylesheet">
         <link href="<?php echo base_url(); ?>assets/alert/jquery-confirm.css" rel="stylesheet">
         <link href="<?php echo base_url(); ?>assets/build/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-
         <!-- angular-->
         <script src="<?php echo base_url(); ?>assets/js/angular.js"></script>
         <script src="<?php echo base_url(); ?>assets/js/angular-sanitize.js"></script>
@@ -96,7 +96,9 @@ if ($role == 'company_admin') {
                             </a>
                         </div>
                         <!-- /menu footer buttons -->
-                    <?php } else {
+                        <?php
+                    } else {
+                        //print_r($features);
                         ?>
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">
@@ -105,26 +107,30 @@ if ($role == 'company_admin') {
                                     <li><a href="<?php echo base_url(); ?>user_dashboard"><i class="fa fa-dashboard"></i> Dashboard </a></li>
                                     <?php
                                     //print_r($features);
+                                    $gradlist = '';
                                     if ($features['status'] != 500) {
                                         foreach ($features['status_message'] as $key) {
-                                            //print_r($key);
-                                            if ($key[0]['feature_name'] == 'Document controller') {
-                                                $symbole = 'check-circle';
-                                            }if ($key[0]['feature_name'] == 'Site Inspection') {
-                                                $symbole = 'file';
-                                            }if ($key[0]['feature_name'] == 'Raise Query') {
-                                                $symbole = 'check';
+                                            $gradlist = json_decode($key['grades_assigned'], true);
+                                            if (in_array($grade_id, $gradlist)) {
+                                                //print_r($key);
+                                                if ($key['feature_name'] == 'Document controller') {
+                                                    $symbole = 'check-circle';
+                                                }if ($key['feature_name'] == 'Site Inspection') {
+                                                    $symbole = 'file';
+                                                }if ($key['feature_name'] == 'Raise Query') {
+                                                    $symbole = 'check';
+                                                }
+                                                ?>
+                                                <li><a href="<?php echo base_url(); ?><?php echo $key['url']; ?>"><i class="fa fa-<?php echo $symbole; ?>"></i> <?php echo $key['feature_name']; ?> </a></li>                                                           
+                                                <?php
                                             }
-                                            ?>
-                                            <li><a href="<?php echo base_url(); ?><?php echo $key[0]['url']; ?>"><i class="fa fa-<?php echo $symbole; ?>"></i> <?php echo $key[0]['feature_name']; ?> </a></li>                                                           
-                                            <?php
                                         }
                                     } else {
                                         ?>
                                         <li><span>No Features Available.</span></li>
                                     <?php } ?>
                                     <li><a href="<?php echo base_url(); ?>user/user_profile"><i class="fa fa-cog"></i>Settings</a></li>
-                                    <!--                   <li><a href="<?php //echo base_url();          ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>-->
+                                    <!--                   <li><a href="<?php //echo base_url();              ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>-->
                                 </ul>
                             </div>
                             <div class="menu_section">
@@ -181,24 +187,24 @@ if ($role == 'company_admin') {
                                         if ($projects['status'] != 500) {
                                             foreach ($projects['status_message'] as $key) {
                                                 ?>
-                                                <li <?php if ($key['project_id'] == $project_id) {
-                                        echo 'class="active"';
-                                    } ?>><a href="<?php echo base_url(); ?>user_dashboard/startSesstionByProjectID?project_id=<?php echo base64_encode($key['project_id'] . '|' . $key['project_name']); ?>"><?php echo strtoupper($key['project_name']); ?></a></li>
-                                                <?php
-                                            }
-                                        } else {
-                                            ?>
+                                                <li <?php
+                                                if ($key['project_id'] == $project_id) {
+                                                    echo 'class="active"';
+                                                }
+                                                ?>><a href="<?php echo base_url(); ?>user_dashboard/startSesstionByProjectID?project_id=<?php echo base64_encode($key['project_id'] . '|' . $key['project_name']); ?>"><?php echo strtoupper($key['project_name']); ?></a></li>
+                                                    <?php
+                                                }
+                                            } else {
+                                                ?>
                                             <li><a >No Projects Created.</a></li>
-    <?php } ?>
+                                        <?php } ?>
                                     </ul>
                                 </li>
                             </ul>
-    <?php // print_r($features);
-    ?>
                         </nav>
                     </div>
                 </div>
-<?php } else { ?>
+            <?php } else { ?>
                 <div class="top_nav">
                     <div class="nav_menu">
                         <nav>
@@ -217,12 +223,12 @@ if ($role == 'company_admin') {
                                     </ul>
                                 </li>                                
                             </ul>
-    <?php // print_r($features);
-    ?>
+                            <?php // print_r($features);
+                            ?>
                         </nav>
                     </div>
                 </div>
-<?php } ?>
+            <?php } ?>
             <!-- /top navigation -->
 
             <!--       </div>

@@ -20,7 +20,7 @@ class Userlogin_model extends CI_Model {
         $user_id = '';
         $username = '';
         $user_role = '';
-        // $role_name = '';
+        $grade_id = '';
         if ($result->num_rows() <= 0) {
             $response = array(
                 'status' => 500
@@ -33,6 +33,7 @@ class Userlogin_model extends CI_Model {
                 $user_id = $key['user_id'];
                 $username = $key['user_name'];
                 $user_role = $key['role_id'] . '/' . $key['role_name'];
+                $grade_id = $key['grade_id'];
             }
 
             // get project name
@@ -47,7 +48,8 @@ class Userlogin_model extends CI_Model {
                 'project_id' => base64_encode($project_id.'|'.$project_name),
                 'user_id' => $user_id,
                 'userrole_name' => $username,
-                'role' => $user_role
+                'role' => $user_role,
+                'grade_id' => $grade_id
             );
         }
 

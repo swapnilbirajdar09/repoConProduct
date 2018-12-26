@@ -8,11 +8,16 @@ class User_dashboard extends CI_Controller {
     public function __construct() {
         parent::__construct();
         // load common model
+        $user_name = $this->session->userdata('user_name');
         $admin_name = $this->session->userdata('usersession_name');
-        //  if ($admin_name == '') {
-        //     //check session variable set or not, otherwise logout
-        //  redirect('login');
-        //  } 
+//        if ($admin_name == '') {
+//            //check session variable set or not, otherwise logout
+//            redirect('login');
+//        }
+//        if ($user_name == '') {
+//            //check session variable set or not, otherwise logout
+//            redirect('login');
+//        }
     }
 
     // main index function
@@ -53,7 +58,7 @@ class User_dashboard extends CI_Controller {
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
         $path = base_url();
-        $url = $path . 'api/Dashboard_api/allDocuments?project_id='.$project_id;
+        $url = $path . 'api/Dashboard_api/allDocuments?project_id=' . $project_id;
         //create a new cURL resource
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPGET, true);
@@ -109,6 +114,7 @@ class User_dashboard extends CI_Controller {
         curl_close($ch);
         $response = json_decode($response_json, true);
         return $response;
+        //print_r($response_json);die();
     }
 
     public function startSesstionByProjectID() {
