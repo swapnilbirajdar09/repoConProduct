@@ -64,6 +64,7 @@ if ($role == 'company_admin') {
                     </div>
                     <div class="clearfix"></div>
                     <?php //print_r($features);
+                    //echo base64_decode('dmFpZGVoaTE3');
                     ?>
                     <!-- sidebar menu -->
                     <?php if ($role == 'company_admin') { ?>
