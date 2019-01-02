@@ -69,7 +69,7 @@
                                 <th class="text-center">Sr.No</th>
                                 <th class="text-center">Query Title</th>
                                 <th class="text-center">Query Raised To</th>                        
-                                <th class="text-center"></th>
+                                <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
