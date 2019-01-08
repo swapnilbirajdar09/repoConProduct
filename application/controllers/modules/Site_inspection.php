@@ -100,6 +100,46 @@ class Site_inspection extends CI_Controller {
         return $response;
     }
 
+  // post comment to rfi query
+    public function addComment() {
+        extract($_POST);
+        // print_r($_POST);die();
+        $data = $_POST;
+        $session_name = $this->session->userdata('usersession_name');
+        $session_role = $this->session->userdata('role');
+        if ($session_role == 'company_admin') {
+            $data['author'] = 'Administrator';
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $data['author'] = $user_name;
+        }
+
+        $path = base_url();
+        $url = $path . 'api/modules/Query_api/saveComments';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+
+        if ($response) {
+            $response = array(
+                'status' => 'success',
+                'message' => '<p class="w3-green w3-padding-small w3-small"><strong>Success!</strong> Comment posted successfully!</p>'
+            );
+            echo json_encode($response);
+            die();
+        } else {
+            $response = array(
+                'status' => 'error',
+                'message' => '<p class="w3-red w3-padding-small w3-small"><strong>Error!</strong> Comment not posted successfully!</p>'
+            );
+            echo json_encode($response);
+            die();
+        }
+    }
     // add new work item function
     public function addWitem() {
         extract($_POST);

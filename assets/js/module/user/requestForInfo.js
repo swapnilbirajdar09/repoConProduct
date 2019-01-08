@@ -104,7 +104,6 @@ function getComments(query_id) {
             // console.log(response);
             $('#comment_list_' + query_id).html(response);
             // var data = JSON.parse(response);
-
         }
     });
 }

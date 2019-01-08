@@ -47,12 +47,16 @@ class User_dashboard extends CI_Controller {
         //$project_id = $this->session->userdata('project_id');die();
         $data['queries'] = User_dashboard::getAllQueries_dashboard();
         $data['allDocuments'] = User_dashboard::allDocuments();
-
+ 		$data['topDocuments'] = User_dashboard::topDocuments();
+ 		$data['countofDocuments'] = User_dashboard::countoFDocuments();
+ 		$data['countofQuery'] = User_dashboard::countoFQuery();
+ 		$data['countofPendingQuery'] = User_dashboard::countoFPendingQuery();
+ 		$data['countoFUser'] = User_dashboard::countoFUser();
         $this->load->view('includes/header', $data);
         $this->load->view('pages/dashboard', $data);
         $this->load->view('includes/footer');
     }
-
+//------pending document list
     public function allDocuments() {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
@@ -71,6 +75,99 @@ class User_dashboard extends CI_Controller {
         return $response;
     }
 
+//-------top 10 document list
+        public function topDocuments() {
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $path = base_url();
+        $url = $path . 'api/Dashboard_api/topDocuments?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        //print_r($response_json);die();
+        return $response;
+    }
+    //-------count of  documents 
+        public function countoFDocuments() {
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $path = base_url();
+        $url = $path . 'api/Dashboard_api/countoFDocuments?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        //print_r($response_json);die();
+        return $response;
+    }
+
+      //-------count of total working users
+        public function countoFUser() {
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $path = base_url();
+        $url = $path . 'api/Dashboard_api/countoFUser?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        //print_r($response_json);die();
+        return $response;
+    }
+  //-------count of  all queries
+        public function countoFQuery() {
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $path = base_url();
+        $url = $path . 'api/Dashboard_api/countoFQuery?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        //print_r($response_json);die();
+        return $response;
+    }
+  //-------count of Pending queries
+        public function countoFPendingQuery() {
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $path = base_url();
+        $url = $path . 'api/Dashboard_api/countoFPendingQuery?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        //print_r($response_json);die();
+        return $response;
+    }
+
+    //---------function to get all project
     public function getAllprojects() {
         $company_id = $this->session->userdata('company_id');
         $path = base_url();

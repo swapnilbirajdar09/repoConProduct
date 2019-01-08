@@ -283,6 +283,64 @@ function openHelp(modal_id) {
   modal.addClass('in');
 }
 
+//----------fun for add comment
+function savecomment(activity_id) {
+    //alert(query_id);
+    if (activity_id == '') {
+        $('.comment_msg').html('<p class="w3-red w3-padding-small w3-small">Warning! Invalid query! Reload the page to resolve the issue.</p>');
+        return false;
+    }
+    var comment_posted = $('#comment_posted_' + activity_id).val();
+    if (comment_posted == '') {
+        $('.comment_msg').html('<p class="w3-red w3-padding-small w3-small">Warning! Please Add Comment first..</p>');
+        return false;
+    }
+    $.ajax({
+        type: "POST",
+        url: BASE_URL + "modules/site_inspection/addComment",
+        data: {
+            activity_id: activity_id,
+            comment_posted: comment_posted
+        },
+        return: false,
+        beforeSend: function () {
+            $('.comment_msg').html('');
+            // $('#commentBtn').prop('disabled', true);
+        },
+        success: function (response) {
+            //alert(response);
+            $('#comment_posted_' + activity_id).val('');
+            var data = JSON.parse(response);
+            $('#commentBtn').prop('disabled', false);
+            // response message
+            switch (data.status) {
+                case 'success':
+                    $('.comment_msg').html(data.message);
+                    getComments(query_id);
+                    // $('#comment_list').load(location.href + " #comment_list>*", "");
+                    break;
+                case 'error':
+                    $('.comment_msg').html(data.message);
+                    break;
+                case 'validation':
+                    $('.comment_msg').html(data.message);
+                    break;
+                default:
+                    $('.comment_msg').html('<p class="w3-red w3-padding-small w3-small"><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></p>');
+                    break;
+            }
+        },
+        error: function (response) {
+            // Re_Enabling the Elements
+            $('#commentBtn').prop('disabled', false);
+            $('.comment_msg').html('<p class="w3-red w3-padding-small w3-small"><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.</strong></p>');
+            setTimeout(function () {
+                $('.comment_msg').fadeOut('fast');
+            }, 4000); // <-- time in milliseconds  
+        }
+    });
+}
+
 
 // fucntion to delete document
 function removeActivity(act_id,key) {

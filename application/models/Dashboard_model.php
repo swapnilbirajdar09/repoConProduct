@@ -72,5 +72,86 @@ class Dashboard_model extends CI_Model {
         }
         return $response;
     }
+  //---------function for top 10 document list
+    public function topDocuments($project_id) {
+        $sql = "SELECT * FROM document_tab WHERE project_id = '$project_id' AND status='0'  ORDER BY created_date DESC LIMIT 10";
+       // echo $sql;die();
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
+//----query for count of document
+      public function countoFDocuments($project_id) {
+        $sql = "SELECT COUNT(document_id) from document_tab WHERE project_id = '$project_id'";
+       // echo $sql;die();
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
 
+    //----query for count of all queries
+      public function countoFQuery($project_id) {
+        $sql = "SELECT COUNT(query_id) from rfi_query_tab WHERE project_id = '$project_id'";
+       // echo $sql;die();
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
+     //----query for count of pending queries
+      public function countoFPendingQuery($project_id) {
+        $sql = "SELECT COUNT(query_id) from rfi_query_tab WHERE project_id = '$project_id' AND status = '0' ";
+       // echo $sql;die();
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
+
+      //----query for count of total working user
+      public function countoFUser($project_id) {
+        $sql = "SELECT COUNT(user_id) from user_tab WHERE project_id = '$project_id'";
+       // echo $sql;die();
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
 }

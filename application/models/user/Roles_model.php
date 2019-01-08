@@ -87,4 +87,23 @@ class Roles_model extends CI_Model {
         return $response;
     }
 
+    //--------fun for save comments
+    public function saveComments($data) {
+        extract($data);
+        $data = array(
+            'activity_id' => $activity_id,
+            'comments' => addslashes($comment_posted),
+            'created_by' => $author,
+            'created_date' => date('Y-m-d H:i:s')
+        );
+
+        $sql = $this->db->set($data)->get_compiled_insert('checklist_activity_tab');
+        $result = $this->db->query($sql);
+        if ($result) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
 }

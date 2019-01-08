@@ -26,6 +26,17 @@ class Role_api extends REST_Controller {
         return $this->response($result);
     }
 
+ public function saveComments_post() {
+        $data = ($_POST);
+        //print_r($data);die();
+        $result = $this->Roles_model->saveComments($data);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
     public function saveRoles_post() {
         $data = ($_POST);
         //print_r($data);die();

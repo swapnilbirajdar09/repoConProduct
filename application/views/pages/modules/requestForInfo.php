@@ -174,8 +174,8 @@
                                                                             <img style="width: 100%;height:100%" class="img img-thumbnail" src="<?php echo base_url() . $file; ?>" alt="image">
                                                                             <div class="mask no-caption">
                                                                                 <div class="tools" style="margin: 20px 0">
-                                                                                    <a class="btn w3-small"  target="_self" href="<?php echo base_url() . $file; ?>" title="Download image" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;" ><i class="fa fa-download"></i> download</a>
-                                                                                </div>
+          <a class="btn w3-small"  target="_self" href="<?php echo base_url() . $file; ?>" title="Download image" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;" ><i class="fa fa-download"></i> download</a>
+                                                    </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -190,10 +190,10 @@
                                                             <label>Comments: </label>
                                                         <form id="rfiReply_form_<?php echo $val['query_id']; ?>">
                                                                 <div class="w3-col l12 w3-round w3-light-grey w3-padding w3-margin-bottom">
-                                                                    <textarea name="comment_posted" id="comment_posted_<?php echo $val['query_id']; ?>" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
-                                                                    <input type="hidden" id="query_id" name="query_id" value="<?php echo $val['query_id']; ?>">
-                                                                    <div class="comment_msg"></div>
-                                                                    <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" onclick="savecomment('<?php echo $val['query_id']; ?>');" type="button"><i class="fa fa-reply"></i> Post Comment</button>
+           <textarea name="comment_posted" id="comment_posted_<?php echo $val['query_id']; ?>" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
+                      <input type="hidden" id="query_id" name="query_id" value="<?php echo $val['query_id']; ?>">
+                         <div class="comment_msg"></div>
+                     <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" onclick="savecomment('<?php echo $val['query_id']; ?>');" type="button"><i class="fa fa-reply"></i> Post Comment</button>
                                                                 </div>
                                                             </form>
 

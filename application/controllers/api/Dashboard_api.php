@@ -23,7 +23,39 @@ class Dashboard_api extends REST_Controller {
         $result = $this->Dashboard_model->allDocuments($project_id);
         return $this->response($result);
     }
+   //--------------fun for top document
+    public function topDocuments_get() {
+        extract($_GET);
+        $result = $this->Dashboard_model->topDocuments($project_id);
+        return $this->response($result);
+    }
 
+//----function for count of documents
+     public function countoFDocuments_get() {
+        extract($_GET);
+        $result = $this->Dashboard_model->countoFDocuments($project_id);
+        return $this->response($result);
+    }
+
+//----function for count of all queries
+     public function countoFQuery_get() {
+        extract($_GET);
+        $result = $this->Dashboard_model->countoFQuery($project_id);
+        return $this->response($result);
+    }
+
+ //----function for count of pending queries
+     public function countoFPendingQuery_get() {
+        extract($_GET);
+        $result = $this->Dashboard_model->countoFPendingQuery($project_id);
+        return $this->response($result);
+    }
+ //----function for count of total working user
+     public function countoFUser_get() {
+        extract($_GET);
+        $result = $this->Dashboard_model->countoFUser($project_id);
+        return $this->response($result);
+    }
 //-----------fun for update query status
     public function updateQueryStatus_get() {
         extract($_GET);
