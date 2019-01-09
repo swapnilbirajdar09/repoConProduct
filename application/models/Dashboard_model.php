@@ -59,7 +59,7 @@ class Dashboard_model extends CI_Model {
 
     //---------fu for all document
     public function allDocuments($project_id) {
-        $sql = "SELECT * FROM document_tab WHERE project_id = '$project_id' AND status='1' AND delete_reason != '' ";
+        $sql = "SELECT * FROM document_tab WHERE project_id = '$project_id' AND status='0' ";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(
@@ -74,7 +74,7 @@ class Dashboard_model extends CI_Model {
     }
   //---------function for top 10 document list
     public function topDocuments($project_id) {
-        $sql = "SELECT * FROM document_tab WHERE project_id = '$project_id' AND status='0'  ORDER BY created_date DESC LIMIT 10";
+        $sql = "SELECT * FROM document_tab WHERE project_id = '$project_id' ORDER BY created_date DESC LIMIT 10";
        // echo $sql;die();
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
@@ -91,7 +91,7 @@ class Dashboard_model extends CI_Model {
 //----query for count of document
       public function countoFDocuments($project_id) {
         $sql = "SELECT COUNT(document_id) from document_tab WHERE project_id = '$project_id'";
-       // echo $sql;die();
+      
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(

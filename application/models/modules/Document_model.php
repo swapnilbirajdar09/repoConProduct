@@ -54,13 +54,10 @@ class Document_model extends CI_Model {
 
     // delete document
     public function removeDoc($document_id) {
-        $update_data = array(
-            'status' => '0'
-        );
-        // print_r($insert_data);die();
-        $this->db->where('document_id', $document_id);
-        $this->db->update('document_tab', $update_data);
-        if ($this->db->affected_rows() > 0) {
+        
+        $sql = "DELETE FROM document_tab WHERE document_id='$document_id'";
+        $result = $this->db->query($sql);
+        if ($this->db->affected_rows() == 1) {        
             return true;
         } else {
             return false;
@@ -71,7 +68,8 @@ class Document_model extends CI_Model {
     public function sendRequestForDeletion($document_id, $reason) {
         //extract($data);
         $update_data = array(
-            'delete_reason' => $reason
+            'delete_reason' =>addslashes($reason),
+            'status' => '0'
         );
         // print_r($insert_data);die();
         $this->db->where('document_id', $document_id);
@@ -85,7 +83,7 @@ class Document_model extends CI_Model {
 
     // get all documents with this project
     public function getAllDocuments($project_id) {
-        $sql = "SELECT * FROM document_tab WHERE project_id='$project_id' AND status = '1' ORDER BY document_id DESC";
+        $sql = "SELECT * FROM document_tab WHERE project_id='$project_id' ORDER BY document_id DESC";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             return false;

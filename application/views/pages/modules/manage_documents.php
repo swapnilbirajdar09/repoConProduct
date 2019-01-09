@@ -146,7 +146,7 @@
                                             $sharedRoles = json_decode($doc['shared_with'], TRUE);
 
                                             if (in_array($role_id, $sharedRoles) || $role == 'company_admin') {
-                                                if ($doc['delete_reason'] != '') {
+                                                if ($doc['status'] != '1') {
                                                     $cls = 'w3-grey';
                                                 }
                                                 ?>

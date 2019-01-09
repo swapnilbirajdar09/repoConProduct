@@ -51,7 +51,6 @@
 	                        </thead>
 	                        <tbody>
 	                            <?php
-	                           
 	                            $i = 1;
 	                            if ($queries['status'] != 500) {
 	                                foreach ($queries['status_message'] as $val) {
@@ -66,7 +65,7 @@
 	                                                </button>
 	                                                <ul role="menu" class="dropdown-menu pull-right">              
 	                                                    <li>
-	                                                        <a title="View Query" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['query_id']; ?>" onclick="openHelp('<?php echo $val['query_id']; ?>')">View Query</a>
+	                                                     <a title="View Query" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['query_id']; ?>" onclick="openHelp('<?php echo $val['query_id']; ?>')">View Query</a>
 	                                                    </li>
 	                                                    <?php
 	                                                    $user_role = $this->session->userdata('role');
@@ -106,41 +105,40 @@
 	                                            <!-- Modal body starts -->
 	                                            <div class="modal-body">
 	                                                <!-- Modal container starts -->
-	                                                <div class="container"> 
-	                                                    <div class="col-lg-12">
-	                                                        <div class="w3-col l12 w3-padding w3-medium">
-	                                                            <label>Description: </label>
-	                                                            <p>                                        
-	                                                                <?php echo $val['query_description']; ?>
-	                                                            </p>
-	                                                        </div>    
-	                                                        <div class="w3-col l12 w3-padding w3-medium">
-	                                                            <label>Query Raised To : </label>
-	                                                            <p>                                        
-	                                                                <?php echo $val['raised_to']; ?>
-	                                                            </p>
-	                                                        </div>                        
-	                                                        <div class="w3-col l12 w3-margin-bottom w3-padding w3-medium">
+	                                     <div class="container"> 
+	                                          <div class="col-lg-12">
+	                                          <div class="w3-col l12 w3-padding w3-medium">
+	                                               <label>Description: </label>
+	                                                 <p>      
+	                                           <?php echo $val['query_description']; ?>
+	                                                  </p>
+	                                           </div>    
+	                                           <div class="w3-col l12 w3-padding w3-medium">
+	                                            <label>Query Raised To : </label>
+	                                                <p>                               <?php echo $val['raised_to']; ?>
+	                                                 </p>
+	                                             </div>                        
+	                                   <div class="w3-col l12 w3-margin-bottom w3-padding w3-medium">
 
-	                                                            <?php
-	                                                            if ($val['images'] != '[]' && $val['images'] != '') {
-	                                                                $image_arr = json_decode($val['images']);
-	                                                                $count = 1;
-	                                                                echo '<label>Images: </label><br>';
-	                                                                foreach ($image_arr as $file) {
-	                                                                    $arr = explode('/', $file);
-	                                                                    $filename = $arr[3];
-	                                                                    $ext_arr = explode('.', $file);
-	                                                                    $ext = end($ext_arr);
-	                                                                    ?>
-	                                                      <div class="col-md-3">
+	                                       <?php
+	                                     if ($val['images'] != '[]' && $val['images'] != '') {
+	                                        $image_arr = json_decode($val['images']);
+	                                         $count = 1;
+	                                          echo '<label>Images: </label><br>';
+	                                          foreach ($image_arr as $file) {
+	                                          $arr = explode('/', $file);
+	                                           $filename = $arr[3];
+	                                           $ext_arr = explode('.', $file);
+	                                            $ext = end($ext_arr);
+	                                           ?>
+	                                        <div class="col-md-3">
 	                                        <div class="image view view-first" style="height: 100px">
 	                                            <img style="width: 100%;height:100%" class="img img-thumbnail" src="<?php echo base_url() . $file; ?>" alt="image">
-	                                                                            <div class="mask no-caption">
-	                                                                                <div class="tools" style="margin: 20px 0">
+	                                               <div class="mask no-caption">
+	                                  <div class="tools" style="margin: 20px 0">
 	                         <a class="btn w3-small"  target="_self" href="<?php echo base_url() . $file; ?>" title="Download image" download="<?php echo $filename; ?>" style="padding:4px;display: inline-block;" ><i class="fa fa-download"></i> download</a>
-	                                                                                </div>
-	                                                                            </div>
+	                                           </div>
+	                                                    </div>
 	                                                                        </div>
 	                                                                    </div>
 	                                                                    <?php
@@ -186,10 +184,12 @@
 	                        <?php } ?>                       
 	                        </tbody>
 	                    </table>
+
 	                </div>
 	            </div>
 	        </div>
 	    </div>
+
 	    <!-----------------------------------------------Div for documents are starts here------------------------------------>
 	    <!-- view all document div -->
 	    <div class="col-md-12 col-sm-12 col-xs-12">
@@ -269,8 +269,8 @@
 	                                                    if ($user_role == 'company_admin' || $user_name == $doc['created_by']) {
 	                                                        ?>
 	                                                        <li>
-	                                                            <a class="btn btn-xs text-left" onclick="removeDoc('<?php echo base64_encode($doc['document_id']); ?>','<?php echo $doc['document_id']; ?>')" title="Delete Document">Delete Document</a>
-	            <!--                                                                <a class="btn btn-xs text-left" onclick="removeDocument('<?php // echo base64_encode($doc['document_id']);   ?>', '<?php //echo $doc['document_id'];   ?>')" title="Send Request For Deletion">Request For Deletion</a>-->
+	                                      <a class="btn btn-xs text-left" onclick="removeDoc('<?php echo base64_encode($doc['document_id']); ?>','<?php echo $doc['document_id']; ?>')" title="Delete Document">Delete Document</a>
+	         
 	                                                        </li>
 	                                                        <?php
 	                                                    }
@@ -303,14 +303,14 @@
 	                                                        <?php
 	                                                        $image_arr = json_decode($doc['document_file']);
 	                                                        ?>                                
-	                                                  <div class="w3-col l12 w3-padding">
-	                                                   <?php
-	                                                            $count = 1;
-	                                                            foreach ($image_arr as $file) {
-	                                                                $arr = explode('/', $file);
-	                                                                $filename = $arr[3];
-	                                                                $ext_arr = explode('.', $file);
-	                                                                $ext = end($ext_arr);
+	                                         <div class="w3-col l12 w3-padding">
+	                                           <?php
+	                                                $count = 1;
+	                                            foreach ($image_arr as $file) {
+	                                                $arr = explode('/', $file);
+	                                                 $filename = $arr[3];
+	                                                 $ext_arr = explode('.', $file);
+	                                                 $ext = end($ext_arr);
 	                                                                switch ($ext) {
 	                                                                    case "jpg":
 	                                                                        $image = 'fa-file-image-o';
@@ -391,7 +391,7 @@
 	    <div class="col-md-12 col-sm-12 col-xs-12">
 	        <div class="x_panel">
 	            <div class="x_title">
-	                <h2><i class="fa fa-list"></i> Top 10 Document List</h2>
+	                <h2><i class="fa fa-list"></i> Recent Documents </h2>
 	                <ul class="nav navbar-right panel_toolbox">
 	                    <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
 	                </ul>
@@ -431,8 +431,7 @@
 	                                        $role_id = $sessionArr[0];
 	                                        $role_name = $sessionArr[1];
 	                                    }
-	                                    //$sharedRoles = json_decode($doc['shared_with'], TRUE);
-	                                    //if (in_array($role_id, $sharedRoles) || $role == 'company_admin') {
+	                                  
 	                                    ?>
 
 	                                    <tr class="w3-center">
@@ -450,7 +449,7 @@
 	                                        </td>
 	                                        <td>
 	                                            <div class="btn-group">
-	                                                <button data-toggle="dropdown" id="actionBtn_<?php echo $top['document_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
+	                          <button data-toggle="dropdown" id="actionBtn_<?php echo $top['document_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
 	                                                </button>
 	                                                <ul role="menu" class="dropdown-menu pull-right">
 	                                                    <li><a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#DocModal_<?php echo $top['document_id']; ?>" onclick="openHelpDoc('<?php echo $top['document_id']; ?>')">View Files</a>
@@ -466,7 +465,7 @@
 	                                                        ?>
 	                                                        <li>
 	                                                           
-	            <!--                                                                <a class="btn btn-xs text-left" onclick="removeDocument('<?php // echo base64_encode($doc['document_id']);   ?>', '<?php //echo $doc['document_id'];   ?>')" title="Send Request For Deletion">Request For Deletion</a>-->
+	           
 	                                                        </li>
 	                                                        <?php
 	                                                    }
@@ -579,8 +578,10 @@
 
 	        </div>
 	    </div>
+
 	    <!-- view all document div ends -->
 	</div>
+
 	<?php ?>
 	<script>
 	    // ----function to open modal product------//
@@ -688,7 +689,7 @@
 	</script> 
 	<script>
 	//--------Reject query
-	    function RejectQueryStatus(query_id) {
+  function RejectQueryStatus(query_id) {
 	        $.confirm({
 	            title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to Reject this Query?</span>',
 	            content: '',
