@@ -86,12 +86,28 @@
                             </div>
                             <div class="col-md-12 col-xs-12">
                                 <label>Document Files: </label>
-                                <div id="file_drop" class="dropzone w3-light-grey" style="border:none;font-size: 25px">
-                                    <div class="dropzone-previews"></div> 
+                           <!--     <div id="file_drop" class="dropzone w3-light-grey" style="border:none;font-size: 25px">
+                                    <div class="dropzone-previews"></div> -->
+                                   <div id="body">
+		                      <p>Upload Big file chunk by chunk using Plupload.</p>
+
+							<div id="filelist">Your browser doesn't have Flashs, Silverlight or HTML5 support.</div>
+							<div id="container">
+									<div class="form-group">
+									<a id="uploadFile"  name="uploadFile" href="javascript:;">Select file</a>
+							</div>
+
+							<div class="form-group">
+							<a id="upload" href="javascript:;" type="submit" class="btn btn-danger">Upload files</a>
+							</div>
+								</div>
+							<input type="hidden" id="file_ext" name="file_ext" value="<?=substr( md5( rand(10,100) ) , 0 ,10 )?>">
+							<div id="console"></div>
+							</div>
                                 </div>
                             </div>
                             <div class="col-md-12 w3-center w3-margin-top w3-margin-bottom">
-                                <button type="submit" id="uploadDocBtn" class="btn theme_bg w3-hover-text-grey btn-large"><i class="fa fa-upload"></i> Click here to Upload Documents</button>
+                                <!--<button type="submit" id="uploadDocBtn" class="btn theme_bg w3-hover-text-grey btn-large"><i class="fa fa-upload"></i> Click here to Upload Documents</button>-->
                                 <div id="response_msg"></div>
                             </div>
                         </form>
@@ -303,8 +319,14 @@
     </div>
 </div>
 <script src="<?php echo base_url(); ?>assets/js/module/user/document.js"></script>
-<script src="<?php echo base_url(); ?>assets/dropzone/dropzone.js"></script>
-<link rel="stylesheet" href="<?php echo base_url(); ?>assets/dropzone/dropzone.css">
+<!--<script src="<?php echo base_url(); ?>assets/dropzone/dropzone.js"></script> 
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/dropzone/dropzone.css"> -->
+<script type="text/javascript">
+	BASE_URL = "<?php echo base_url();?>"
+</script>
+
+<script src="<?=base_url();?>public/js/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="<?=base_url();?>public/js/application.js"></script>
 <script>
 //                                                                $(function () {
 //                                                                    $('.multiselect-ui').multiselect({
