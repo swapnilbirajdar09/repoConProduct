@@ -308,7 +308,7 @@ function savecomment(activity_id) {
             // $('#commentBtn').prop('disabled', true);
         },
         success: function (response) {
-            //alert(response);
+           // alert(response);
             $('#comment_posted_' + activity_id).val('');
             var data = JSON.parse(response);
             $('#commentBtn').prop('disabled', false);
@@ -316,7 +316,7 @@ function savecomment(activity_id) {
             switch (data.status) {
                 case 'success':
                     $('.comment_msg').html(data.message);
-                    getComments(query_id);
+                    getComments(activity_id);
                     // $('#comment_list').load(location.href + " #comment_list>*", "");
                     break;
                 case 'error':
@@ -341,7 +341,24 @@ function savecomment(activity_id) {
     });
 }
 
-
+// get associated comments
+function getComments(activity_id) {
+    $('#comment_list_' + activity_id).html("<span class='w3-text-grey'><i class='fa fa-circle-o-notch fa-spin'></i> Loading comments. Please wait... </span>")
+    $.ajax({
+        type: "GET",
+        url: BASE_URL + "modules/site_inspection/getQueryComments",
+        data: {
+            activity_id: activity_id
+        },
+        cache: false,
+        success: function (response) {
+            //alert(response);
+            // console.log(response);
+            $('#comment_list_' + activity_id).html(response);
+            // var data = JSON.parse(response);
+        }
+    });
+}
 // fucntion to delete document
 function removeActivity(act_id,key) {
   $.confirm({

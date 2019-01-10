@@ -501,22 +501,45 @@
 	            <div class="container"> 
 	              <div class="col-md-12">
 	                <div class="w3-col l5 w3-left w3-small w3-text-grey">
-	                 <span title="Slab Cycle Checklist">SSC: <b>Day <?php echo $key['day']; ?></b>vaidehi joshi</span>
+	                 <span title="Slab Cycle Checklist">SSC: <b>Day <?php echo $key['day']; ?></b></span>
 	              </div>
+
 	               <div class="col-lg-12 w3-medium">
+
                      <hr>
-                     <label>Comments: </label>
+                     
                  <form id="rfiReply_form_<?php echo $key['activity_id'];; ?>">
-                    <div class="w3-col l12 w3-round w3-light-grey w3-padding w3-margin-bottom">
-                    <textarea name="comment_posted" id="comment_posted_<?php $key['activity_id']; ?>" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
-                     <input type="hidden" id="activity_id" name="activity_id" value="<?php echo $key['activity_id']; ?>">
+                 	<div class="w3-col l12 w3-round w3-light-grey w3-padding w3-margin-bottom">
+                 		<div class="w3-col l6 w3-padding">
+                 	<label>Query Title</label>
+                 	 <input type="text" name="query_title" class="w3-input" >
+                 	</div>
+                 	<div class="w3-col l6 w3-padding">
+                 	<label>Shared With :</label> <br>
+                 	<?php
+                         if ($roles['status'] == 200) {
+                        foreach ($roles['status_message'] as $key) {
+                      ?>
+                     <input type="checkbox" checked id="shared_with" name="shared_with[]" value="<?php echo $key['role_id']; ?>"> <?php echo $key['role_name']; ?><br>
+                      <?php
+                         }
+                         } else {
+                        echo '<span class="w3-light-grey">No Roles Are Available</span>';
+                       }
+                      ?>
+                 	</div>
+                 	<label>Comments: </label>
+                    <textarea name="comment_posted" id="comment_posted" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
+                   
                         <div class="comment_msg"></div>
-                      <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" onclick="savecomment('<?php echo $key['activity_id']; ?>');" type="button"><i class="fa fa-reply"></i> Post Comment</button>
+                      <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right"  type="button"><i class="fa fa-reply"></i> Post Comment</button>
+                <!--       <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" onclick="savecomment('<?php echo $key['activity_id']; ?>');" type="button"><i class="fa fa-reply"></i> Post Comment</button> -->
                     </div>
+                   
                  </form>
 
-                <div class="w3-col l12 w3-small comment_list" id="comment_list_<?php echo $key['activity_id']; ?>">
-                    </div>
+              <!--  <div class="w3-col l12 w3-small comment_list" id="comment_list_<?php echo $key['activity_id']; ?>">
+                    </div> -->
                </div>
 	                <div class="w3-col l7 w3-right w3-small w3-text-grey">
 	                </div>                                                     

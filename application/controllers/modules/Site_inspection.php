@@ -35,7 +35,7 @@ class Site_inspection extends CI_Controller {
     // main index function
     public function index() {
         $role = $this->session->userdata('role');
-// get project session
+       // get project session
         $projSession = $this->session->userdata('project_id');
         $projArr=explode('|', base64_decode($projSession));
         $project_id=$projArr[0];
@@ -64,11 +64,30 @@ class Site_inspection extends CI_Controller {
         if(isset($_POST['selected_witem']) && $_POST['selected_witem']!=''){
             $selected=$_POST['selected_witem'];
             $data['checklistDetails'] = Site_inspection::getSlabCycleDetails($selected);
+             
         }
-
+        $data['roles'] = Site_inspection::getAllRoles();
         $this->load->view('includes/header', $data);
         $this->load->view('pages/modules/site_inspection', $data);
         $this->load->view('includes/footer');
+    }
+
+  public function getAllRoles() {
+        // $project_id = $this->session->userdata('project_id');
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $path = base_url();
+        $url = $path . 'api/user/Role_api/getAllRoles?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
     }
 
     public function getAllFeatuesForUser($user_id, $role_id) {
@@ -103,7 +122,7 @@ class Site_inspection extends CI_Controller {
   // post comment to rfi query
     public function addComment() {
         extract($_POST);
-        // print_r($_POST);die();
+       //  print_r($_POST);die();
         $data = $_POST;
         $session_name = $this->session->userdata('usersession_name');
         $session_role = $this->session->userdata('role');
@@ -115,7 +134,7 @@ class Site_inspection extends CI_Controller {
         }
 
         $path = base_url();
-        $url = $path . 'api/modules/Query_api/saveComments';
+        $url = $path . 'api/modules/sitecontroller_api/saveComments';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -138,6 +157,44 @@ class Site_inspection extends CI_Controller {
             );
             echo json_encode($response);
             die();
+        }
+    }
+
+
+     // get associated comments for query
+    public function getQueryComments() {
+        extract($_GET);
+        $path = base_url();
+        $url = $path . 'api/modules/rfiquery_api/getQueryComments?activity_id=' . $activity_id;
+        // echo $url;die();
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        // authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+        //close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        // echo $output;
+        if (!$response) {
+            echo '<span>No Comments Available.</span>';
+        } else {
+            foreach ($response as $key) {
+                echo '
+            <div class="w3-border w3-padding" >
+             <label><i>' . $key['created_by'] . '-' . $key['created_date'] . '</i></label>
+              <p><i class="fa fa-quote-left"></i> 
+                 <i>' . $key['response_description'] . '</i> 
+                 <i class="fa fa-quote-right"></i></p>
+               </div>
+             </div>
+            ';
+            }
         }
     }
     // add new work item function

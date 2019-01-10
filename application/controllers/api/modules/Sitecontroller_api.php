@@ -21,6 +21,14 @@ class Sitecontroller_api extends REST_Controller {
         }
     }
 
+      public function addComment_post() {
+        $data = $_POST;
+        //print_r($data);die();
+        $result = $this->sitecontroller_model->add_comments($data);
+        return $this->response($result);
+    }
+
+
     // api to get all activities
     public function getAllActivity_get() {
         extract($_GET);
@@ -31,6 +39,13 @@ class Sitecontroller_api extends REST_Controller {
         } else {
             return $this->response(NULL, 404);
         }
+    }
+
+   // get all query responses
+    public function getQueryComments_get() {
+        extract($_GET);
+        $result = $this->sitecontroller_model->getQueryComments($activity_id);
+        return $this->response($result);
     }
 
     // api to get activity details

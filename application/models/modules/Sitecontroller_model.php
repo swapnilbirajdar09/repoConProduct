@@ -174,6 +174,35 @@ class Sitecontroller_model extends CI_Model {
         }
     }
 
+//--------fun for save report issue
+    public function saveComments($data) {
+        extract($data);
+        $data = array(
+            'activity_id' => $activity_id,
+            'response_description' => addslashes($comment_posted),
+            'created_by' => $author,
+            'created_date' => date('Y-m-d H:i:s')
+        );
+
+        $sql = $this->db->set($data)->get_compiled_insert('checklist_query_tab');
+        $result = $this->db->query($sql);
+        if ($result) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+    
+  public function getQueryComments($activity_id) {
+        $sql = "SELECT * FROM checklist_query_tab WHERE activity_id='$activity_id'";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            return false;
+        } else {
+            return $result->result_array();
+        }
+    }
+
     // upload portfolio image
     public function uploadImageInfo($data) {
         extract($data);
