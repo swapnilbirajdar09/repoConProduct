@@ -116,7 +116,7 @@ class Manage_documents extends CI_Controller {
 		$cleanupTargetDir = true; // Remove old files
 		$maxFileAge = 5 * 3600; // Temp file age in seconds
 
-
+		$newpath = '';
 		// Create target dir
 		if (!file_exists($targetDir)) {
 			@mkdir($targetDir);
@@ -130,15 +130,13 @@ class Manage_documents extends CI_Controller {
 		} else {
 			$fileName = uniqid("file_");
 		}
-
+		$newpath ='uploads'.$fileName;
 		$filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
-
+		//print_r($filePath);die();
 		// Chunking might be enabled
 		$chunk = isset($_REQUEST["chunk"]) ? intval($_REQUEST["chunk"]) : 0;
 		$chunks = isset($_REQUEST["chunks"]) ? intval($_REQUEST["chunks"]) : 0;
-
-// Return Success JSON-RPC response
-		die('{"jsonrpc" : "2.0", "result" : '.$filePath.', "id" : "id"}');
+      
 		// Remove old temp files	
 		if ($cleanupTargetDir) {
 			if (!is_dir($targetDir) || !$dir = opendir($targetDir)) {
@@ -195,7 +193,7 @@ class Manage_documents extends CI_Controller {
 			rename("{$filePath}.part", $filePath);
 		}
 		// Return Success JSON-RPC response
-		die('{"jsonrpc" : "2.0", "result" : '.$targetDir.', "id" : "id"}');
+		die('{"jsonrpc" : "2.0", "result" : "'.$targetDir.'", "id" : "id"}');
 
     }
 
@@ -215,8 +213,9 @@ class Manage_documents extends CI_Controller {
         return $response;
     }
 
-    public function upload() {
+    public function uploadFileData() {
         extract($_POST);
+        //print_r($_POST);die();
 // print_r($_FILES);
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
@@ -236,66 +235,7 @@ class Manage_documents extends CI_Controller {
 
             $data['author'] = $user_name;
         }
-// validate fields
-        if ($document_type == '0') {
-            $response = array(
-                'status' => 'validation',
-                'message' => '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Document Type First !</div>',
-                'field' => 'document_type'
-            );
-            echo json_encode($response);
-            die();
-        }
-        if ($shared_with == '0') {
-            $response = array(
-                'status' => 'validation',
-                'message' => '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Role First !</div>',
-                'field' => 'shared_with'
-            );
-            echo json_encode($response);
-            die();
-        }
-
-        $imageArr = array();
-        for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
-            $count = $i + 1;
-            $imagePath = '';
-            $product_image = $_FILES['file']['name'][$i];
-            if (!empty(($_FILES['file']['name'][$i]))) {
-
-                $extension = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
-
-                $_FILES['userFile']['name'] = $document_title . '-' . $document_type . '_' . $project_id . '.' . $extension;
-                $_FILES['userFile']['type'] = $_FILES['file']['type'][$i];
-                $_FILES['userFile']['tmp_name'] = $_FILES['file']['tmp_name'][$i];
-                $_FILES['userFile']['error'] = $_FILES['file']['error'][$i];
-                $_FILES['userFile']['size'] = $_FILES['file']['size'][$i];
-
-                $uploadPath = 'assets/modules/documents/';
-                $config['upload_path'] = $uploadPath;
-                $config['allowed_types'] = '*';
-//allowed types of images           
-                $config['overwrite'] = FALSE;
-                $this->load->library('upload', $config);
-//load upload file config.
-                $this->upload->initialize($config);
-
-                if ($this->upload->do_upload('userFile')) {
-                    $fileData = $this->upload->data();
-                    $imagePath = 'assets/modules/documents/' . $fileData['file_name'];
-                } else {
-                    $response = array(
-                        'status' => 'validation',
-                        'message' => $this->upload->display_errors('<div class="alert alert-warning alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong>', '</div>'),
-                        'field' => 'file_drop'
-                    );
-                    echo json_encode($response);
-                    die();
-                }
-            }
-            $imageArr[] = $imagePath;
-        }
-        $data['images'] = json_encode($imageArr);
+        
         $data['shared_with'] = json_encode($shared_with);
         //print_r($data);die();
         $path = base_url();
@@ -313,7 +253,6 @@ class Manage_documents extends CI_Controller {
 //close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
-        print_r($output);
         if ($response) {
             $response = array(
                 'status' => 'success',

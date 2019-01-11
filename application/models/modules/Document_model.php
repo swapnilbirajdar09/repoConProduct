@@ -112,7 +112,7 @@ class Document_model extends CI_Model {
             'project_id' => $project_id,
             'revision_no' => $revision_number,
             'shared_with' => $shared_with,
-            'document_file' => $images,
+            'document_file' => $file_uploaded,
             'created_by' => $author,
             'status' => '1',
             'created_date' => date('Y-m-d H:i:s')
