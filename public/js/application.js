@@ -8,7 +8,7 @@ var datafile = new plupload.Uploader({
 	url : BASE_URL + 'modules/manage_documents/uploadtoserver',
 	max_file_count: 1,
 	//max_file_size: '10mb',
-	//multi_selection: true,
+	multi_selection: false,
 
 	//ADD FILE FILTERS HERE
 	filters : {
