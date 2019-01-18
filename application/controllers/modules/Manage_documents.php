@@ -87,6 +87,122 @@ class Manage_documents extends CI_Controller {
         return $response;
     }
 
+    public function upload() {
+        extract($_POST);
+// print_r($_FILES);
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+
+        $data = $_POST;
+
+        $data['project_id'] = $project_id;
+        $session_name = $this->session->userdata('usersession_name');
+
+        $session_role = $this->session->userdata('role');
+        if ($session_role == 'company_admin') {
+
+            $data['author'] = 'Administrator';
+        } else {
+            $user_name = $this->session->userdata('user_name');
+
+            $data['author'] = $user_name;
+        }
+// validate fields
+        if ($document_type == '0') {
+            $response = array(
+                'status' => 'validation',
+                'message' => '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Document Type First !</div>',
+                'field' => 'document_type'
+            );
+            echo json_encode($response);
+            die();
+        }
+        if ($shared_with == '0') {
+            $response = array(
+                'status' => 'validation',
+                'message' => '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Role First !</div>',
+                'field' => 'shared_with'
+            );
+            echo json_encode($response);
+            die();
+        }
+
+        $imageArr = array();
+        for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+            $count = $i + 1;
+            $imagePath = '';
+            $product_image = $_FILES['file']['name'][$i];
+            if (!empty(($_FILES['file']['name'][$i]))) {
+
+                $extension = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
+
+                $_FILES['userFile']['name'] = $document_title . '-' . $document_type . '_' . $project_id . '.' . $extension;
+                $_FILES['userFile']['type'] = $_FILES['file']['type'][$i];
+                $_FILES['userFile']['tmp_name'] = $_FILES['file']['tmp_name'][$i];
+                $_FILES['userFile']['error'] = $_FILES['file']['error'][$i];
+                $_FILES['userFile']['size'] = $_FILES['file']['size'][$i];
+
+                $uploadPath = 'assets/modules/documents/';
+                $config['upload_path'] = $uploadPath;
+                $config['allowed_types'] = '*';
+//allowed types of images           
+                $config['overwrite'] = FALSE;
+                $this->load->library('upload', $config);
+//load upload file config.
+                $this->upload->initialize($config);
+
+                if ($this->upload->do_upload('userFile')) {
+                    $fileData = $this->upload->data();
+                    $imagePath = 'assets/modules/documents/' . $fileData['file_name'];
+                } else {
+                    $response = array(
+                        'status' => 'validation',
+                        'message' => $this->upload->display_errors('<div class="alert alert-warning alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong>', '</div>'),
+                        'field' => 'file_drop'
+                    );
+                    echo json_encode($response);
+                    die();
+                }
+            }
+            $imageArr[] = $imagePath;
+        }
+        $data['images'] = json_encode($imageArr);
+        $data['shared_with'] = json_encode($shared_with);
+        //print_r($data);die();
+        $path = base_url();
+        $url = $path . 'api/modules/document_api/addDocument';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+// authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $output = curl_exec($ch);
+//close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        //print_r($output);die()
+        if ($response) {
+            $response = array(
+                'status' => 'success',
+                'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> Documents uploaded successfully.</div>'
+            );
+            echo json_encode($response);
+            die();
+        } else {
+            $response = array(
+                'status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> Documents were not uploaded.</div>'
+            );
+            echo json_encode($response);
+            die();
+        }
+    }
+
     public function getAllFeatuesForUser($user_id, $role_id) {
         $path = base_url();
         $url = $path . 'api/user/User_api/getAllFeatuesForUser?user_id=' . $user_id . '&role_id=' . $role_id;
@@ -102,101 +218,97 @@ class Manage_documents extends CI_Controller {
     }
 
 //--fun for large file upload
-    public function uploadtoserver()
-    {
-		// 5 minutes execution time
-		@set_time_limit(5 * 60);
-		// Uncomment this one to fake upload time
-		// usleep(5000);
+    public function uploadtoserver() {
+        // 5 minutes execution time
+        @set_time_limit(5 * 60);
+        // Uncomment this one to fake upload time
+        // usleep(5000);
+        // Settings
 
-		// Settings
+        $targetDir = FCPATH . "uploads";
+        //$targetDir = 'uploads';
+        $cleanupTargetDir = true; // Remove old files
+        $maxFileAge = 5 * 3600; // Temp file age in seconds
 
-		$targetDir = FCPATH . "uploads";
-		//$targetDir = 'uploads';
-		$cleanupTargetDir = true; // Remove old files
-		$maxFileAge = 5 * 3600; // Temp file age in seconds
+        $newpath = '';
+        // Create target dir
+        if (!file_exists($targetDir)) {
+            @mkdir($targetDir);
+        }
 
-		$newpath = '';
-		// Create target dir
-		if (!file_exists($targetDir)) {
-			@mkdir($targetDir);
-		}
+        // Get a file name
+        if (isset($_REQUEST["name"])) {
+            $fileName = $_REQUEST["name"];
+        } elseif (!empty($_FILES)) {
+            $fileName = $_FILES["file"]["name"];
+        } else {
+            $fileName = uniqid("file_");
+        }
+        $newpath = 'uploads' . $fileName;
+        $filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
+        //print_r($filePath);die();
+        // Chunking might be enabled
+        $chunk = isset($_REQUEST["chunk"]) ? intval($_REQUEST["chunk"]) : 0;
+        $chunks = isset($_REQUEST["chunks"]) ? intval($_REQUEST["chunks"]) : 0;
 
-		// Get a file name
-		if (isset($_REQUEST["name"])) {
-			$fileName = $_REQUEST["name"];
-		} elseif (!empty($_FILES)) {
-			$fileName = $_FILES["file"]["name"];
-		} else {
-			$fileName = uniqid("file_");
-		}
-		$newpath ='uploads'.$fileName;
-		$filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
-		//print_r($filePath);die();
-		// Chunking might be enabled
-		$chunk = isset($_REQUEST["chunk"]) ? intval($_REQUEST["chunk"]) : 0;
-		$chunks = isset($_REQUEST["chunks"]) ? intval($_REQUEST["chunks"]) : 0;
-      
-		// Remove old temp files	
-		if ($cleanupTargetDir) {
-			if (!is_dir($targetDir) || !$dir = opendir($targetDir)) {
-				die('{"jsonrpc" : "2.0", "error" : {"code": 100, "message": "Failed to open temp directory."}, "id" : "id"}');
-			}
+        // Remove old temp files	
+        if ($cleanupTargetDir) {
+            if (!is_dir($targetDir) || !$dir = opendir($targetDir)) {
+                die('{"jsonrpc" : "2.0", "error" : {"code": 100, "message": "Failed to open temp directory."}, "id" : "id"}');
+            }
 
-			while (($file = readdir($dir)) !== false) {
-				$tmpfilePath = $targetDir . DIRECTORY_SEPARATOR . $file;
+            while (($file = readdir($dir)) !== false) {
+                $tmpfilePath = $targetDir . DIRECTORY_SEPARATOR . $file;
 
-				// If temp file is current file proceed to the next
-				if ($tmpfilePath == "{$filePath}.part") {
-					continue;
-				}
+                // If temp file is current file proceed to the next
+                if ($tmpfilePath == "{$filePath}.part") {
+                    continue;
+                }
 
-				// Remove temp file if it is older than the max age and is not the current file
-				if (preg_match('/\.part$/', $file) && (filemtime($tmpfilePath) < time() - $maxFileAge)) {
-					@unlink($tmpfilePath);
-				}
-			}
-			closedir($dir);
-		}	
+                // Remove temp file if it is older than the max age and is not the current file
+                if (preg_match('/\.part$/', $file) && (filemtime($tmpfilePath) < time() - $maxFileAge)) {
+                    @unlink($tmpfilePath);
+                }
+            }
+            closedir($dir);
+        }
 
 
-		// Open temp file
-		if (!$out = @fopen("{$filePath}.part", $chunks ? "ab" : "wb")) {
-			die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
-		}
+        // Open temp file
+        if (!$out = @fopen("{$filePath}.part", $chunks ? "ab" : "wb")) {
+            die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
+        }
 
-		if (!empty($_FILES)) {
-			if ($_FILES["file"]["error"] || !is_uploaded_file($_FILES["file"]["tmp_name"])) {
-				die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
-			}
+        if (!empty($_FILES)) {
+            if ($_FILES["file"]["error"] || !is_uploaded_file($_FILES["file"]["tmp_name"])) {
+                die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
+            }
 
-			// Read binary input stream and append it to temp file
-			if (!$in = @fopen($_FILES["file"]["tmp_name"], "rb")) {
-				die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
-			}
-		} else {	
-			if (!$in = @fopen("php://input", "rb")) {
-				die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
-			}
-		}
+            // Read binary input stream and append it to temp file
+            if (!$in = @fopen($_FILES["file"]["tmp_name"], "rb")) {
+                die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+            }
+        } else {
+            if (!$in = @fopen("php://input", "rb")) {
+                die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+            }
+        }
 
-		while ($buff = fread($in, 4096)) {
-			fwrite($out, $buff);
-		}
+        while ($buff = fread($in, 4096)) {
+            fwrite($out, $buff);
+        }
 
-		@fclose($out);
-		@fclose($in);
+        @fclose($out);
+        @fclose($in);
 
-		// Check if file has been uploaded
-		if (!$chunks || $chunk == $chunks - 1) {
-			// Strip the temp .part suffix off 
-			rename("{$filePath}.part", $filePath);
-		}
-		// Return Success JSON-RPC response
-		die('{"jsonrpc" : "2.0", "result" : "'.$targetDir.'", "id" : "id"}');
-
+        // Check if file has been uploaded
+        if (!$chunks || $chunk == $chunks - 1) {
+            // Strip the temp .part suffix off 
+            rename("{$filePath}.part", $filePath);
+        }
+        // Return Success JSON-RPC response
+        die('{"jsonrpc" : "2.0", "result" : "' . $targetDir . '", "id" : "id"}');
     }
-
 
     public function getAllprojects() {
         $company_id = $this->session->userdata('company_id');
@@ -235,7 +347,7 @@ class Manage_documents extends CI_Controller {
 
             $data['author'] = $user_name;
         }
-        
+
         $data['shared_with'] = json_encode($shared_with);
         //print_r($data);die();
         $path = base_url();
@@ -569,7 +681,7 @@ class Manage_documents extends CI_Controller {
         extract($_GET);
         //print_r($_GET);die();
         $path = base_url();
-        $url = $path . 'api/modules/document_api/sendRequestForDeletion?doc_id=' . $doc_id.'&reason='.$reason;
+        $url = $path . 'api/modules/document_api/sendRequestForDeletion?doc_id=' . $doc_id . '&reason=' . $reason;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 // authenticate API

@@ -104,7 +104,28 @@ class Document_model extends CI_Model {
     }
 
     // add new document function
-    public function addDocument($data) {
+//    public function addDocument($data) {
+//        extract($data);
+//        $insert_data = array(
+//            'document_title' => $document_title,
+//            'document_type' => $document_type,
+//            'project_id' => $project_id,
+//            'revision_no' => $revision_number,
+//            'shared_with' => $shared_with,
+//            'document_file' => $file_uploaded,
+//            'created_by' => $author,
+//            'status' => '1',
+//            'created_date' => date('Y-m-d H:i:s')
+//        );
+//        // print_r($insert_data);die();
+//        $this->db->insert('document_tab', $insert_data);
+//        if ($this->db->affected_rows() > 0) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+     public function addDocument($data) {
         extract($data);
         $insert_data = array(
             'document_title' => $document_title,
@@ -112,7 +133,7 @@ class Document_model extends CI_Model {
             'project_id' => $project_id,
             'revision_no' => $revision_number,
             'shared_with' => $shared_with,
-            'document_file' => $file_uploaded,
+            'document_file' => $images,
             'created_by' => $author,
             'status' => '1',
             'created_date' => date('Y-m-d H:i:s')
