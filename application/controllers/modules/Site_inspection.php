@@ -35,10 +35,10 @@ class Site_inspection extends CI_Controller {
     // main index function
     public function index() {
         $role = $this->session->userdata('role');
-       // get project session
+        // get project session
         $projSession = $this->session->userdata('project_id');
-        $projArr=explode('|', base64_decode($projSession));
-        $project_id=$projArr[0];
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         if ($role == 'company_admin') {
 
             if ($project_id == '') {
@@ -60,11 +60,10 @@ class Site_inspection extends CI_Controller {
         }
 
         // get checklist details
-        $selected='';
-        if(isset($_POST['selected_witem']) && $_POST['selected_witem']!=''){
-            $selected=$_POST['selected_witem'];
+        $selected = '';
+        if (isset($_POST['selected_witem']) && $_POST['selected_witem'] != '') {
+            $selected = $_POST['selected_witem'];
             $data['checklistDetails'] = Site_inspection::getSlabCycleDetails($selected);
-             
         }
         $data['roles'] = Site_inspection::getAllRoles();
         $this->load->view('includes/header', $data);
@@ -72,7 +71,82 @@ class Site_inspection extends CI_Controller {
         $this->load->view('includes/footer');
     }
 
-  public function getAllRoles() {
+//-----------fun for save query for checklist failure
+    public function raiseQueryForChecklistFailure() {
+        extract($_POST);
+        $data = $_POST;
+
+        //  print_r($_POST);die();
+        if ($query_title == '') {
+            $response = array(
+                'status' => 'validation',
+                'message' => '<p class="w3-red w3-padding-small w3-small"><strong>Warning!</strong> Please fill the query title.!</p>'
+            );
+            echo json_encode($response);
+            die();
+        }
+
+        if (!isset($shared_with)) {
+            $response = array(
+                'status' => 'validation',
+                'message' => '<p class="w3-red w3-padding-small w3-small"><strong>Warning!</strong> Please Choose at least one role first.!</p>'
+            );
+            echo json_encode($response);
+            die();
+        }
+
+        if ($comment_posted == '') {
+            $response = array(
+                'status' => 'validation',
+                'message' => '<p class="w3-red w3-padding-small w3-small"><strong>Warning!</strong> Please please fill the query description.!</p>'
+            );
+            echo json_encode($response);
+            die();
+        }
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $session_name = $this->session->userdata('usersession_name');
+        $session_role = $this->session->userdata('role');
+        if ($session_role == 'company_admin') {
+            $data['author'] = 'Administrator';
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $data['author'] = $user_name;
+        }
+        $data['project_id'] = $project_id;
+        $data['shared_with'] = json_encode($shared_with);
+
+        $path = base_url();
+        $url = $path . 'api/modules/sitecontroller_api/raiseQueryForChecklistFailure';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        //print_r($response_json);
+        //die();
+
+        if ($response) {
+            $response = array(
+                'status' => 'success',
+                'message' => '<p class="w3-green w3-padding-small w3-small"><strong>Success!</strong> Query raised successfully!</p>'
+            );
+            echo json_encode($response);
+            die();
+        } else {
+            $response = array(
+                'status' => 'error',
+                'message' => '<p class="w3-red w3-padding-small w3-small"><strong>Error!</strong> Query not raised successfully!</p>'
+            );
+            echo json_encode($response);
+            die();
+        }
+    }
+
+    public function getAllRoles() {
         // $project_id = $this->session->userdata('project_id');
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
@@ -119,10 +193,10 @@ class Site_inspection extends CI_Controller {
         return $response;
     }
 
-  // post comment to rfi query
+    // post comment to rfi query
     public function addComment() {
         extract($_POST);
-       //  print_r($_POST);die();
+        //  print_r($_POST);die();
         $data = $_POST;
         $session_name = $this->session->userdata('usersession_name');
         $session_role = $this->session->userdata('role');
@@ -160,8 +234,7 @@ class Site_inspection extends CI_Controller {
         }
     }
 
-
-     // get associated comments for query
+    // get associated comments for query
     public function getQueryComments() {
         extract($_GET);
         $path = base_url();
@@ -197,14 +270,15 @@ class Site_inspection extends CI_Controller {
             }
         }
     }
+
     // add new work item function
     public function addWitem() {
         extract($_POST);
         // print_r($_FILES);
         // get project session
         $projSession = $this->session->userdata('project_id');
-        $projArr=explode('|', base64_decode($projSession));
-        $project_id=$projArr[0];
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         $data = $_POST;
         $data['project_id'] = $project_id;
 
@@ -241,10 +315,10 @@ class Site_inspection extends CI_Controller {
     public function getAllWitems() {
         // get project session
         $projSession = $this->session->userdata('project_id');
-        $projArr=explode('|', base64_decode($projSession));
-        $project_id=$projArr[0];
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         $path = base_url();
-        $url = $path . 'api/modules/sitecontroller_api/getAllWitems?project_id='.$project_id;
+        $url = $path . 'api/modules/sitecontroller_api/getAllWitems?project_id=' . $project_id;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
@@ -288,8 +362,8 @@ class Site_inspection extends CI_Controller {
         // print_r($_FILES);
         // get project session
         $projSession = $this->session->userdata('project_id');
-        $projArr=explode('|', base64_decode($projSession));
-        $project_id=$projArr[0];
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         $data = $_POST;
         $data['project_id'] = $project_id;
 
@@ -403,9 +477,9 @@ class Site_inspection extends CI_Controller {
     }
 
     // mark checklist as done
-    public function markChecklistDone(){
+    public function markChecklistDone() {
         extract($_GET);
-        $author='';
+        $author = '';
         $session_name = $this->session->userdata('usersession_name');
         $session_role = $this->session->userdata('role');
         if ($session_role == 'company_admin') {
@@ -415,7 +489,7 @@ class Site_inspection extends CI_Controller {
             $author = $user_name;
         }
         $path = base_url();
-        $url = $path . 'api/modules/sitecontroller_api/markChecklistDone?activity_id='.$act_id.'&author='.$author;
+        $url = $path . 'api/modules/sitecontroller_api/markChecklistDone?activity_id=' . $act_id . '&author=' . $author;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
@@ -429,7 +503,7 @@ class Site_inspection extends CI_Controller {
         //close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
-        if ($response) {           
+        if ($response) {
             echo '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> Checklist Status marked as <b>Done</b>.</div>';
             die();
         } else {
@@ -440,9 +514,9 @@ class Site_inspection extends CI_Controller {
     }
 
     // mark checklist as undone
-    public function markChecklistUndone(){
+    public function markChecklistUndone() {
         extract($_GET);
-        $author='';
+        $author = '';
         $session_name = $this->session->userdata('usersession_name');
         $session_role = $this->session->userdata('role');
         if ($session_role == 'company_admin') {
@@ -452,7 +526,7 @@ class Site_inspection extends CI_Controller {
             $author = $user_name;
         }
         $path = base_url();
-        $url = $path . 'api/modules/sitecontroller_api/markChecklistUndone?activity_id='.$act_id.'&author='.$author;
+        $url = $path . 'api/modules/sitecontroller_api/markChecklistUndone?activity_id=' . $act_id . '&author=' . $author;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
@@ -466,7 +540,7 @@ class Site_inspection extends CI_Controller {
         //close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
-        if ($response) {           
+        if ($response) {
             echo '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> Checklist Status marked as <b>Undone</b>.</div>';
             die();
         } else {
@@ -493,7 +567,7 @@ class Site_inspection extends CI_Controller {
         $file_name = $_FILES['checklist_image']['name'];
         if (!empty(($_FILES['checklist_image']['name']))) {
             $extension = pathinfo($_FILES['checklist_image']['name'], PATHINFO_EXTENSION);
-            $_FILES['userFile']['name'] = 'Activity_IU0'.$data['activity_id'].'_'.time().'.'.$extension;
+            $_FILES['userFile']['name'] = 'Activity_IU0' . $data['activity_id'] . '_' . time() . '.' . $extension;
             $_FILES['userFile']['type'] = $_FILES['checklist_image']['type'];
             $_FILES['userFile']['tmp_name'] = $_FILES['checklist_image']['tmp_name'];
             $_FILES['userFile']['error'] = $_FILES['checklist_image']['error'];
@@ -511,7 +585,7 @@ class Site_inspection extends CI_Controller {
 
             if ($this->upload->do_upload('userFile')) {
                 $fileData = $this->upload->data();
-                $filepath = 'assets/modules/site_images/'.$fileData['file_name'];
+                $filepath = 'assets/modules/site_images/' . $fileData['file_name'];
             } else {
                 $response = array(
                     'status' => 'validation',
@@ -541,8 +615,7 @@ class Site_inspection extends CI_Controller {
             );
             echo json_encode($response);
             die();
-        }
-        else {
+        } else {
             $response = array(
                 'status' => 'error',
                 'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> File was not uploaded.</div>'
@@ -618,10 +691,10 @@ class Site_inspection extends CI_Controller {
     public function getSlabCycleDetails($selected_witem) {
         // get project session
         $projSession = $this->session->userdata('project_id');
-        $projArr=explode('|', base64_decode($projSession));
-        $project_id=$projArr[0];
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         $path = base_url();
-        $url = $path . 'api/modules/sitecontroller_api/getSlabCycleDetails?project_id='.$project_id.'&witemid='.$selected_witem;
+        $url = $path . 'api/modules/sitecontroller_api/getSlabCycleDetails?project_id=' . $project_id . '&witemid=' . $selected_witem;
         //create a new cURL resource
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPGET, true);

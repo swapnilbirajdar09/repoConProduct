@@ -10,7 +10,7 @@ class Rfiquery_model extends CI_Model {
 //----------fun for save the query details
     public function raiseQuery($data) {
         extract($data);
-       // print_r($data);
+        // print_r($data);
         $sql = "INSERT INTO rfi_query_tab(project_id,query_title,query_description,raised_to,"
                 . "images,resolved_by,resolved_status,created_by,"
                 . "created_date)"
@@ -27,7 +27,7 @@ class Rfiquery_model extends CI_Model {
     }
 
 //-------fun for get all role
- public function getRoleName() {
+    public function getRoleName() {
         $sql = "SELECT * FROM role_tab";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
@@ -36,6 +36,7 @@ class Rfiquery_model extends CI_Model {
             return $result->result_array();
         }
     }
+
 //--------------fun for get all queries
     public function getAllQueries() {
         $sql = "SELECT * FROM rfi_query_tab where status='1' AND resolved_status ='0'";
@@ -84,23 +85,21 @@ class Rfiquery_model extends CI_Model {
         return $response;
     }
 
-  
-
     public function updateQueryDetails($query_id) {
-       // extract($data);
-     //   $update_data = array(
-           // 'query_title' => addslashes($query_title),
-           // 'query_description' => addslashes($queryDescription),
-          //  'modified_by' => $author,
-          //  'modified_date' => date('Y-m-d H:i:s')
-          //  'resolved_status' => '1'
-   //     );
+        // extract($data);
+        //   $update_data = array(
+        // 'query_title' => addslashes($query_title),
+        // 'query_description' => addslashes($queryDescription),
+        //  'modified_by' => $author,
+        //  'modified_date' => date('Y-m-d H:i:s')
+        //  'resolved_status' => '1'
+        //     );
 
         $sql = "UPDATE rfi_query_tab SET resolved_status = '1' WHERE query_id = '$query_id'";
-          $this->db->query($sql);
+        $this->db->query($sql);
         // print_r($insert_data);die();
-      //  $this->db->where('query_id', base64_decode($query_id));
-      //  $this->db->update('rfi_query_tab', $update_data);
+        //  $this->db->where('query_id', base64_decode($query_id));
+        //  $this->db->update('rfi_query_tab', $update_data);
         if ($this->db->affected_rows() > 0) {
             $response = array(
                 'status' => 'success',
@@ -112,6 +111,7 @@ class Rfiquery_model extends CI_Model {
         }
         return $response;
     }
+
 //-------fun for remove image
     public function removeImage($key, $query_id, $author) {
         //extract($data);        

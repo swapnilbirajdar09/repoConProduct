@@ -8,6 +8,8 @@ class User_dashboard extends CI_Controller {
     public function __construct() {
         parent::__construct();
         // load common model
+        date_default_timezone_set('Asia/kolkata');
+
         $user_name = $this->session->userdata('user_name');
         $admin_name = $this->session->userdata('usersession_name');
 //        if ($admin_name == '') {
@@ -47,15 +49,16 @@ class User_dashboard extends CI_Controller {
         //$project_id = $this->session->userdata('project_id');die();
         $data['queries'] = User_dashboard::getAllQueries_dashboard();
         $data['allDocuments'] = User_dashboard::allDocuments();
- 		$data['topDocuments'] = User_dashboard::topDocuments();
- 		$data['countofDocuments'] = User_dashboard::countoFDocuments();
- 		$data['countofQuery'] = User_dashboard::countoFQuery();
- 		$data['countofPendingQuery'] = User_dashboard::countoFPendingQuery();
- 		$data['countoFUser'] = User_dashboard::countoFUser();
+        $data['topDocuments'] = User_dashboard::topDocuments();
+        $data['countofDocuments'] = User_dashboard::countoFDocuments();
+        $data['countofQuery'] = User_dashboard::countoFQuery();
+        $data['countofPendingQuery'] = User_dashboard::countoFPendingQuery();
+        $data['countoFUser'] = User_dashboard::countoFUser();
         $this->load->view('includes/header', $data);
         $this->load->view('pages/dashboard', $data);
         $this->load->view('includes/footer');
     }
+
 //------pending document list
     public function allDocuments() {
         $projSession = $this->session->userdata('project_id');
@@ -76,7 +79,7 @@ class User_dashboard extends CI_Controller {
     }
 
 //-------top 10 document list
-        public function topDocuments() {
+    public function topDocuments() {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
@@ -93,8 +96,9 @@ class User_dashboard extends CI_Controller {
         //print_r($response_json);die();
         return $response;
     }
+
     //-------count of  documents 
-        public function countoFDocuments() {
+    public function countoFDocuments() {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
@@ -112,8 +116,8 @@ class User_dashboard extends CI_Controller {
         return $response;
     }
 
-      //-------count of total working users
-        public function countoFUser() {
+    //-------count of total working users
+    public function countoFUser() {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
@@ -130,8 +134,9 @@ class User_dashboard extends CI_Controller {
         //print_r($response_json);die();
         return $response;
     }
-  //-------count of  all queries
-        public function countoFQuery() {
+
+    //-------count of  all queries
+    public function countoFQuery() {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
@@ -148,8 +153,9 @@ class User_dashboard extends CI_Controller {
         //print_r($response_json);die();
         return $response;
     }
-  //-------count of Pending queries
-        public function countoFPendingQuery() {
+
+    //-------count of Pending queries
+    public function countoFPendingQuery() {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];

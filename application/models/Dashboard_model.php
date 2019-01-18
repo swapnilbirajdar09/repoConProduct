@@ -4,6 +4,7 @@ class Dashboard_model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
+        date_default_timezone_set('Asia/kolkata');
     }
 
     //--------------fun for get all queries
@@ -25,7 +26,9 @@ class Dashboard_model extends CI_Model {
     //---fun for update query status ,, status changed to 1 for approved query
 
     public function updateQueryStatus($query_id) {
-        $sql = "UPDATE rfi_query_tab SET status = '1' WHERE query_id = '$query_id'";
+        $date = date("Y-m-d H:i:s");
+        $sql = "UPDATE rfi_query_tab SET status = '1',modified_date = '$date' WHERE query_id = '$query_id'";
+        //echo $sql; die();
         $this->db->query($sql);
         if ($this->db->affected_rows() > 0) {
             $response = array(
@@ -43,7 +46,8 @@ class Dashboard_model extends CI_Model {
 
 
     public function RejectQueryStatus($query_id) {
-        $sql = "UPDATE rfi_query_tab SET status = '2' WHERE query_id = '$query_id'";
+        $date = date("Y-m-d H:i:s");
+        $sql = "UPDATE rfi_query_tab SET status = '2',modified_date = '$date' WHERE query_id = '$query_id'";
         $this->db->query($sql);
         if ($this->db->affected_rows() > 0) {
             $response = array(
@@ -72,10 +76,11 @@ class Dashboard_model extends CI_Model {
         }
         return $response;
     }
-  //---------function for top 10 document list
+
+    //---------function for top 10 document list
     public function topDocuments($project_id) {
         $sql = "SELECT * FROM document_tab WHERE project_id = '$project_id' ORDER BY created_date DESC LIMIT 10";
-       // echo $sql;die();
+        // echo $sql;die();
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(
@@ -88,10 +93,11 @@ class Dashboard_model extends CI_Model {
         }
         return $response;
     }
+
 //----query for count of document
-      public function countoFDocuments($project_id) {
+    public function countoFDocuments($project_id) {
         $sql = "SELECT COUNT(document_id) from document_tab WHERE project_id = '$project_id'";
-      
+
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(
@@ -106,25 +112,9 @@ class Dashboard_model extends CI_Model {
     }
 
     //----query for count of all queries
-      public function countoFQuery($project_id) {
+    public function countoFQuery($project_id) {
         $sql = "SELECT COUNT(query_id) from rfi_query_tab WHERE project_id = '$project_id'";
-       // echo $sql;die();
-        $result = $this->db->query($sql);
-        if ($result->num_rows() <= 0) {
-            $response = array(
-                'status' => 500,
-                'status_message' => 'No data found.');
-        } else {
-            $response = array(
-                'status' => 200,
-                'status_message' => $result->result_array());
-        }
-        return $response;
-    }
-     //----query for count of pending queries
-      public function countoFPendingQuery($project_id) {
-        $sql = "SELECT COUNT(query_id) from rfi_query_tab WHERE project_id = '$project_id' AND status = '0' ";
-       // echo $sql;die();
+        // echo $sql;die();
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(
@@ -138,10 +128,10 @@ class Dashboard_model extends CI_Model {
         return $response;
     }
 
-      //----query for count of total working user
-      public function countoFUser($project_id) {
-        $sql = "SELECT COUNT(user_id) from user_tab WHERE project_id = '$project_id'";
-       // echo $sql;die();
+    //----query for count of pending queries
+    public function countoFPendingQuery($project_id) {
+        $sql = "SELECT COUNT(query_id) from rfi_query_tab WHERE project_id = '$project_id' AND status = '0' ";
+        // echo $sql;die();
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(
@@ -154,4 +144,22 @@ class Dashboard_model extends CI_Model {
         }
         return $response;
     }
+
+    //----query for count of total working user
+    public function countoFUser($project_id) {
+        $sql = "SELECT COUNT(user_id) from user_tab WHERE project_id = '$project_id'";
+        // echo $sql;die();
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
+
 }

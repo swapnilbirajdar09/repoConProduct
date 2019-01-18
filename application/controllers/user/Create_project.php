@@ -149,7 +149,6 @@ class Create_project extends CI_Controller {
             <th>Activity</th>
             <th>Date</th>
             <th>Status</th>
-            <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -180,10 +179,7 @@ class Create_project extends CI_Controller {
                 <td>'.$response[$i]['activity_name'].'</td>
                 <td>'.$dtime->format("d/m/Y").'</td>
                 <td class="text-center">'.$status.'</td>
-                <td class="text-center">
-                <a class="btn btn-sm w3-text-grey w3-hover-text-black" name="delbtn"><i class="fa fa-trash"></i> delete</a>
-                <a class="btn w3-text-grey w3-hover-text-black" id="delBtn_'.$response[$i]['activity_id'].'" style="padding: 2px 5px;background-color: #DDDDDD" onclick="removeActivity('.base64_encode($response[$i]['activity_id']).', '.$response[$i]['activity_id'].')"><i class="fa fa-trash"></i> Delete</a>
-                </td>
+                
                 </tr>                                                                        
                 ';
             }

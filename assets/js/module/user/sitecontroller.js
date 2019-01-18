@@ -281,6 +281,7 @@ function openModal(id) {
 function openHelp(modal_id) {
   var modal=$('#'+modal_id);
   modal.addClass('in');
+  getAllQueries(modal_id);
 }
 
 //----------fun for add comment

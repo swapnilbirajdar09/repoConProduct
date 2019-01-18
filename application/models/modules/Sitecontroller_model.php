@@ -98,6 +98,29 @@ class Sitecontroller_model extends CI_Model {
         }
     }
 
+    public function raiseQueryForChecklistFailure($data){
+        extract($data);
+        //print_r($data);die();
+        $insert_data = array(
+            'query_title' => $query_title,
+            'shared_with' => $shared_with,
+            'query_description' => $comment_posted,
+            'project_id' => $project_id,
+            'created_by' => $author,
+            'created_date' => date('Y-m-d H:i:s'),
+            'status' => '1',
+            'activity_id' => $activity_id
+        );
+        $this->db->insert('checklist_query_tab', $insert_data);
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }       
+    }
+
+    
+
     // add new activity function
     public function addActivity($data) {
         extract($data);

@@ -3,18 +3,19 @@
 <section class="hero-area" id="home">
     <div class="player" data-property="{videoURL:'http://youtu.be/kn-1D5z3-Cs',containment:'#home',autoPlay:true, mute:true, startAt:0, showControls:false, loop:true, opacity:1}"></div>
     <div class="container">
-        <div class="row">
+        <div class="row" style="margin-bottom: 30px;">
             <div class="col-lg-7">
                 <div class="hero-area-content">
-                    <h1>It�s all about Promoting your Business</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo </p>
-                    <a href="#" class="appao-btn">Google Play</a>
-                    <a href="#" class="appao-btn">App Store</a>
+                    <h2 style="color: white;">It�s all about construction management</h2>
+                    <p>Construction Manager is the online platform for construction projects. </p>
+                    <span>This provide to get connect owners, supervisors, contractors, project managers, architects easily.</span><br>
+                    <!--                    <a href="#" class="appao-btn">Google Play</a>-->
+                    <a href="#" class="appao-btn">Register Now</a>
                 </div>
             </div>
-            <div class="col-lg-5">
-                <div class="hand-mockup text-lg-left text-center">
-                    <img src="assets/assets/img/hand-mockup.png" alt="Hand Mockup" />
+            <div class="col-lg-5" >
+                <div class="hand-mockup text-lg-left text-center" style="padding-left: 0px;  margin-top: 10px;">
+                    <img src="assets/assets/img/prod_home1.png" alt="Hand Mockup" />
                 </div>
             </div>
         </div>
@@ -24,11 +25,20 @@
 <section class="about-area ptb-90">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
-                <div class="sec-title">
-                    <h2>About Prantokon<span class="sec-title-border"><span></span><span></span><span></span></span></h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt</p>
-                </div>
+            <div class="col-lg-12 ptb-90">
+                <!--                <div class="sec-title">-->
+                <center>
+                    <h2 style="padding-bottom: 10px;">About Construction Manager<span class="sec-title-border"><span></span><span></span><span></span></span></h2>
+                    <p>Construction manager is the online management system. which defines the project development flow.<br> 
+                        It provide a platform to get connect and collaborate the project owners, project managers, supervisors, contractors, architects easily.
+                        <br>Construction industry is still based on papers means the drawings are still on the papers. 
+                        Those drawings need to be send the different teams in good manner. This is our first motive to go paperless. For that the construction manager provide a feature for Document upload.<br>
+                        The <b>Document upload</b> feature is used as send the large files to specified roles.<br> There is another feature called <b>Site inspection</b> which shows that the track of your project and you can track the progress of your site.<br>
+                                There is another feature is <b>Raise query.</b> Which is used to raise query for project task failed or not done.<br>
+                        We believed that there are many simpler ways to developer and complete the construction projects.
+                    </p>
+                </center>
+                <!--                </div>-->
             </div>
         </div>
         <div class="row">
@@ -36,21 +46,21 @@
                 <div class="single-about-box">
                     <i class="icofont icofont-ruler-pencil"></i>
                     <h4>Responsive Design</h4>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</p>
+                    <p>We provide the responsive design and user friendly UI for users.</p>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="single-about-box active">
                     <i class="icofont icofont-computer"></i>
                     <h4>Fast Performance</h4>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</p>
+                    <p>The Construction manager provide the fast performance and it shows the faster output as well.</p>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="single-about-box">
                     <i class="icofont icofont-headphone-alt"></i>
-                    <h4>Cross Platfrom</h4>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</p>
+                    <h4>Cross Platform</h4>
+                    <p>This construction manager is based on cross platform. Which works on any platform.</p>
                 </div>
             </div>
         </div>
@@ -66,7 +76,7 @@
                         <li>
                             <div class="feature-box-info">
                                 <h4>Unlimited Features</h4>
-                                <p>Lorem ipsum dolor amet consectetur adipisicing eiusmod </p>
+                                <p></p>
                             </div>
                             <div class="feature-box-icon">
                                 <i class="icofont icofont-brush"></i>
@@ -75,7 +85,7 @@
                         <li>
                             <div class="feature-box-info">
                                 <h4>Responsive Design</h4>
-                                <p>Lorem ipsum dolor amet consectetur adipisicing eiusmod </p>
+                                <p> </p>
                             </div>
                             <div class="feature-box-icon">
                                 <i class="icofont icofont-computer"></i>
@@ -84,21 +94,21 @@
                         <li>
                             <div class="feature-box-info">
                                 <h4>Well Documented</h4>
-                                <p>Lorem ipsum dolor amet consectetur adipisicing eiusmod </p>
+                                <p> </p>
                             </div>
                             <div class="feature-box-icon">
                                 <i class="icofont icofont-law-document"></i>
                             </div>
                         </li>
-                        <li>
+<!--                        <li>
                             <div class="feature-box-info">
                                 <h4>Full Free Chat</h4>
-                                <p>Lorem ipsum dolor amet consectetur adipisicing eiusmod </p>
+                                <p></p>
                             </div>
                             <div class="feature-box-icon">
                                 <i class="icofont icofont-heart-beat"></i>
                             </div>
-                        </li>
+                        </li>-->
                     </ul>
                 </div>
             </div>
@@ -110,22 +120,22 @@
             <div class="col-lg-4">
                 <div class="single-feature-box text-lg-left text-center">
                     <ul>
-                        <li>
+<!--                        <li>
                             <div class="feature-box-icon">
                                 <i class="icofont icofont-eye"></i>
                             </div>
                             <div class="feature-box-info">
                                 <h4>Retina ready</h4>
-                                <p>Lorem ipsum dolor amet consectetur adipisicing eiusmod </p>
+                                <p> </p>
                             </div>
-                        </li>
+                        </li>-->
                         <li>
                             <div class="feature-box-icon">
                                 <i class="icofont icofont-sun-alt"></i>
                             </div>
                             <div class="feature-box-info">
                                 <h4>High Resolution</h4>
-                                <p>Lorem ipsum dolor amet consectetur adipisicing eiusmod </p>
+                                <p></p>
                             </div>
                         </li>
                         <li>
@@ -134,7 +144,7 @@
                             </div>
                             <div class="feature-box-info">
                                 <h4>Clean Codes</h4>
-                                <p>Lorem ipsum dolor amet consectetur adipisicing eiusmod </p>
+                                <p> </p>
                             </div>
                         </li>
                         <li>
@@ -143,7 +153,7 @@
                             </div>
                             <div class="feature-box-info">
                                 <h4>Helping Supports</h4>
-                                <p>Lorem ipsum dolor amet consectetur adipisicing eiusmod </p>
+                                <p> </p>
                             </div>
                         </li>
                     </ul>
@@ -159,7 +169,7 @@
             <div class="col-lg-12">
                 <div class="sec-title">
                     <h2>Showcase<span class="sec-title-border"><span></span><span></span><span></span></span></h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt</p>
+                    <p></p>
                 </div>
             </div>
         </div>
@@ -271,7 +281,7 @@
                             <li>Email Read Receipent</li>
                             <li>2 User Free</li>
                         </ul>
-                        <a class="appao-btn" href="<?php echo base_url();?>registration"> Register Free</a>
+                        <a class="appao-btn" href="<?php echo base_url(); ?>registration"> Register Free</a>
                     </div>
                 </div>
             </div>
@@ -294,7 +304,7 @@
                             <li>Email Read Receipent</li>
                             <li>2 User Free</li>
                         </ul>
-                        <a class="appao-btn" href="<?php echo base_url();?>registration">Register Free</a>
+                        <a class="appao-btn" href="<?php echo base_url(); ?>registration">Register Free</a>
                     </div>
                 </div>
             </div>
@@ -317,7 +327,7 @@
                             <li>Email Read Receipent</li>
                             <li>2 User Free</li>
                         </ul>
-                        <a class="appao-btn" href="<?php echo base_url();?>registration">Register Free</a>
+                        <a class="appao-btn" href="<?php echo base_url(); ?>registration">Register Free</a>
                     </div>
                 </div>
             </div>

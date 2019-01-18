@@ -40,8 +40,18 @@ class Sitecontroller_api extends REST_Controller {
             return $this->response(NULL, 404);
         }
     }
+    
+    public function raiseQueryForChecklistFailure_post(){
+        $data = $_POST;
+        $result = $this->sitecontroller_model->raiseQueryForChecklistFailure($data);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
 
-   // get all query responses
+    // get all query responses
     public function getQueryComments_get() {
         extract($_GET);
         $result = $this->sitecontroller_model->getQueryComments($activity_id);
