@@ -283,7 +283,7 @@
                                         <td><?php echo $doc['document_title']; ?></td>
                                         <td><?php echo $doc['document_type']; ?></td>
                                         <td>#<?php echo $doc['revision_no']; ?></td>
-                                        <td width="250px"><?php echo $doc['delete_reason']; ?></td>
+                                        <td width="250px"><p><?php echo $doc['reason_type'].' ('.$doc['delete_reason'].')'; ?></p></td>
                                         <td><?php echo $doc['created_by']; ?></td>
                                         <td><?php
                                             $dtime = new DateTime($doc['created_date']);
@@ -308,7 +308,6 @@
                                                         ?>
                                                         <li>
                                                             <a class="btn btn-xs text-left" onclick="removeDoc('<?php echo base64_encode($doc['document_id']); ?>', '<?php echo $doc['document_id']; ?>')" title="Delete Document">Delete Document</a>
-
                                                         </li>
                                                         <?php
                                                     }
@@ -317,7 +316,6 @@
                                             </div>
                                         </td>
                                     </tr>
-
                                     <!--Modal to edit product--> 
                                 <div class="modal fade bs-example-modal-lg" id="DocModal_<?php echo $doc['document_id']; ?>" role="dialog" aria-hidden="true">
                                     <div class="modal-dialog modal-md ">
@@ -329,7 +327,7 @@
                                                 </button>
                                                 <h3 class="modal-title w3-center"><?php echo $doc['document_title']; ?> <span class="badge w3-grey w3-text-white w3-small"><?php echo $doc['document_type']; ?></span></h3>
                                             </div>
-                                            <!--                                                    Modal body starts -->
+                                            <!--      Modal body starts -->
                                             <div class="modal-body">
                                                 <!--                                                        Modal container starts -->
                                                 <div class="container"> 
@@ -646,7 +644,6 @@
                             $('#actionBtn_' + key).html('<i class="fa fa-circle-o-notch fa-spin"></i> Sending');
                         },
                         success: function (data) {
-                            // alert(data);
                             $('#table_msg').html(data);
                             $('#actionBtn_' + key).html('Action <span class="caret"></span>');
 

@@ -84,11 +84,8 @@ function removeDocument(doc_id, key) {
                         $('#actionBtn_' + key).html('<i class="fa fa-circle-o-notch fa-spin"></i> Sending');
                     },
                     success: function (data) {
-                        //alert(data);
-                        // console.log(data);return false;
                         $('#table_msg').html(data);
                         $('#actionBtn_' + key).html('Action <span class="caret"></span>');
-
                         window.setTimeout(function () {
                             $(".alert").fadeTo(500, 0).slideUp(500, function () {
                                 $(this).remove();

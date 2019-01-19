@@ -722,6 +722,7 @@ class Manage_documents extends CI_Controller {
 //close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
+        //print_r($output);die();
         if ($response == true) {
             echo '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success!</strong> Document removed successfully.</div>';
         } else {

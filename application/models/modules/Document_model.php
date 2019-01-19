@@ -54,10 +54,19 @@ class Document_model extends CI_Model {
 
     // delete document
     public function removeDoc($document_id) {
-
+        $sqlselect = "SELECT * FROM document_tab WHERE document_id = '$document_id'";
+        $result_arr = $this->db->query($sqlselect);
+        $currentFiles = '';
+        foreach ($result_arr->result_array() as $row) {
+            $currentFiles = json_decode($row['document_file'], TRUE);
+        }
+        
         $sql = "DELETE FROM document_tab WHERE document_id='$document_id'";
         $result = $this->db->query($sql);
         if ($this->db->affected_rows() == 1) {
+            foreach ($currentFiles as $key) {
+                unlink($key);
+            }
             return true;
         } else {
             return false;
@@ -72,7 +81,7 @@ class Document_model extends CI_Model {
         $document_id = base64_decode($doc_id);
 
         $update_data = array(
-            'reson_type' => $reason_type,
+            'reason_type' => $reason_type,
             'delete_reason' => addslashes($reason_description),
             'status' => '0'
         );
