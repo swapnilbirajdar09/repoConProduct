@@ -180,14 +180,15 @@
                                                                     if ($doc['delete_reason'] == '') {
                                                                         ?>
                                                                         <li>
-                                                                            <a class="btn btn-xs text-left" onclick="removeDocument('<?php echo base64_encode($doc['document_id']); ?>', '<?php echo $doc['document_id']; ?>')" title="Send Request For Deletion">Request For Deletion</a>
+                                                                            <a class="btn btn-xs text-left" data-toggle="modal" data-target="#RequestModal_<?php echo $doc['document_id']; ?>" onclick="openNewModal('RequestModal_<?php echo $doc['document_id']; ?>');"  title="Send Request For Deletion">Request For Deletion</a>
                                                                         </li>
                                                                     <?php } else {
                                                                         ?>
                                                                         <li>
                                                                             <a class="btn btn-xs text-left" onclick="showMsg()" title="Request For Deletion">Request For Deletion</a>
                                                                         </li>
-                                                                    <?php }
+                                                                        <?php
+                                                                    }
                                                                 }
                                                                 ?>
                                                             </ul>
@@ -265,7 +266,7 @@
                                                                             }
                                                                             ?>
                                                                             <div class="w3-padding-small" style="display: inline;">
-                                                                                <a class="w3-text-grey btn w3-round"  target="_self" href="<?php echo base_url() . $file; ?>"  download="<?php echo 'File_' . $count . '.' . $ext; ?>" title="Download <?php echo $filename; ?>" style="padding:4px;display: inline-block;"><b></b><i class="fa <?php echo $image; ?> w3-jumbo"></i></a>
+                                                                                <a class="w3-text-grey btn w3-round"  target="_self" href="<?php echo base_url() . $file; ?>"  download="<?php echo $filename . '.' . $ext; ?>" title="Download <?php echo $filename; ?>" style="padding:4px;display: inline-block;"><b></b><i class="fa <?php echo $image; ?> w3-jumbo"></i></a>
                                                                             </div>
                                                                             <?php
                                                                             $count++;
@@ -282,34 +283,150 @@
                                                 </div>
                                             </div>
                                             <!--                                        Modal ends here -->
-                                            <?php
-                                        }
-                                    }
-                                } else {
-                                    ?>
-                                    <tr>
-                                        <td colspan="7" class="w3-center theme_text"><b>No Documents Uploaded</b></td>
-                                    </tr>
-<?php } ?>                       
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
 
+
+                                            <!--Modal to edit product--> 
+                                            <div class="modal fade bs-example-modal-lg" id="RequestModal_<?php echo $doc['document_id']; ?>" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-md ">
+                                                    <!--                                                Modal content starts -->
+                                                    <div class="modal-content">
+
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                                            </button>
+                                                            <h3 class="modal-title w3-center"><?php echo $doc['document_title']; ?> <span class="badge w3-grey w3-text-white w3-small"><?php echo $doc['document_type']; ?></span></h3>
+                                                        </div>
+                                                        <!--                                                    Modal body starts -->
+                                                        <div class="modal-body">
+                                                            <!--                                                        Modal container starts -->
+                                                            <div class="container"> 
+                                                                <!-- Div for images-->
+
+                                                                <div class="col-lg-12">
+                                                                    <div class="w3-col l12 w3-padding">
+                                                                        <span class="pull-left"><b>Revision No.:</b> #<?php echo $doc['revision_no']; ?></span>
+                                                                        <span class="pull-right"><b>Uploaded By:</b> <?php echo $doc['created_by']; ?>, <?php echo $dtime->format("d M y H:i:s"); ?></span>
+                                                                    </div>
+                                                                    <?php
+                                                                    $image_arr = json_decode($doc['document_file']);
+                                                                    ?>                                
+                                                                    <div class="w3-col l12 w3-padding">
+                                                                        <?php
+                                                                        $count = 1;
+                                                                        foreach ($image_arr as $file) {
+                                                                            $arr = explode('/', $file);
+                                                                            $filename = $arr[3];
+                                                                            $ext_arr = explode('.', $file);
+                                                                            $ext = end($ext_arr);
+                                                                            switch ($ext) {
+                                                                                case "jpg":
+                                                                                    $image = 'fa-file-image-o';
+                                                                                    break;
+                                                                                case "jpeg":
+                                                                                    $image = 'fa-file-image-o';
+                                                                                    break;
+                                                                                case "JPG":
+                                                                                    $image = 'fa-file-image-o';
+                                                                                    break;
+                                                                                case "JPEG":
+                                                                                    $image = 'fa-file-image-o';
+                                                                                    break;
+                                                                                case "png":
+                                                                                    $image = 'fa-file-image-o';
+                                                                                    break;
+                                                                                case "docx":
+                                                                                    $image = 'fa-file-word-o';
+                                                                                    break;
+                                                                                case "doc":
+                                                                                    $image = 'fa-file-word-o';
+                                                                                    break;
+                                                                                case "pdf":
+                                                                                    $image = 'fa-file-pdf-o';
+                                                                                    break;
+                                                                                case "text":
+                                                                                    $image = 'fa-file-text-o';
+                                                                                    break;
+                                                                                case "zip":
+                                                                                    $image = 'fa-file-archive-o';
+                                                                                    break;
+                                                                                case "pptx":
+                                                                                    $image = 'fa-file-powerpoint-o';
+                                                                                    break;
+                                                                                default:
+                                                                                    $image = 'fa-file-o';
+                                                                            }
+                                                                            ?>
+                                                                            <div class="w3-padding-small" style="display: inline;">
+                                                                                <a class="w3-text-grey btn w3-round"  target="_self" href="<?php echo base_url() . $file; ?>"  download="<?php echo $filename . '.' . $ext; ?>" title="Download <?php echo $filename; ?>" style="padding:4px;display: inline-block;"><b></b><i class="fa <?php echo $image; ?> w3-jumbo"></i></a>
+                                                                            </div>
+                                                                            <?php
+                                                                            $count++;
+                                                                        }
+                                                                        ?>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Div For Images -->
+                                                                <form id="reason_form_<?php echo $doc['document_id']; ?>" name="reason_form_<?php echo $doc['document_id']; ?>">
+                                                                    <div class="col-lg-12">
+
+                                                                        <div class="w3-col l12 w3-padding">
+                                                                            <div class="form-group">
+                                                                                <label>Select Reason For <font color ="red"><span id ="pname_star">*</span></font></label>
+                                                                                <select class="w3-input w3-border" name="reason_type" id="reason_type_<?php echo $doc['document_id']; ?>" style="border-bottom-color: #CCCCCC">
+                                                                                    <option value="0" class="w3-light-grey">Choose document type</option>
+                                                                                    <option value="Incorrect data" class="w3-light-grey">Incorrect data</option>
+                                                                                    <option value="Incomplete data" class="w3-light-grey">Incomplete data</option>
+                                                                                    <option value="Not compatible data format" class="w3-light-grey">Not compatible data format</option>
+                                                                                    <option value="Others" class="w3-light-grey">Others</option>                                                                              
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <label>Select Reason For <font color ="red"><span id ="pname_star">*</span></font></label>
+                                                                                <textarea class="w3-input w3-border" name="reason_description" id="reason_description_<?php echo $doc['document_id']; ?>" placeholder="Description For the reason."></textarea>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <button type="button" class="btn" id="submitBtn" name="submitBtn" onclick="removeDocument('<?php echo base64_encode($doc['document_id']); ?>', '<?php echo $doc['document_id']; ?>')" >Submit</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Modal container ends -->
+                                                    </div>
+                                                    <!--  Modal Body ends -->
+                                                </div>
+                                                <!--   Modal content ends -->
+                                            </div>
+                                    </div>
+                                    <!--   Modal ends here -->
+                                    <?php
+                                }
+                            }
+                        } else {
+                            ?>
+                            <tr>
+                                <td colspan="7" class="w3-center theme_text"><b>No Documents Uploaded</b></td>
+                            </tr>
+                        <?php } ?>                       
+                        </tbody>
+                        </table>
+                    </div>
                 </div>
+
             </div>
-            <!-- view all document div ends -->
         </div>
+        <!-- view all document div ends -->
     </div>
 </div>
+</div>
+<script>
+    function openNewModal(modal_id) {
+        var modal = $('#' + modal_id);
+        modal.addClass('in');
+    }
+</script>
 <script src="<?php echo base_url(); ?>assets/js/module/user/document.js"></script>
 <script src="<?php echo base_url(); ?>assets/dropzone/dropzone.js"></script>
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dropzone/dropzone.css">
-<script>
-//                                                                $(function () {
-//                                                                    $('.multiselect-ui').multiselect({
-//                                                                        includeSelectAllOption: true
-//                                                                    });
-//                                                                });
-</script>
 <!-- /page content

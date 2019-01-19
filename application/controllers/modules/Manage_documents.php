@@ -680,20 +680,23 @@ class Manage_documents extends CI_Controller {
     public function sendRequestForDeletion() {
         extract($_GET);
         //print_r($_GET);die();
+        $data = array(
+            'doc_id' => $doc_id,
+            'reason_type' => $reason_type,
+            'reason_description' => $reason_description
+        );
+        // print_r($data);die();
         $path = base_url();
-        $url = $path . 'api/modules/document_api/sendRequestForDeletion?doc_id=' . $doc_id . '&reason=' . $reason;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-// authenticate API
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+        $url = $path . 'api/modules/document_api/sendRequestForDeletion';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPGET, 1);
-        $output = curl_exec($ch);
-//close cURL resource
+        $response_json = curl_exec($ch);
         curl_close($ch);
-        $response = json_decode($output, true);
-        //print_r($output);die();
+        $response = json_decode($response_json, true);
+//        print_r($response_json);
+//        die();
         if ($response == true) {
             echo '<div class="alert alert-success alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success!</strong> Request Sent successfully.</div>';
         } else {

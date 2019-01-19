@@ -54,10 +54,10 @@ class Document_model extends CI_Model {
 
     // delete document
     public function removeDoc($document_id) {
-        
+
         $sql = "DELETE FROM document_tab WHERE document_id='$document_id'";
         $result = $this->db->query($sql);
-        if ($this->db->affected_rows() == 1) {        
+        if ($this->db->affected_rows() == 1) {
             return true;
         } else {
             return false;
@@ -65,10 +65,15 @@ class Document_model extends CI_Model {
     }
 
 //------fun for document deletion
-    public function sendRequestForDeletion($document_id, $reason) {
-        //extract($data);
+    public function sendRequestForDeletion($data) {
+        extract($data);
+        //print_r($data);
+        //die();
+        $document_id = base64_decode($doc_id);
+
         $update_data = array(
-            'delete_reason' =>addslashes($reason),
+            'reson_type' => $reason_type,
+            'delete_reason' => addslashes($reason_description),
             'status' => '0'
         );
         // print_r($insert_data);die();
@@ -125,7 +130,7 @@ class Document_model extends CI_Model {
 //            return false;
 //        }
 //    }
-     public function addDocument($data) {
+    public function addDocument($data) {
         extract($data);
         $insert_data = array(
             'document_title' => $document_title,

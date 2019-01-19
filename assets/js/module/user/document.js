@@ -46,24 +46,38 @@ function showMsg() {
 }
 // fucntion to delete document
 function removeDocument(doc_id, key) {
+    var reason_type = $('#reason_type_' + key).val();
+    if (reason_type == '0') {
+        $('#table_msg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Reason Type first !</div>');
+        $("#reason_type_" + key).focus();
+        setTimeout(function () {
+            $('.alert').fadeOut('fast');
+        }, 8000); // <-- time in milliseconds
+        return false;
+    }
+    var reason_description = $('#reason_description_' + key).val();
+    if(reason_description == ''){
+        $('#table_msg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Enter description for the reason. !</div>');
+        $("#reason_description_" + key).focus();
+        setTimeout(function () {
+            $('.alert').fadeOut('fast');
+        }, 8000); // <-- time in milliseconds
+        return false;
+    }
     $.confirm({
-        title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Reuest For Deletion. Add Reasone For Delete Document.</span>',
+        title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Reuest For Deletion. Are you sure to send this request?</span>',
         type: 'red',
-        content: '' +
-                '<form action="" class="formName">' +
-                '<div class="form-group">' +
-                '<input type="text" id="reason" name="reason" placeholder="Enter Reason For Delete The Document" value="" id="auto_passwd" class="w3-border auto_passwd w3-input" required>' +
-//                '<br><span class="w3-small w3-text-red"><b>[NOTE: You can modify this Auto-generated Password.]</b></span>' +
-                '</div>' +
-                '</form>',
+        content: '',
         buttons: {
             confirm: function () {
                 $.ajax({
                     type: "GET",
                     url: BASE_URL + "modules/manage_documents/sendRequestForDeletion",
                     data: {
+                        key: key,
                         doc_id: doc_id,
-                        reason: $('#reason').val()
+                        reason_type: $('#reason_type_' + key).val(),
+                        reason_description: $('#reason_description_' + key).val()
                     },
                     cache: false,
                     beforeSend: function () {
@@ -71,6 +85,7 @@ function removeDocument(doc_id, key) {
                     },
                     success: function (data) {
                         //alert(data);
+                        // console.log(data);return false;
                         $('#table_msg').html(data);
                         $('#actionBtn_' + key).html('Action <span class="caret"></span>');
 

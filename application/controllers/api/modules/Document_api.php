@@ -94,10 +94,11 @@ class Document_api extends REST_Controller {
         }
     }
 //---------api for send req for deletion
-    public function sendRequestForDeletion_get(){
-        extract($_GET);
-        $document_id=base64_decode($doc_id);
-        $result = $this->document_model->sendRequestForDeletion($document_id,$reason);
+    public function sendRequestForDeletion_post(){
+        extract($_POST);
+        //print_r($_POST);die();
+        $data = $_POST;
+        $result = $this->document_model->sendRequestForDeletion($data);
         if($result)
         {
             return $this->response($result, 200);
