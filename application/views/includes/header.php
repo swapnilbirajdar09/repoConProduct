@@ -80,6 +80,7 @@ if ($role == 'company_admin') {
                                     <li><a href="<?php echo base_url(); ?>modules/site_inspection"><i class="fa fa-check-circle"></i> Site Inspection </a></li>
                                     <li><a href="<?php echo base_url(); ?>modules/raisequery_rfi"><i class="fa fa-question"></i> Raise Query (RFI) </a></li>
                                     <li><a href="<?php echo base_url(); ?>modules/manage_documents"><i class="fa fa-file"></i> Manage Document </a></li> 
+                                    <li><a href="<?php echo base_url(); ?>modules/request_module"><i class="fa fa-file"></i> Request Module </a></li>
                                     <li><a href="<?php echo base_url(); ?>user/user_settings"><i class="fa fa-cog"></i>Settings</a></li>
                                 </ul>
                             </div>
