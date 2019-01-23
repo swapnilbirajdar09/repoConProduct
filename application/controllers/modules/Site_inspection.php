@@ -271,6 +271,82 @@ class Site_inspection extends CI_Controller {
         }
     }
 
+//----fun for get all queries
+    public function getAllQueries() {
+        extract($_GET);
+        $path = base_url();
+        $url = $path . 'api/modules/sitecontroller_api/getAllActivityQueries?activity_id=' . $activity_id;
+        // echo $url;die();
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+        //close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        // echo $output;
+        if (!$response) {
+            echo '<span>No Comments Available.</span>';
+        } else {
+            foreach ($response as $key) {
+                echo '<div>
+            <label>All Raised Queries</label>
+            <div class="w3-border w3-padding">';
+                if ($key['status'] == 1) {
+                    echo'<a class="btn w3-right w3-green" onclick="querySolved(' . $key['query_id'] . ');">Solve</a>';
+                } else {
+                    echo'<a class="w3-right w3-blue btn">Solved</a>';
+                }
+                echo'<label><i>' . $key['created_by'] . '-' . $key['created_date'] . '</i></label><br>
+                 <label><i>' . $key['query_title'] . '</i></label>
+              <p><i class="fa fa-quote-left"></i> 
+                 <i>' . $key['query_description'] . '</i> 
+                 <i class="fa fa-quote-right"></i></p>
+               </div>
+             </div>';
+            }
+        }
+    }
+
+// fun for query solve
+    public function querySolved() {
+        extract($_GET);
+
+        $session_name = $this->session->userdata('usersession_name');
+        $session_role = $this->session->userdata('role');
+        if ($session_role == 'company_admin') {
+            $author = 'Administrator';
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $author = $user_name;
+        }
+        $path = base_url();
+        $url = $path . 'api/modules/sitecontroller_api/querySolved?query_id=' . $query_id . '&author=' . $author;
+        // echo $url;die();
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+        //close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        //print_r($output);
+        //die();
+        if ($response) {
+            echo '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> Query Solved Successfully.</div>';
+        } else {
+            echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> Query Not Solved Successfully.</div>';
+        }
+    }
+
     // add new work item function
     public function addWitem() {
         extract($_POST);
@@ -356,6 +432,33 @@ class Site_inspection extends CI_Controller {
         return $response;
     }
 
+    //--------update activity-------//
+    public function updateActivity() {
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        extract($_GET);
+        $path = base_url();
+        $url = $path . 'api/modules/sitecontroller_api/updateActivity?project_id=' . base64_encode($project_id) . '&act_id=' . $act_id . '&key=' . $key;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+        //close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        if ($response) {
+            echo '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> Activity Status Updated Successfully.</div>';
+        } else {
+            echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> Activity Status was not updated successfully.</div>';
+        }
+    }
+
     // add new activity in checklist function
     public function addActivity() {
         extract($_POST);
@@ -375,8 +478,21 @@ class Site_inspection extends CI_Controller {
             $user_name = $this->session->userdata('user_name');
             $data['author'] = $user_name;
         }
-
-        // print_r($data);die();
+        //print_r($activity);
+        $i = '';
+        $activity_new = '';
+        $act = array();
+        for ($i = 0; $i < count($activity); $i++) {
+            $activity_new = array(
+                'activity_name' => $activity[$i],
+                'status' => 0,
+                'completed_date' => ''
+            );
+            $act[] = $activity_new;
+        }
+        $data['activity'] = json_encode($act);
+//        print_r($data);
+//        die();
         $path = base_url();
         $url = $path . 'api/modules/sitecontroller_api/addActivity';
         $ch = curl_init();
@@ -384,7 +500,6 @@ class Site_inspection extends CI_Controller {
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
         $output = curl_exec($ch);
         //close cURL resource
         curl_close($ch);
@@ -503,11 +618,14 @@ class Site_inspection extends CI_Controller {
         //close cURL resource
         curl_close($ch);
         $response = json_decode($output, true);
-        if ($response) {
+        //getprint_r($output);die();
+        if ($response == 200) {
             echo '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> Checklist Status marked as <b>Done</b>.</div>';
             die();
+        } elseif ($response == 412) {
+            echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Complete all tasks first..</div>';
+            die();
         } else {
-
             echo '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Checklist Status was not changed.</div>';
             die();
         }

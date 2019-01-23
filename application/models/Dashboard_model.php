@@ -7,9 +7,25 @@ class Dashboard_model extends CI_Model {
         date_default_timezone_set('Asia/kolkata');
     }
 
+// fun for get all checklist failure queries
+    public function getAllChecklistQueries($project_id) {
+        $sql = "SELECT * FROM checklist_query_tab where status='1' AND project_id = '$project_id'";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            $response = array(
+                'status' => 500,
+                'status_message' => 'No data found.');
+        } else {
+            $response = array(
+                'status' => 200,
+                'status_message' => $result->result_array());
+        }
+        return $response;
+    }
+
     //--------------fun for get all queries
-    public function getAllQueries_dashboard() {
-        $sql = "SELECT * FROM rfi_query_tab where status='0'";
+    public function getAllQueries_dashboard($project_id) {
+        $sql = "SELECT * FROM rfi_query_tab where status='0' AND project_id = '$project_id'";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(

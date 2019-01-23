@@ -253,7 +253,6 @@
             -webkit-box-shadow: 0 0 1px rgba(0,0,0,0.20);
             -moz-box-shadow: 0 0 1px rgba(0,0,0,0.20);
             box-shadow: 0 0 1px rgba(0,0,0,0.20);
-
             z-index: 15;
         }
 
@@ -286,9 +285,7 @@
         </div>
 
         <div class="clearfix"></div>
-
         <div class="row">
-
             <!-- view all checklist div -->
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -350,7 +347,36 @@
                                                 <div class="flag-wrapper">
                                                     <span class="flag" title="Slab Cycle Checklist">SSC: <span class="w3-large">Day <?php echo $key['day']; ?></span></span><br>
                                                 </div>
-                                                <div class="desc w3-medium"><i class="fa fa-check-circle"></i> <?php echo $key['activity_name']; ?></div>
+                                                <?php
+                                                $activity = json_decode($key['activity_name'], true);
+                                                for ($j = 0; $j < count($activity); $j++) {
+                                                    if ($activity[$j]['status'] == '1') {
+                                                        $text_green = 'w3-text-green';
+                                                        $title = "Task Completed";
+                                                    } else {
+                                                        $text_green = '';
+                                                        $title = 'Complete This Task.';
+                                                    }
+                                                    ?>
+                                                    <div class="desc w3-medium">
+                                                        <div class="w3-col l3">
+                                                            <?php if ($activity[$j]['status'] != '1') {
+                                                                ?>
+                                                                <a class="btn <?php echo $text_green; ?>" title="<?php echo $title; ?>" onclick="updateActivity(<?php echo $j; ?>,<?php echo $key['activity_id']; ?>);">
+                                                                    <i class="fa fa-check-circle w3-large"></i> check
+                                                                </a>
+                                                            <?php } else { ?>
+                                                                <a class="btn <?php echo $text_green; ?>" title="<?php echo $title; ?>">
+                                                                    <i class="fa fa-check-circle w3-large"></i> check
+                                                                </a>
+                                                            <?php } ?>
+                                                        </div>
+                                                        <div class="w3-col l9">
+                                                            <?php echo $activity[$j]['activity_name']; ?>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+
                                                 <div class="desc"><i class="fa fa-quote-left"></i> <?php echo $key['comments']; ?> <i class="fa fa-quote-right"></i></div>
                                                 <div class="desc">
                                                     <?php
@@ -366,9 +392,9 @@
                                                         <?php
                                                     } else {
                                                         ?> 
-                                                        <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" id="markBtn_<?php echo $key['activity_id']; ?>" onclick="mark('<?php echo base64_encode($key['activity_id']); ?>', 'undone', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-times-circle"></i> Unmark as Done</a>
+            <!--                                                            <a class="btn btn-sm w3-text-grey w3-hover-text-black" style="padding: 2px 5px;background-color: #DDDDDD" id="markBtn_<?php // echo $key['activity_id'];    ?>" onclick="mark('<?php //echo base64_encode($key['activity_id']);    ?>', 'undone', '<?php //echo $key['activity_id'];    ?>')"><i class="fa fa-times-circle"></i> Unmark as Done</a>-->
                                                     <?php } ?>                                                   
-                                                    <a class="btn btn-sm w3-text-grey w3-hover-text-black"  style="padding: 2px 5px;background-color: #DDDDDD" data-toggle="modal" data-target="#Reportissue_<?php echo $key['activity_id']; ?>" onclick="openHelp('Reportissue_<?php echo $key['activity_id']; ?>')"><i class="fa fa-warning"></i> Report Issue</a>
+                                                    <a class="btn btn-sm w3-text-grey w3-hover-text-black"  style="padding: 2px 5px;background-color: #DDDDDD" data-toggle="modal" data-target="#Reportissue_<?php echo $key['activity_id']; ?>" onclick="openForm('Reportissue_<?php echo $key['activity_id']; ?>', '<?php echo $key['activity_id']; ?>')"><i class="fa fa-warning"></i> Report Issue</a>
 
                                                 </div>
                                             </div>
@@ -382,8 +408,38 @@
                                                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                                                         </button>
                                                         <h4 class="modal-title">
-                                                            <i class="fa fa-check-circle"></i> <?php echo $key['activity_name']; ?> <span class="badge w3-grey w3-text-white w3-small"><?php echo $key['witem_name']; ?></span>
+                                                            <span class="badge w3-padding-small w3-grey w3-text-white w3-small"><?php echo $key['witem_name']; ?></span>
                                                         </h4>
+                                                        <?php
+                                                        $activity = json_decode($key['activity_name'], true);
+                                                        for ($j = 0; $j < count($activity); $j++) {
+                                                            if ($activity[$j]['status'] == '1') {
+                                                                $text_green = 'w3-text-green';
+                                                                $title = "Task Completed";
+                                                            } else {
+                                                                $text_green = '';
+                                                                $title = 'Complete This Task.';
+                                                            }
+                                                            ?>
+                                                            <div class="desc w3-medium">
+                                                                <div class="w3-col l3">
+                                                                    <?php if ($activity[$j]['status'] != '1') {
+                                                                        ?>
+                                                                        <a class="btn <?php echo $text_green; ?>" title="<?php echo $title; ?>">
+                                                                            <i class="fa fa-check-circle w3-large"></i> check
+                                                                        </a>
+                                                                    <?php } else { ?>
+                                                                        <a class="btn <?php echo $text_green; ?>" title="<?php echo $title; ?>">
+                                                                            <i class="fa fa-check-circle w3-large"></i> check
+                                                                        </a>
+                                                                    <?php } ?>
+                                                                </div>
+                                                                <div class="w3-col l9">
+                                                                    <?php echo $activity[$j]['activity_name']; ?>
+                                                                </div>
+                                                            </div>
+                                                        <?php } ?>
+
                                                     </div>
                                                     <!--Modal body starts -->
                                                     <div class="modal-body">
@@ -406,7 +462,7 @@
                                                                         <?php
                                                                     } else {
                                                                         ?> 
-                                                                        <a class="btn btn-md btn-block btn-danger" onclick="mark('<?php echo base64_encode($key['activity_id']); ?>', 'undone', '<?php echo $key['activity_id']; ?>')"> <i class="fa fa-check-square"></i> Unmark this Checklist as Done</a>
+            <!--                                                                            <a class="btn btn-md btn-block btn-danger" onclick="mark('<?php echo base64_encode($key['activity_id']); ?>', 'undone', '<?php echo $key['activity_id']; ?>')"> <i class="fa fa-check-square"></i> Unmark this Checklist as Done</a>-->
                                                                     <?php } ?> 
                                                                     <hr>
                                                                 </div>
@@ -490,8 +546,37 @@
                                                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                                                         </button>
                                                         <h4 class="modal-title">
-                                                            <i class="fa fa-check-circle"></i> <?php echo $key['activity_name']; ?> <span class="badge w3-grey w3-text-white w3-small"><?php echo $key['witem_name']; ?></span>
+                                                            <span class="badge w3-padding-small w3-grey w3-text-white w3-small"><?php echo $key['witem_name']; ?></span>
                                                         </h4>
+                                                        <?php
+                                                        $activity = json_decode($key['activity_name'], true);
+                                                        for ($j = 0; $j < count($activity); $j++) {
+                                                            if ($activity[$j]['status'] == '1') {
+                                                                $text_green = 'w3-text-green';
+                                                                $title = "Task Completed";
+                                                            } else {
+                                                                $text_green = '';
+                                                                $title = 'Complete This Task.';
+                                                            }
+                                                            ?>
+                                                            <div class="desc w3-medium">
+                                                                <div class="w3-col l3">
+                                                                    <?php if ($activity[$j]['status'] != '1') {
+                                                                        ?>
+                                                                        <a class="btn <?php echo $text_green; ?>" title="<?php echo $title; ?>">
+                                                                            <i class="fa fa-check-circle w3-large"></i> check
+                                                                        </a>
+                                                                    <?php } else { ?>
+                                                                        <a class="btn <?php echo $text_green; ?>" title="<?php echo $title; ?>">
+                                                                            <i class="fa fa-check-circle w3-large"></i> check
+                                                                        </a>
+                                                                    <?php } ?>
+                                                                </div>
+                                                                <div class="w3-col l9">
+                                                                    <?php echo $activity[$j]['activity_name']; ?>
+                                                                </div>
+                                                            </div>
+                                                        <?php } ?>
                                                     </div>
                                                     <!--Modal body starts -->
                                                     <div class="modal-body">
@@ -528,7 +613,7 @@
                                                                             <textarea name="comment_posted" id="comment_posted" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
 
                                                                             <div id="comment_msg" class="comment_msg"></div>
-                                                                            <?php // echo $key['activity_id']; ?>
+                                                                            <?php // echo $key['activity_id'];     ?>
                                                                             <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" onclick="raiseQuery(<?php echo $key['activity_id']; ?>);" type="button">Submit</button>
                                                                       <!--       <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" onclick="savecomment('<?php echo $key['activity_id']; ?>');" type="button"><i class="fa fa-reply"></i> Post Comment</button> -->
                                                                         </div>
@@ -539,6 +624,9 @@
                                                                 <div class="w3-col l7 w3-right w3-small w3-text-grey">
                                                                 </div>                                                     
                                                                 <br><br>
+                                                                <div class="w3-col l12 w3-small comment_list" id="query_list_<?php echo $key['activity_id']; ?>">
+
+                                                                </div>
                                                                 <div class="w3-col l12 w3-margin-bottom w3-margin-top" style="display: inline;">
                                                                     <hr>
                                                                 </div>
@@ -574,9 +662,55 @@
     </div>
 </div>
 <script>
+    // fun for solve query
+    function querySolved(query_id) {
+        $.confirm({
+            title: '<h4 class="w3-text-green">Please confirm the action!</h4><span class="w3-medium">Are You Sure.?</span>',
+            content: '',
+            type: 'green',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "GET",
+                        url: BASE_URL + "modules/site_inspection/querySolved",
+                        data: {
+                            query_id: query_id
+                        },
+                        cache: false,
+                        beforeSend: function () {
+                            // $('#delBtn_' + key).html('<i class="fa fa-circle-o-notch fa-spin"></i> Deleting');
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            $('#checklistmsg').html(data);
+                            //$('#delBtn_' + key).html('<i class="fa fa-trash"></i> Delete');
+                            window.setTimeout(function () {
+                                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                                    $(this).remove();
+                                });
+                                //window.location.reload();
+                            }, 1500);
+                        },
+                        error: function (data) {
+                            $('#checklistmsg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
+                            //$('#delBtn_' + key).html('<i class="fa fa-trash"></i> Delete');
+                            window.setTimeout(function () {
+                                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                                    $(this).remove();
+                                });
+                            }, 5000);
+                        }
+                    });
+                },
+                cancel: function () {
+                }
+            }
+        });
+    }
+
     // update changes of document
     function raiseQuery(activity_id) {
-       
+
         dataString = $("#rfiReply_form_" + activity_id).serialize();
         //alert(dataString);
         $.ajax({
@@ -601,17 +735,14 @@
                             window.location.reload();
                         }, 1500); // <-- time in milliseconds 
                         break;
-
                     case 'error':
                         $('#comment_msg').html(data.message);
                         setTimeout(function () {
                             $('.alert').fadeOut('fast');
                         }, 10000); // <-- time in milliseconds
                         break;
-
                     case 'validation':
                         $('#comment_msg').html(data.message);
-
                         setTimeout(function () {
                             $('.alert').fadeOut('fast');
                         }, 8000); // <-- time in milliseconds
@@ -635,12 +766,9 @@
                 }, 5000);
             }
         });
-        return false;  //stop the actual form post !important!
+        return false; //stop the actual form post !important!
     }
     ;
-
-
-
     $(document).ready(function () {
         var max_fields = 5;
         var wrapper = $("#addedmore_imageDiv");
@@ -664,7 +792,7 @@
                     </div>\n\
                     </div>'); //add input box
             } else {
-                $.alert('<label class="w3-label w3-text-red"><i class="fa fa-warning w3-xxlarge"></i> You Reached the maximum limit of adding ' + max_fields + ' fields</label>');   //alert when added more than 4 input fields
+                $.alert('<label class="w3-label w3-text-red"><i class="fa fa-warning w3-xxlarge"></i> You Reached the maximum limit of adding ' + max_fields + ' fields</label>'); //alert when added more than 4 input fields
             }
         });
         $(wrapper).on("click", ".delete", function (e) {
@@ -673,8 +801,6 @@
             x--;
         });
     });
-
-
     // preview images
     function readURL(input) {
         if (input.files && input.files[0]) {
@@ -691,13 +817,60 @@
         //alert(id);
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-
             reader.onload = function (e) {
                 $('#ImagePreview_' + id).attr('src', e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    function updateActivity(key, activity_id) {
+        $.confirm({
+            title: '<h4 class="w3-text-green">Please confirm the action!</h4><span class="w3-medium">Are You Sure.?</span>',
+            content: '',
+            type: 'red',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "GET",
+                        url: BASE_URL + "modules/site_inspection/updateActivity",
+                        data: {
+                            act_id: activity_id,
+                            key: key
+                        },
+                        cache: false,
+                        beforeSend: function () {
+                            // $('#delBtn_' + key).html('<i class="fa fa-circle-o-notch fa-spin"></i> Deleting');
+                        },
+                        success: function (data) {
+                            //console.log(data);
+                            $('#checklistmsg').html(data);
+                            //$('#delBtn_' + key).html('<i class="fa fa-trash"></i> Delete');
+                            window.setTimeout(function () {
+                                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                                    $(this).remove();
+                                });
+                                window.location.reload();
+                            }, 1500);
+                        },
+                        error: function (data) {
+                            $('#checklistmsg').html('<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Failure!</strong> Something went wrong. Please refresh the page and try once again.</div>');
+                            //$('#delBtn_' + key).html('<i class="fa fa-trash"></i> Delete');
+                            window.setTimeout(function () {
+                                $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                                    $(this).remove();
+                                });
+                            }, 5000);
+                        }
+                    });
+                },
+                cancel: function () {
+                }
+            }
+        });
+    }
+
+
 
 </script>
 <script src="<?php echo base_url(); ?>assets/js/module/user/sitecontroller.js"></script>

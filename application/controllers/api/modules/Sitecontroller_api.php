@@ -21,13 +21,23 @@ class Sitecontroller_api extends REST_Controller {
         }
     }
 
-      public function addComment_post() {
+//--------update activity
+    public function updateActivity_get() {
+        extract($_GET);
+        $result = $this->sitecontroller_model->updateActivity($project_id, $act_id, $key);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
+    public function addComment_post() {
         $data = $_POST;
         //print_r($data);die();
         $result = $this->sitecontroller_model->add_comments($data);
         return $this->response($result);
     }
-
 
     // api to get all activities
     public function getAllActivity_get() {
@@ -40,8 +50,8 @@ class Sitecontroller_api extends REST_Controller {
             return $this->response(NULL, 404);
         }
     }
-    
-    public function raiseQueryForChecklistFailure_post(){
+
+    public function raiseQueryForChecklistFailure_post() {
         $data = $_POST;
         $result = $this->sitecontroller_model->raiseQueryForChecklistFailure($data);
         if ($result) {
@@ -137,6 +147,28 @@ class Sitecontroller_api extends REST_Controller {
         }
     }
 
+//---------api foe get all queries
+    public function getAllActivityQueries_get() {
+        extract($_GET);
+        $result = $this->sitecontroller_model->getAllActivityQueries($activity_id);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
+// fun for solve the query
+    public function querySolved_get() {
+        extract($_GET);
+        $result = $this->sitecontroller_model->querySolved($query_id,$author);
+        if ($result) {
+            return $this->response($result, 200);
+        } else {
+            return $this->response(NULL, 404);
+        }
+    }
+
     // api to remove file in Document
     public function removeImageInfo_post() {
         extract($_POST);
@@ -158,12 +190,11 @@ class Sitecontroller_api extends REST_Controller {
         }
     }
 
-
     // get slab cycle details details
-    public function getSlabCycleDetails_get(){
+    public function getSlabCycleDetails_get() {
         extract($_GET);
 
-        $result = $this->sitecontroller_model->getSlabCycleDetails($project_id,$witemid);
+        $result = $this->sitecontroller_model->getSlabCycleDetails($project_id, $witemid);
         if ($result) {
             return $this->response($result, 200);
         } else {
@@ -172,10 +203,10 @@ class Sitecontroller_api extends REST_Controller {
     }
 
     // mark checklist as done
-    public function markChecklistDone_get(){
+    public function markChecklistDone_get() {
         extract($_GET);
-        $act_id=base64_decode($activity_id);
-        $result = $this->sitecontroller_model->markChecklistDone($act_id,$author);
+        $act_id = base64_decode($activity_id);
+        $result = $this->sitecontroller_model->markChecklistDone($act_id, $author);
         if ($result) {
             return $this->response($result, 200);
         } else {
@@ -184,10 +215,10 @@ class Sitecontroller_api extends REST_Controller {
     }
 
     // mark checklist as undone
-    public function markChecklistUndone_get(){
+    public function markChecklistUndone_get() {
         extract($_GET);
-        $act_id=base64_decode($activity_id);
-        $result = $this->sitecontroller_model->markChecklistUndone($act_id,$author);
+        $act_id = base64_decode($activity_id);
+        $result = $this->sitecontroller_model->markChecklistUndone($act_id, $author);
         if ($result) {
             return $this->response($result, 200);
         } else {

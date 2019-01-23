@@ -54,9 +54,49 @@ class User_dashboard extends CI_Controller {
         $data['countofQuery'] = User_dashboard::countoFQuery();
         $data['countofPendingQuery'] = User_dashboard::countoFPendingQuery();
         $data['countoFUser'] = User_dashboard::countoFUser();
+        $data['checklistQueries'] = User_dashboard::getAllChecklistQueries();
+        $data['roles'] = User_dashboard::getAllRoles();
+
         $this->load->view('includes/header', $data);
         $this->load->view('pages/dashboard', $data);
         $this->load->view('includes/footer');
+    }
+
+    public function getAllRoles() {
+        // $project_id = $this->session->userdata('project_id');
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $path = base_url();
+        $url = $path . 'api/user/Role_api/getAllRoles?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
+    }
+
+// fun for get all checklist queries
+    public function getAllChecklistQueries() {
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $path = base_url();
+        $url = $path . 'api/Dashboard_api/getAllChecklistQueries?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        //print_r($response_json);die();
+        return $response;
     }
 
 //------pending document list
@@ -191,8 +231,11 @@ class User_dashboard extends CI_Controller {
 
 //------------fun for get all queries
     public function getAllQueries_dashboard() {
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
         $path = base_url();
-        $url = $path . 'api/Dashboard_api/getAllQueriesdashboard';
+        $url = $path . 'api/Dashboard_api/getAllQueriesdashboard?project_id=' . $project_id;
         //create a new cURL resource
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HTTPGET, true);

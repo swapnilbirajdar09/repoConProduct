@@ -29,7 +29,7 @@ class Sitecontroller_model extends CI_Model {
     }
 
     // get slab cycle details
-    public function getSlabCycleDetails($project_id,$witem_id) {
+    public function getSlabCycleDetails($project_id, $witem_id) {
         $sql = "SELECT * FROM work_list_tab, checklist_activity_tab WHERE work_list_tab.witem_id=checklist_activity_tab.work_item AND checklist_activity_tab.project_id='$project_id' AND checklist_activity_tab.work_item='$witem_id' ORDER BY day";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
@@ -98,7 +98,7 @@ class Sitecontroller_model extends CI_Model {
         }
     }
 
-    public function raiseQueryForChecklistFailure($data){
+    public function raiseQueryForChecklistFailure($data) {
         extract($data);
         //print_r($data);die();
         $insert_data = array(
@@ -116,17 +116,49 @@ class Sitecontroller_model extends CI_Model {
             return true;
         } else {
             return false;
-        }       
+        }
     }
 
-    
+//---------update activity
+    public function updateActivity($project_id, $act_id, $index) {
+        $project = base64_decode($project_id);
+        $sql = "SELECT * FROM checklist_activity_tab WHERE project_id = '$project' AND activity_id = '$act_id'";
+
+        $result = $this->db->query($sql);
+        $activity = '';
+        foreach ($result->result_array() as $row) {
+            $activity = json_decode($row['activity_name'], true);
+        }
+
+        foreach ($activity as $key => $val) {
+
+            if ($key == $index) {
+                $activity[$key]['status'] = '1';
+                $activity[$key]['completed_date'] = date('Y-m-d H:i:s');
+            }
+        }
+        // print_r($activity);
+        $act = json_encode($activity);
+
+        $update_data = array(
+            'activity_name' => $act
+        );
+        // print_r($insert_data);die();
+        $this->db->where('activity_id', $act_id);
+        $this->db->update('checklist_activity_tab', $update_data);
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     // add new activity function
     public function addActivity($data) {
         extract($data);
         // print_r($data);die();
         $insert_data = array(
-            'activity_name' => addslashes($activity),
+            'activity_name' => $activity,
             'work_item' => $work_item_selected,
             'day' => $day_selected,
             'project_id' => $project_id,
@@ -164,15 +196,65 @@ class Sitecontroller_model extends CI_Model {
     }
 
     // mark checklist as done
-    public function markChecklistDone($act_id,$author) {
+    public function markChecklistDone($act_id, $author) {
+        $taskCompleted = '0';
+        $activity = '';
+        $currentFiles = '';
+        $sql = "SELECT * FROM checklist_activity_tab WHERE activity_id='$act_id'";
+        $result_arr = $this->db->query($sql);
+        foreach ($result_arr->result_array() as $key) {
+            $activity = json_decode($key['activity_name'], true);
+        }
+
+        foreach ($activity as $val) {
+            //print_r($val['status']);
+            if ($val['status'] == '0') {
+                // echo 'got';
+                $taskCompleted = '1';
+            }
+        }
+        //echo $taskCompleted;die();
+        if ($taskCompleted != '1') {
+
+            $update_data = array(
+                'status' => '1',
+                'modified_by' => $author,
+                'modified_date' => date('Y-m-d H:i:s')
+            );
+            // print_r($insert_data);die();
+            $this->db->where('activity_id', $act_id);
+            $this->db->update('checklist_activity_tab', $update_data);
+            if ($this->db->affected_rows() > 0) {
+                return 200;
+            } else {
+                return 500;
+            }
+        } else {
+            return 412;
+        }
+    }
+
+//-------fun for get all queries
+    public function getAllActivityQueries($activity_id) {
+        $sql = "SELECT * FROM checklist_query_tab WHERE activity_id='$activity_id'";
+        $result = $this->db->query($sql);
+        if ($result->num_rows() <= 0) {
+            return false;
+        } else {
+            return $result->result_array();
+        }
+    }
+
+// fun for solving the query
+    public function querySolved($query_id,$author) {
         $update_data = array(
-            'status' => '1',
+            'status' => '0',
             'modified_by' => $author,
             'modified_date' => date('Y-m-d H:i:s')
         );
         // print_r($insert_data);die();
-        $this->db->where('activity_id', $act_id);
-        $this->db->update('checklist_activity_tab', $update_data);
+        $this->db->where('query_id', $query_id);
+        $this->db->update('checklist_query_tab', $update_data);
         if ($this->db->affected_rows() > 0) {
             return true;
         } else {
@@ -181,7 +263,7 @@ class Sitecontroller_model extends CI_Model {
     }
 
     // mark checklist as undone
-    public function markChecklistUndone($act_id,$author) {
+    public function markChecklistUndone($act_id, $author) {
         $update_data = array(
             'status' => '0',
             'modified_by' => $author,
@@ -215,8 +297,8 @@ class Sitecontroller_model extends CI_Model {
             return FALSE;
         }
     }
-    
-  public function getQueryComments($activity_id) {
+
+    public function getQueryComments($activity_id) {
         $sql = "SELECT * FROM checklist_query_tab WHERE activity_id='$activity_id'";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
@@ -229,85 +311,88 @@ class Sitecontroller_model extends CI_Model {
     // upload portfolio image
     public function uploadImageInfo($data) {
         extract($data);
+        $taskCompleted = '0';
+        $activity = '';
         $currentFiles = '';
         $sql = "SELECT images FROM checklist_activity_tab WHERE activity_id='$activity_id'";
         $result_arr = $this->db->query($sql);
         foreach ($result_arr->result_array() as $key) {
             $currentFiles = $key['images'];
+            $activity = json_decode($key['activity_name'], true);
         }
-        $fileArr=array();
 
-        if($currentFiles=='' || $currentFiles=='[]'){
-            $fileArr[]=$filepath;
+        $fileArr = array();
+
+        if ($currentFiles == '' || $currentFiles == '[]') {
+            $fileArr[] = $filepath;
+        } else {
+            $fileArr = json_decode($currentFiles);
+            array_push($fileArr, $filepath);
         }
-        else{
-         $fileArr = json_decode($currentFiles);
-         array_push($fileArr, $filepath); 
-     }
 
 
-     $result = array(
-        'images' => json_encode($fileArr),
-        'comments' => addslashes($checklist_comment),
-        'modified_by' => $author,
-        'modified_date' => date('Y-m-d H:i:s')
-    );
+        $result = array(
+            'images' => json_encode($fileArr),
+            'comments' => addslashes($checklist_comment),
+            'modified_by' => $author,
+            'modified_date' => date('Y-m-d H:i:s')
+        );
 
-     $this->db->where('activity_id', $activity_id);
-     $this->db->update('checklist_activity_tab', $result);
-     if ($this->db->affected_rows() == 1) {
-        return true;
-    } else {
-        return false;
+        $this->db->where('activity_id', $activity_id);
+        $this->db->update('checklist_activity_tab', $result);
+        if ($this->db->affected_rows() == 1) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
     }
-}
 
     // delete activity
-public function removeActivity($activity_id) {
-    $sql = "DELETE FROM checklist_activity_tab WHERE activity_id='$activity_id'";
-    $result = $this->db->query($sql);
-    if ($this->db->affected_rows() > 0) {
-        return true;
-    } else {
-        return false;
+    public function removeActivity($activity_id) {
+        $sql = "DELETE FROM checklist_activity_tab WHERE activity_id='$activity_id'";
+        $result = $this->db->query($sql);
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
-}
 
     // remove file
-public function removeImageInfo($key, $activity_id, $author) {
-    $sql = "SELECT images FROM checklist_activity_tab WHERE activity_id='$activity_id'";
-    $result_arr = $this->db->query($sql);
-    foreach ($result_arr->result_array() as $row) {
-        $currentFiles = $row['images'];
-    }
+    public function removeImageInfo($key, $activity_id, $author) {
+        $sql = "SELECT images FROM checklist_activity_tab WHERE activity_id='$activity_id'";
+        $result_arr = $this->db->query($sql);
+        foreach ($result_arr->result_array() as $row) {
+            $currentFiles = $row['images'];
+        }
 
-    $fileArr = json_decode($currentFiles);
-            // unset key value
-    unlink($fileArr[$key]);
-    unset($fileArr[$key]);
-    $fileArr = array_values($fileArr);
-    $result = array(
-        'images' => json_encode($fileArr),
-        'modified_by' => $author,
-        'modified_date' => date('Y-m-d H:i:s')
-    );
+        $fileArr = json_decode($currentFiles);
+        // unset key value
+        unlink($fileArr[$key]);
+        unset($fileArr[$key]);
+        $fileArr = array_values($fileArr);
+        $result = array(
+            'images' => json_encode($fileArr),
+            'modified_by' => $author,
+            'modified_date' => date('Y-m-d H:i:s')
+        );
 
-    $this->db->where('activity_id', $activity_id);
-    $this->db->update('checklist_activity_tab', $result);
-    if ($this->db->affected_rows() == 1) {
-        $response = array(
-            'status' => 'success',
-            'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> File was successfully deleted.</div>'
-        );
-        return $response;
-    } else {
-        $response = array(
-            'status' => 'failure',
-            'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> File was not deleted.</div>'
-        );
-        return $response;
+        $this->db->where('activity_id', $activity_id);
+        $this->db->update('checklist_activity_tab', $result);
+        if ($this->db->affected_rows() == 1) {
+            $response = array(
+                'status' => 'success',
+                'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> File was successfully deleted.</div>'
+            );
+            return $response;
+        } else {
+            $response = array(
+                'status' => 'failure',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> File was not deleted.</div>'
+            );
+            return $response;
+        }
     }
-}
 
 //    public function getAllActivities($project_id){
 //        
