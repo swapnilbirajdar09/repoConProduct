@@ -19,4 +19,16 @@ class Request_api extends REST_Controller {
         return $this->response($result);
     }
 
+    public function getApprovedRequests_get(){
+        extract($_GET);
+        $result = $this->request_model->getApprovedRequests($project_id);
+        return $this->response($result);
+    }
+    
+    public function getAllRequests_get(){
+        extract($_GET);
+        $result = $this->request_model->getAllRequests($project_id);
+        return $this->response($result);
+    }
+    
 }

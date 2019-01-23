@@ -80,7 +80,7 @@
                     </div>
                     <div class="col-md-1"></div>
 
-                    <div class="col-md-3 w3-padding" style=" background-color: #ff0000;">
+                    <div class="col-md-3 w3-padding" style=" background-color: #ff3333;">
                         <span class="w3-text-white">Not Seen From 4 hr.</span>
                     </div>
                     <div class="col-md-1"></div>
@@ -119,7 +119,7 @@
                                         if ($diff >= 3) {
                                             $bgcolor = "background-color: #ff8080";
                                         } elseif ($diff >= 4) {
-                                            $bgcolor = "background-color: #ff0000";
+                                            $bgcolor = "background-color: #ff3333";
                                         } elseif ($diff >= 5) {
                                             $bgcolor = "background-color: #cc0000";
                                         } else {
@@ -220,7 +220,7 @@
                                                                 }
                                                                 ?>
                                                             </div>
-                                                            <div class="col-lg-12 w3-medium">
+<!--                                                            <div class="col-lg-12 w3-medium">
                                                                 <hr>
                                                                 <label>Comments: </label>
                                                                 <form id="rfiReply_form_<?php echo $val['query_id']; ?>">
@@ -235,7 +235,7 @@
                                                                 <div class="w3-col l12 w3-small comment_list" id="comment_list_<?php echo $val['query_id']; ?>">
 
                                                                 </div>
-                                                            </div>
+                                                            </div>-->
                                                         </div>
                                                     </div>
                                                     <!-- Modal container ends -->

@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-md-1"></div>
 
-                    <div class="col-md-3 w3-padding" style=" background-color: #ff0000;">
+                    <div class="col-md-3 w3-padding" style=" background-color: #ff3333;">
                         <span class="w3-text-white">Not Seen From 4 hr.</span>
                     </div>
                     <div class="col-md-1"></div>
@@ -81,7 +81,7 @@
                                     if ($diff >= 3) {
                                         $bgcolor = "background-color: #ff8080";
                                     } elseif ($diff >= 4) {
-                                        $bgcolor = "background-color: #ff0000";
+                                        $bgcolor = "background-color: #ff3333";
                                     } elseif ($diff >= 5) {
                                         $bgcolor = "background-color: #cc0000";
                                     } else {
@@ -239,22 +239,6 @@
                             $i = 1;
                             if ($checklistQueries['status'] != 500) {
                                 foreach ($checklistQueries['status_message'] as $val) {
-                                    $date_a = new DateTime($val['created_date']);
-                                    $dat = date("Y-m-d H:i:s");
-                                    $date_b = new DateTime($dat);
-                                    //echo $date_a.'/'.$date_b;
-                                    $interval = date_diff($date_a, $date_b);
-                                    $diff = $interval->format('%h');
-                                    //echo $diff;
-                                    if ($diff >= 3) {
-                                        $bgcolor = "background-color: #ff8080";
-                                    } elseif ($diff >= 4) {
-                                        $bgcolor = "background-color: #ff0000";
-                                    } elseif ($diff >= 5) {
-                                        $bgcolor = "background-color: #cc0000";
-                                    } else {
-                                        $bgcolor = "background-color: #ffffff";
-                                    }
                                     ?>
                                     <tr class="w3-center">
                                         <td style=" vertical-align: middle;"><?php echo $i; ?></td>
@@ -264,33 +248,7 @@
                                         <td style=" vertical-align: middle;"><span class="badge">Pending</span></td>                                        
                                         <td style=" vertical-align: middle;">
                                             <div class="btn-group">
-                                                <button data-toggle="dropdown" id="actionBtn_<?php echo $val['query_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
-                                                </button>
-                                                <ul role="menu" class="dropdown-menu pull-right">              
-                                                    <li>
-                                                        <a title="View Query" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['query_id']; ?>" onclick="openHelp('<?php echo $val['query_id']; ?>')">View Query</a>
-                                                    </li>
-                                                    <?php
-                                                    $user_role = $this->session->userdata('role');
-                                                    if ($user_role == 'company_admin') {
-                                                        $user_name = $this->session->userdata('usersession_name');
-                                                    } else {
-                                                        $user_name = $this->session->userdata('user_name');
-                                                    }
-                                                    if ($user_role == 'company_admin' || $user_name == $val['created_by']) {
-                                                        ?>
-                                                        <li><a title="Approve Query" class="btn btn-xs text-left" onclick="updateQueryStatus('<?php echo $val['query_id']; ?>');" >Approve Query</a>
-                                                        </li>
-                                                        <li><a title="Reject Query" class="btn btn-xs text-left" onclick="RejectQueryStatus('<?php echo $val['query_id']; ?>');" >Reject Query</a>
-                                                        </li>
-                                                        <!--     <li>
-                                                                 <a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
-                                                             </li> -->
-                                                        <?php
-                                                    }
-                                                    ?>
-
-                                                </ul>
+                                                <button data-toggle="modal" data-target="#RFIModal_<?php echo $val['query_id']; ?>" onclick="openHelp('<?php echo $val['query_id']; ?>')" class="btn btn-default w3-small dropdown-toggle w3-blue" type="button" style="padding: 2px 6px">View</button>
                                             </div>
                                         </td>
                                     </tr>  
@@ -316,17 +274,19 @@
                                                                 <?php echo $val['query_description']; ?>
                                                             </p>
                                                         </div>    
-                                                        <div class="w3-col l12 w3-padding w3-medium">
-                                                            <label>Query Raised To : </label>
-                                                            <p>
-                                                                <?php
-                                                                
-                                                                echo $val['shared_with'];
-                                                                
-                                                                ?>
-                                                            </p>
-                                                        </div>                        
-                                                        
+                                                        <!--                                                        <div class="w3-col l12 w3-padding w3-medium">
+                                                                                                                    <label>Query Raised To : </label>
+                                                                                                                    <p>
+                                                        <?php
+//                                                                $shared = json_decode($val['shared_with'], TRUE);
+//                                                                foreach ($shared as $row) {  
+                                                        ?>
+                                                                                                                        
+                                                                                                                        <span><i class="fa fa-check w3-text-green"></i><?php ?></span><br>
+                                                        <?php //}  ?>
+                                                                                                                    </p>
+                                                                                                                </div>                        -->
+
                                                     </div>
                                                 </div>
                                                 <!-- Modal container ends -->
@@ -354,194 +314,345 @@
     </div>
     <!--all raised queries for checklist failure ends here-->
 
-    <!-- All queries for checklist failure -->
-    <!-----------------------------------------------Div for documents are starts here------------------------------------>
-    <!-- view all document div -->
-    <div class="col-md-12 col-sm-12 col-xs-12 page_title">
-        <div class="x_panel">
-            <div class="x_title">
-                <h2><i class="fa fa-list"></i> Documents For Deletion</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                    <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                </ul>
-                <div class="clearfix"></div>
-            </div>
-            <?php //print_r($allDocuments);   ?>
-            <div class="container x_content">
-                <div id="table_msg"></div>
-                <div class="w3-col l12 w3-padding w3-small" id="">
-                    <table id="" class="table table-striped table-bordered">
-                        <thead>
-                            <tr >
-                                <td class="text-center">Sr.No</td>
-                                <th class="text-center">Doc Title</th>
-                                <th class="text-center">Type</th>
-                                <th class="text-center">Revision No</th>
-                                <th class="text-center">Reason</th>
-                                <th class="text-center">Uploaded by</th>
-                                <th class="text-center">Added date</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $role_id = '';
-                            $sharedRoles = '';
-                            $i = 1;
-                            if ($allDocuments['status'] == 200) {
-                                foreach ($allDocuments['status_message'] as $doc) {
-                                    $role = $this->session->userdata('role');
-                                    if ($role == 'company_admin') {
-                                        
-                                    } else {
-                                        $role = $this->session->userdata('role');
-                                        $sessionArr = explode('/', $role);
-                                        $role_id = $sessionArr[0];
-                                        $role_name = $sessionArr[1];
-                                    }
-                                    //$sharedRoles = json_decode($doc['shared_with'], TRUE);
-                                    //if (in_array($role_id, $sharedRoles) || $role == 'company_admin') {
-                                    ?>
+    <!-- All pending documents for request module -->
+    <div class="row">
+        <div class="w3-col l12 w3-padding-small w3-margin-top page_title">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-list"></i> All Pending Document Request For Request Module</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+<!--                <div class="w3-col l12 w3-padding w3-text-black" id="message"><span class="w3-medium"></span></div>-->
 
-                                    <tr class="w3-center">
-                                        <td><?php echo $i; ?></td>
-                                        <td><?php echo $doc['document_title']; ?></td>
-                                        <td><?php echo $doc['document_type']; ?></td>
-                                        <td>#<?php echo $doc['revision_no']; ?></td>
-                                        <td width="250px"><p><?php echo $doc['reason_type'] . ' (' . $doc['delete_reason'] . ')'; ?></p></td>
-                                        <td><?php echo $doc['created_by']; ?></td>
-                                        <td><?php
-                                            $dtime = new DateTime($doc['created_date']);
-                                            echo $dtime->format("d M y H:i a");
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button data-toggle="dropdown" id="actionBtn_<?php echo $doc['document_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
-                                                </button>
-                                                <ul role="menu" class="dropdown-menu pull-right">
-                                                    <li><a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#DocModal_<?php echo $doc['document_id']; ?>" onclick="openHelpDoc('<?php echo $doc['document_id']; ?>')">View Files</a>
-                                                    </li>
-                                                    <?php
-                                                    $user_role = $this->session->userdata('role');
-                                                    if ($user_role == 'company_admin') {
-                                                        $user_name = $this->session->userdata('usersession_name');
-                                                    } else {
-                                                        $user_name = $this->session->userdata('user_name');
-                                                    }
-                                                    if ($user_role == 'company_admin' || $user_name == $doc['created_by']) {
-                                                        ?>
+                <div class="container x_content">
+                    <div id="table_msg"></div>
+                    <div class="w3-col l12 w3-padding w3-small" id="allDocumentDiv">
+                        <table id="datatable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Sr.No</th>
+                                    <th class="text-center">Document Name</th>
+                                    <th class="text-center">Requested By</th>
+                                    <th class="text-center">Requested From</th> 
+                                    <th class="text-center">Added Date</th>                        
+                                    <th class="text-center">Estimated Date</th>                        
+                                    <th class="text-center">Status</th>                        
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                //print_r($approveRequests);
+                                $i = 1;
+                                if ($requests['status'] != 500) {
+                                    foreach ($requests['status_message'] as $val) {
+                                        ?>
+                                        <tr class="w3-center">
+                                            <td style=" vertical-align: middle;"><?php echo $i; ?></td>
+                                            <td style=" vertical-align: middle;"><?php echo $val['document_name']; ?></td>
+                                            <td style=" vertical-align: middle;"><?php echo $val['requested_by']; ?></td>
+                                            <td style=" vertical-align: middle;"><p><?php echo $val['requested_from']; ?></p></td>  
+                                            <td style=" vertical-align: middle;"><p><?php echo $val['created_date']; ?></p></td>                                    
+                                            <td style=" vertical-align: middle;"><?php echo $val['estimated_date'] ?></td>                                    
+                                            <td style=" vertical-align: middle;"><span class="badge">Pending</span></td>                                    
+                                            <td style=" vertical-align: middle;">
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" id="actionBtn_<?php echo $val['request_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
+                                                    </button>
+                                                    <ul role="menu" class="dropdown-menu pull-right">              
                                                         <li>
-                                                            <a class="btn btn-xs text-left" onclick="removeDoc('<?php echo base64_encode($doc['document_id']); ?>', '<?php echo $doc['document_id']; ?>')" title="Delete Document">Delete Document</a>
+                                                            <a title="View Query" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['request_id']; ?>" onclick="openHelp('<?php echo $val['request_id']; ?>')">View Query</a>
                                                         </li>
                                                         <?php
-                                                    }
-                                                    ?>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!--Modal to edit product--> 
-                                <div class="modal fade bs-example-modal-lg" id="DocModal_<?php echo $doc['document_id']; ?>" role="dialog" aria-hidden="true">
-                                    <div class="modal-dialog modal-md ">
-                                        <!--                                                Modal content starts -->
-                                        <div class="modal-content">
-
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                                                </button>
-                                                <h3 class="modal-title w3-center"><?php echo $doc['document_title']; ?> <span class="badge w3-grey w3-text-white w3-small"><?php echo $doc['document_type']; ?></span></h3>
-                                            </div>
-                                            <!--      Modal body starts -->
-                                            <div class="modal-body">
-                                                <!--                                                        Modal container starts -->
-                                                <div class="container"> 
-                                                    <div class="col-lg-12">
-                                                        <div class="w3-col l12 w3-padding">
-                                                            <span class="pull-left"><b>Revision No.:</b> #<?php echo $doc['revision_no']; ?></span>
-                                                            <span class="pull-right"><b>Uploaded By:</b> <?php echo $doc['created_by']; ?>, <?php echo $dtime->format("d M y H:i:s"); ?></span>
-                                                        </div>
-                                                        <?php
-                                                        $image_arr = json_decode($doc['document_file']);
-                                                        ?>                                
-                                                        <div class="w3-col l12 w3-padding">
-                                                            <?php
-                                                            $count = 1;
-                                                            foreach ($image_arr as $file) {
-                                                                $arr = explode('/', $file);
-                                                                $filename = $arr[3];
-                                                                $ext_arr = explode('.', $file);
-                                                                $ext = end($ext_arr);
-                                                                switch ($ext) {
-                                                                    case "jpg":
-                                                                        $image = 'fa-file-image-o';
-                                                                        break;
-                                                                    case "jpeg":
-                                                                        $image = 'fa-file-image-o';
-                                                                        break;
-                                                                    case "JPG":
-                                                                        $image = 'fa-file-image-o';
-                                                                        break;
-                                                                    case "JPEG":
-                                                                        $image = 'fa-file-image-o';
-                                                                        break;
-                                                                    case "png":
-                                                                        $image = 'fa-file-image-o';
-                                                                        break;
-                                                                    case "docx":
-                                                                        $image = 'fa-file-word-o';
-                                                                        break;
-                                                                    case "doc":
-                                                                        $image = 'fa-file-word-o';
-                                                                        break;
-                                                                    case "pdf":
-                                                                        $image = 'fa-file-pdf-o';
-                                                                        break;
-                                                                    case "text":
-                                                                        $image = 'fa-file-text-o';
-                                                                        break;
-                                                                    case "zip":
-                                                                        $image = 'fa-file-archive-o';
-                                                                        break;
-                                                                    case "pptx":
-                                                                        $image = 'fa-file-powerpoint-o';
-                                                                        break;
-                                                                    default:
-                                                                        $image = 'fa-file-o';
-                                                                }
-                                                                ?>
-                                                                <div class="w3-padding-small" style="display: inline;">
-                                                                    <a class="w3-text-grey btn w3-round"  target="_self" href="<?php echo base_url() . $file; ?>"  download="<?php echo 'File_' . $count . '.' . $ext; ?>" title="Download <?php echo $filename; ?>" style="padding:4px;display: inline-block;"><b></b><i class="fa <?php echo $image; ?> w3-jumbo"></i></a>
-                                                                </div>
-                                                                <?php
-                                                                $count++;
-                                                            }
+                                                        $user_role = $this->session->userdata('role');
+                                                        if ($user_role == 'company_admin') {
+                                                            $user_name = $this->session->userdata('usersession_name');
+                                                        } else {
+                                                            $user_name = $this->session->userdata('user_name');
+                                                        }
+                                                        if ($user_role == 'company_admin' || $user_name == $val['created_by']) {
                                                             ?>
+            <!--                                                            <li><a title="Resolved query" class="btn btn-xs text-left" onclick="updateQuery('<?php echo $val['request_id']; ?>');" >Resolved</a>
+                                                                </li>-->
+                                                            <li><a title="Approve Query" class="btn btn-xs text-left" onclick="approveRequest('<?php echo $val['request_id']; ?>');" >Approve Request</a>
+                                                            </li>
+                                                            <li><a title="Reject Query" class="btn btn-xs text-left" onclick="rejectRequest('<?php echo $val['request_id']; ?>');" >Reject Request</a>
+                                                            </li>
+                                                            <!--     <li>
+                                                                     <a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
+                                                                 </li> -->
+                                                            <?php
+                                                        }
+                                                        ?>
+
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>  
+                                        <!-- Modal to View Query -->
+                                    <div class="modal fade bs-example-modal-lg" id="RFIModal_<?php echo $val['request_id']; ?>" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-md ">
+                                            <!-- Modal content View Query -->
+                                            <div class="modal-content">
+
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <h4 class="modal-title w3-left w3-margin-left"><b>Query:</b> <?php echo $val['document_name']; ?></h4>
+                                                </div>
+                                                <!-- Modal body starts -->
+                                                <div class="modal-body">
+                                                    <!-- Modal container starts -->
+                                                    <div class="container"> 
+                                                        <div class="col-lg-12">
+                                                            <div class="w3-col l12 w3-padding w3-medium">
+                                                                <label>Description: </label>
+                                                                <p>                                        
+                                                                    <?php echo $val['document_name']; ?>
+                                                                </p>
+                                                            </div>    
+                                                            <div class="w3-col l12 w3-padding w3-medium">
+                                                                <label>Query Raised To : </label>
+                                                                <p>                                        
+                                                                    <?php echo $val['requested_from']; ?>
+                                                                </p>
+                                                            </div>                        
+
+                                                            <!--                                                            <div class="col-lg-12 w3-medium">
+                                                                                                                            <hr>
+                                                                                                                            <label>Comments: </label>
+                                                                                                                            <form id="rfiReply_form_<?php echo $val['request_id']; ?>">
+                                                                                                                                <div class="w3-col l12 w3-round w3-light-grey w3-padding w3-margin-bottom">
+                                                                                                                                    <textarea name="comment_posted" id="comment_posted_<?php echo $val['request_id']; ?>" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
+                                                                                                                                    <input type="hidden" id="request_id" name="request_id" value="<?php echo $val['request_id']; ?>">
+                                                                                                                                    <div class="comment_msg"></div>
+                                                                                                                                    <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" onclick="savecomment('<?php echo $val['request_id']; ?>');" type="button"><i class="fa fa-reply"></i> Post Comment</button>
+                                                                                                                                </div>
+                                                                                                                            </form>
+                                                            
+                                                                                                                            <div class="w3-col l12 w3-small comment_list" id="comment_list_<?php echo $val['request_id']; ?>">
+                                                            
+                                                                                                                            </div>
+                                                                                                                        </div>-->
                                                         </div>
                                                     </div>
+                                                    <!-- Modal container ends -->
                                                 </div>
-                                                <!--                                                        Modal container ends -->
+                                                <!-- Modal Body ends -->
                                             </div>
-                                            <!--                                                    Modal Body ends -->
+                                            <!-- Modal contenet ends -->
                                         </div>
-                                        <!--                                                Modal contenet ends -->
-                                    </div>
-                                </div>
-                                <!--                                        Modal ends here -->
-                                <?php
-                                $i++;
-                            }
-                        } else {
-                            ?>
-                            <tr>
-                                <td colspan="9" class="w3-center theme_text"><b>No Pending Documents For Deletion</b></td>
-                            </tr>
-                        <?php } ?>                       
-                        </tbody>
-                    </table>
+                                    </div>                               
+                                    <!-- Modal ends here -->                              
+                                    <?php
+                                    $i++;
+                                }
+                            } else {
+                                ?>
+                                <tr>
+                                    <td colspan="5" class="w3-center theme_text"><b>No Requests Raised.</b></td>
+                                </tr>
+                            <?php } ?>                       
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <!--all pending documents for request module ends here-->
+    <!-----------------------------------------------Div for documents are starts here------------------------------------>
+    <!-- view all document div -->
+    <div class="row">
+        <div class="w3-col l12 w3-padding-small w3-margin-top page_title">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-list"></i> Documents For Deletion</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <?php //print_r($allDocuments);    ?>
+                <div class="container x_content">
+                    <div id="table_msg"></div>
+                    <div class="w3-col l12 w3-padding w3-small" id="">
+                        <table id="" class="table table-striped table-bordered">
+                            <thead>
+                                <tr >
+                                    <td class="text-center">Sr.No</td>
+                                    <th class="text-center">Doc Title</th>
+                                    <th class="text-center">Type</th>
+                                    <th class="text-center">Revision No</th>
+                                    <th class="text-center">Reason</th>
+                                    <th class="text-center">Uploaded by</th>
+                                    <th class="text-center">Added date</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $role_id = '';
+                                $sharedRoles = '';
+                                $i = 1;
+                                if ($allDocuments['status'] == 200) {
+                                    foreach ($allDocuments['status_message'] as $doc) {
+                                        $role = $this->session->userdata('role');
+                                        if ($role == 'company_admin') {
+                                            
+                                        } else {
+                                            $role = $this->session->userdata('role');
+                                            $sessionArr = explode('/', $role);
+                                            $role_id = $sessionArr[0];
+                                            $role_name = $sessionArr[1];
+                                        }
+                                        //$sharedRoles = json_decode($doc['shared_with'], TRUE);
+                                        //if (in_array($role_id, $sharedRoles) || $role == 'company_admin') {
+                                        ?>
 
+                                        <tr class="w3-center">
+                                            <td><?php echo $i; ?></td>
+                                            <td><?php echo $doc['document_title']; ?></td>
+                                            <td><?php echo $doc['document_type']; ?></td>
+                                            <td>#<?php echo $doc['revision_no']; ?></td>
+                                            <td width="250px"><p><?php echo $doc['reason_type'] . ' (' . $doc['delete_reason'] . ')'; ?></p></td>
+                                            <td><?php echo $doc['created_by']; ?></td>
+                                            <td><?php
+                                                $dtime = new DateTime($doc['created_date']);
+                                                echo $dtime->format("d M y H:i a");
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" id="actionBtn_<?php echo $doc['document_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
+                                                    </button>
+                                                    <ul role="menu" class="dropdown-menu pull-right">
+                                                        <li><a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#DocModal_<?php echo $doc['document_id']; ?>" onclick="openHelpDoc('<?php echo $doc['document_id']; ?>')">View Files</a>
+                                                        </li>
+                                                        <?php
+                                                        $user_role = $this->session->userdata('role');
+                                                        if ($user_role == 'company_admin') {
+                                                            $user_name = $this->session->userdata('usersession_name');
+                                                        } else {
+                                                            $user_name = $this->session->userdata('user_name');
+                                                        }
+                                                        if ($user_role == 'company_admin' || $user_name == $doc['created_by']) {
+                                                            ?>
+                                                            <li>
+                                                                <a class="btn btn-xs text-left" onclick="removeDoc('<?php echo base64_encode($doc['document_id']); ?>', '<?php echo $doc['document_id']; ?>')" title="Delete Document">Delete Document</a>
+                                                            </li>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <!--Modal to edit product--> 
+                                    <div class="modal fade bs-example-modal-lg" id="DocModal_<?php echo $doc['document_id']; ?>" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-md ">
+                                            <!--                                                Modal content starts -->
+                                            <div class="modal-content">
+
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <h3 class="modal-title w3-center"><?php echo $doc['document_title']; ?> <span class="badge w3-grey w3-text-white w3-small"><?php echo $doc['document_type']; ?></span></h3>
+                                                </div>
+                                                <!--      Modal body starts -->
+                                                <div class="modal-body">
+                                                    <!--                                                        Modal container starts -->
+                                                    <div class="container"> 
+                                                        <div class="col-lg-12">
+                                                            <div class="w3-col l12 w3-padding">
+                                                                <span class="pull-left"><b>Revision No.:</b> #<?php echo $doc['revision_no']; ?></span>
+                                                                <span class="pull-right"><b>Uploaded By:</b> <?php echo $doc['created_by']; ?>, <?php echo $dtime->format("d M y H:i:s"); ?></span>
+                                                            </div>
+                                                            <?php
+                                                            $image_arr = json_decode($doc['document_file']);
+                                                            ?>                                
+                                                            <div class="w3-col l12 w3-padding">
+                                                                <?php
+                                                                $count = 1;
+                                                                foreach ($image_arr as $file) {
+                                                                    $arr = explode('/', $file);
+                                                                    $filename = $arr[3];
+                                                                    $ext_arr = explode('.', $file);
+                                                                    $ext = end($ext_arr);
+                                                                    switch ($ext) {
+                                                                        case "jpg":
+                                                                            $image = 'fa-file-image-o';
+                                                                            break;
+                                                                        case "jpeg":
+                                                                            $image = 'fa-file-image-o';
+                                                                            break;
+                                                                        case "JPG":
+                                                                            $image = 'fa-file-image-o';
+                                                                            break;
+                                                                        case "JPEG":
+                                                                            $image = 'fa-file-image-o';
+                                                                            break;
+                                                                        case "png":
+                                                                            $image = 'fa-file-image-o';
+                                                                            break;
+                                                                        case "docx":
+                                                                            $image = 'fa-file-word-o';
+                                                                            break;
+                                                                        case "doc":
+                                                                            $image = 'fa-file-word-o';
+                                                                            break;
+                                                                        case "pdf":
+                                                                            $image = 'fa-file-pdf-o';
+                                                                            break;
+                                                                        case "text":
+                                                                            $image = 'fa-file-text-o';
+                                                                            break;
+                                                                        case "zip":
+                                                                            $image = 'fa-file-archive-o';
+                                                                            break;
+                                                                        case "pptx":
+                                                                            $image = 'fa-file-powerpoint-o';
+                                                                            break;
+                                                                        default:
+                                                                            $image = 'fa-file-o';
+                                                                    }
+                                                                    ?>
+                                                                    <div class="w3-padding-small" style="display: inline;">
+                                                                        <a class="w3-text-grey btn w3-round"  target="_self" href="<?php echo base_url() . $file; ?>"  download="<?php echo 'File_' . $count . '.' . $ext; ?>" title="Download <?php echo $filename; ?>" style="padding:4px;display: inline-block;"><b></b><i class="fa <?php echo $image; ?> w3-jumbo"></i></a>
+                                                                    </div>
+                                                                    <?php
+                                                                    $count++;
+                                                                }
+                                                                ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--                                                        Modal container ends -->
+                                                </div>
+                                                <!--                                                    Modal Body ends -->
+                                            </div>
+                                            <!--                                                Modal contenet ends -->
+                                        </div>
+                                    </div>
+                                    <!--                                        Modal ends here -->
+                                    <?php
+                                    $i++;
+                                }
+                            } else {
+                                ?>
+                                <tr>
+                                    <td colspan="9" class="w3-center theme_text"><b>No Pending Documents For Deletion</b></td>
+                                </tr>
+                            <?php } ?>                       
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
     <!-- view all document div ends -->
@@ -549,191 +660,193 @@
 
     <!-----------------------------------------------Div for top 10 documents are starts here------------------------------------>
     <!-- view Top 10 document list -->
-    <div class="col-md-12 col-sm-12 col-xs-12 page_title">
-        <div class="x_panel">
-            <div class="x_title">
-                <h2><i class="fa fa-list"></i> Recent Documents </h2>
-                <ul class="nav navbar-right panel_toolbox">
-                    <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                </ul>
-                <div class="clearfix"></div>
-            </div>
-            <?php //print_r($allDocuments);   ?>
-            <div class="container x_content">
-                <div id="table_msg"></div>
-                <div class="w3-col l12 w3-padding w3-small" id="">
-                    <table id="" class="table table-striped table-bordered">
-                        <thead>
-                            <tr >
-                                <td class="text-center">Sr.No</td>
-                                <th class="text-center">Doc Title</th>
-                                <th class="text-center">Type</th>
-                                <th class="text-center">Revision No</th>
-                                <th class="text-center">Reason</th>
-                                <th class="text-center">Added by</th>
-                                <th class="text-center">Added date</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $role_id = '';
-                            $sharedRoles = '';
-                            $i = 1;
-                            if ($topDocuments['status'] == 200) {
-                                foreach ($topDocuments['status_message'] as $top) {
-                                    $role = $this->session->userdata('role');
-                                    if ($role == 'company_admin') {
-                                        
-                                    } else {
+    <div class="row">
+        <div class="w3-col l12 w3-padding-small w3-margin-top page_title">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-list"></i> Recent Documents </h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <?php //print_r($allDocuments);    ?>
+                <div class="container x_content">
+                    <div id="table_msg"></div>
+                    <div class="w3-col l12 w3-padding w3-small" id="">
+                        <table id="" class="table table-striped table-bordered">
+                            <thead>
+                                <tr >
+                                    <td class="text-center">Sr.No</td>
+                                    <th class="text-center">Doc Title</th>
+                                    <th class="text-center">Type</th>
+                                    <th class="text-center">Revision No</th>
+                                    <th class="text-center">Reason</th>
+                                    <th class="text-center">Added by</th>
+                                    <th class="text-center">Added date</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $role_id = '';
+                                $sharedRoles = '';
+                                $i = 1;
+                                if ($topDocuments['status'] == 200) {
+                                    foreach ($topDocuments['status_message'] as $top) {
                                         $role = $this->session->userdata('role');
-                                        $sessionArr = explode('/', $role);
-                                        $role_id = $sessionArr[0];
-                                        $role_name = $sessionArr[1];
-                                    }
-                                    ?>
+                                        if ($role == 'company_admin') {
+                                            
+                                        } else {
+                                            $role = $this->session->userdata('role');
+                                            $sessionArr = explode('/', $role);
+                                            $role_id = $sessionArr[0];
+                                            $role_name = $sessionArr[1];
+                                        }
+                                        ?>
 
-                                    <tr class="w3-center">
-                                        <td><?php echo $i; ?></td>
-                                        <td><?php echo $top['document_title']; ?></td>
-                                        <td><?php echo $top['document_type']; ?></td>
-                                        <td>#<?php echo $top['revision_no']; ?></td>
-                                        <td width="250px"><?php echo $top['delete_reason']; ?></td>
-                                        <td><?php echo $top['created_by']; ?></td>
-                                        <td><?php
-                                            $dtime = new DateTime($top['created_date']);
-                                            echo $dtime->format("d M y H:i a");
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button data-toggle="dropdown" id="actionBtn_<?php echo $top['document_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
-                                                </button>
-                                                <ul role="menu" class="dropdown-menu pull-right">
-                                                    <li><a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#DocModal_<?php echo $top['document_id']; ?>" onclick="openHelpDoc('<?php echo $top['document_id']; ?>')">View Files</a>
-                                                    </li>
-                                                    <?php
-                                                    $user_role = $this->session->userdata('role');
-                                                    if ($user_role == 'company_admin') {
-                                                        $user_name = $this->session->userdata('usersession_name');
-                                                    } else {
-                                                        $user_name = $this->session->userdata('user_name');
-                                                    }
-                                                    if ($user_role == 'company_admin' || $user_name == $top['created_by']) {
-                                                        ?>
-                                                        <li>
-
-
+                                        <tr class="w3-center">
+                                            <td><?php echo $i; ?></td>
+                                            <td><?php echo $top['document_title']; ?></td>
+                                            <td><?php echo $top['document_type']; ?></td>
+                                            <td>#<?php echo $top['revision_no']; ?></td>
+                                            <td width="250px"><?php echo $top['delete_reason']; ?></td>
+                                            <td><?php echo $top['created_by']; ?></td>
+                                            <td><?php
+                                                $dtime = new DateTime($top['created_date']);
+                                                echo $dtime->format("d M y H:i a");
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button data-toggle="dropdown" id="actionBtn_<?php echo $top['document_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
+                                                    </button>
+                                                    <ul role="menu" class="dropdown-menu pull-right">
+                                                        <li><a title="View files" class="btn btn-xs text-left" data-toggle="modal" data-target="#DocModal_<?php echo $top['document_id']; ?>" onclick="openHelpDoc('<?php echo $top['document_id']; ?>')">View Files</a>
                                                         </li>
                                                         <?php
-                                                    }
-                                                    ?>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                        $user_role = $this->session->userdata('role');
+                                                        if ($user_role == 'company_admin') {
+                                                            $user_name = $this->session->userdata('usersession_name');
+                                                        } else {
+                                                            $user_name = $this->session->userdata('user_name');
+                                                        }
+                                                        if ($user_role == 'company_admin' || $user_name == $top['created_by']) {
+                                                            ?>
+                                                            <li>
 
-                                    <!--Modal to edit product--> 
-                                <div class="modal fade bs-example-modal-lg" id="DocModal_<?php echo $top['document_id']; ?>" role="dialog" aria-hidden="true">
-                                    <div class="modal-dialog modal-md ">
-                                        <!--                                                Modal content starts -->
-                                        <div class="modal-content">
 
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                                                </button>
-                                                <h3 class="modal-title w3-center"><?php echo $top['document_title']; ?> <span class="badge w3-grey w3-text-white w3-small"><?php echo $top['document_type']; ?></span></h3>
-                                            </div>
-                                            <!--                                                    Modal body starts -->
-                                            <div class="modal-body">
-                                                <!--                                                        Modal container starts -->
-                                                <div class="container"> 
-                                                    <div class="col-lg-12">
-                                                        <div class="w3-col l12 w3-padding">
-                                                            <span class="pull-left"><b>Revision No.:</b> #<?php echo $top['revision_no']; ?></span>
-                                                            <span class="pull-right"><b>Uploaded By:</b> <?php echo $top['created_by']; ?>, <?php echo $dtime->format("d M y H:i:s"); ?></span>
-                                                        </div>
-                                                        <?php
-                                                        $image_arr = json_decode($top['document_file']);
-                                                        ?>                                
-                                                        <div class="w3-col l12 w3-padding">
+                                                            </li>
                                                             <?php
-                                                            $count = 1;
-                                                            foreach ($image_arr as $file) {
-                                                                $arr = explode('/', $file);
-                                                                $filename = $arr[3];
-                                                                $ext_arr = explode('.', $file);
-                                                                $ext = end($ext_arr);
-                                                                switch ($ext) {
-                                                                    case "jpg":
-                                                                        $image = 'fa-file-image-o';
-                                                                        break;
-                                                                    case "jpeg":
-                                                                        $image = 'fa-file-image-o';
-                                                                        break;
-                                                                    case "JPG":
-                                                                        $image = 'fa-file-image-o';
-                                                                        break;
-                                                                    case "JPEG":
-                                                                        $image = 'fa-file-image-o';
-                                                                        break;
-                                                                    case "png":
-                                                                        $image = 'fa-file-image-o';
-                                                                        break;
-                                                                    case "docx":
-                                                                        $image = 'fa-file-word-o';
-                                                                        break;
-                                                                    case "doc":
-                                                                        $image = 'fa-file-word-o';
-                                                                        break;
-                                                                    case "pdf":
-                                                                        $image = 'fa-file-pdf-o';
-                                                                        break;
-                                                                    case "text":
-                                                                        $image = 'fa-file-text-o';
-                                                                        break;
-                                                                    case "zip":
-                                                                        $image = 'fa-file-archive-o';
-                                                                        break;
-                                                                    case "pptx":
-                                                                        $image = 'fa-file-powerpoint-o';
-                                                                        break;
-                                                                    default:
-                                                                        $image = 'fa-file-o';
+                                                        }
+                                                        ?>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <!--Modal to edit product--> 
+                                    <div class="modal fade bs-example-modal-lg" id="DocModal_<?php echo $top['document_id']; ?>" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-md ">
+                                            <!--                                                Modal content starts -->
+                                            <div class="modal-content">
+
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                                    </button>
+                                                    <h3 class="modal-title w3-center"><?php echo $top['document_title']; ?> <span class="badge w3-grey w3-text-white w3-small"><?php echo $top['document_type']; ?></span></h3>
+                                                </div>
+                                                <!--                                                    Modal body starts -->
+                                                <div class="modal-body">
+                                                    <!--                                                        Modal container starts -->
+                                                    <div class="container"> 
+                                                        <div class="col-lg-12">
+                                                            <div class="w3-col l12 w3-padding">
+                                                                <span class="pull-left"><b>Revision No.:</b> #<?php echo $top['revision_no']; ?></span>
+                                                                <span class="pull-right"><b>Uploaded By:</b> <?php echo $top['created_by']; ?>, <?php echo $dtime->format("d M y H:i:s"); ?></span>
+                                                            </div>
+                                                            <?php
+                                                            $image_arr = json_decode($top['document_file']);
+                                                            ?>                                
+                                                            <div class="w3-col l12 w3-padding">
+                                                                <?php
+                                                                $count = 1;
+                                                                foreach ($image_arr as $file) {
+                                                                    $arr = explode('/', $file);
+                                                                    $filename = $arr[3];
+                                                                    $ext_arr = explode('.', $file);
+                                                                    $ext = end($ext_arr);
+                                                                    switch ($ext) {
+                                                                        case "jpg":
+                                                                            $image = 'fa-file-image-o';
+                                                                            break;
+                                                                        case "jpeg":
+                                                                            $image = 'fa-file-image-o';
+                                                                            break;
+                                                                        case "JPG":
+                                                                            $image = 'fa-file-image-o';
+                                                                            break;
+                                                                        case "JPEG":
+                                                                            $image = 'fa-file-image-o';
+                                                                            break;
+                                                                        case "png":
+                                                                            $image = 'fa-file-image-o';
+                                                                            break;
+                                                                        case "docx":
+                                                                            $image = 'fa-file-word-o';
+                                                                            break;
+                                                                        case "doc":
+                                                                            $image = 'fa-file-word-o';
+                                                                            break;
+                                                                        case "pdf":
+                                                                            $image = 'fa-file-pdf-o';
+                                                                            break;
+                                                                        case "text":
+                                                                            $image = 'fa-file-text-o';
+                                                                            break;
+                                                                        case "zip":
+                                                                            $image = 'fa-file-archive-o';
+                                                                            break;
+                                                                        case "pptx":
+                                                                            $image = 'fa-file-powerpoint-o';
+                                                                            break;
+                                                                        default:
+                                                                            $image = 'fa-file-o';
+                                                                    }
+                                                                    ?>
+                                                                    <div class="w3-padding-small" style="display: inline;">
+                                                                        <a class="w3-text-grey btn w3-round"  target="_self" href="<?php echo base_url() . $file; ?>"  download="<?php echo 'File_' . $count . '.' . $ext; ?>" title="Download <?php echo $filename; ?>" style="padding:4px;display: inline-block;"><b></b><i class="fa <?php echo $image; ?> w3-jumbo"></i></a>
+                                                                    </div>
+                                                                    <?php
+                                                                    $count++;
                                                                 }
                                                                 ?>
-                                                                <div class="w3-padding-small" style="display: inline;">
-                                                                    <a class="w3-text-grey btn w3-round"  target="_self" href="<?php echo base_url() . $file; ?>"  download="<?php echo 'File_' . $count . '.' . $ext; ?>" title="Download <?php echo $filename; ?>" style="padding:4px;display: inline-block;"><b></b><i class="fa <?php echo $image; ?> w3-jumbo"></i></a>
-                                                                </div>
-                                                                <?php
-                                                                $count++;
-                                                            }
-                                                            ?>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <!--                                                        Modal container ends -->
                                                 </div>
-                                                <!--                                                        Modal container ends -->
+                                                <!--                                                    Modal Body ends -->
                                             </div>
-                                            <!--                                                    Modal Body ends -->
+                                            <!--                                                Modal contenet ends -->
                                         </div>
-                                        <!--                                                Modal contenet ends -->
                                     </div>
-                                </div>
-                                <!--                                        Modal ends here -->
-                                <?php
-                                $i++;
-                            }
-                        } else {
-                            ?>
-                            <tr>
-                                <td colspan="9" class="w3-center theme_text"><b>Document Not Found</b></td>
-                            </tr>
-                        <?php } ?>                       
-                        </tbody>
-                    </table>
+                                    <!--                                        Modal ends here -->
+                                    <?php
+                                    $i++;
+                                }
+                            } else {
+                                ?>
+                                <tr>
+                                    <td colspan="9" class="w3-center theme_text"><b>Document Not Found</b></td>
+                                </tr>
+                            <?php } ?>                       
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
     <!-- view all document div ends -->
@@ -796,9 +909,9 @@
 //--------update query
     function updateQueryStatus(query_id) {
         $.confirm({
-            title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to Change Status to Approved Of this Query?</span>',
+            title: '<h4 class="w3-text-green">Please confirm the action!</h4><span class="w3-medium">Do you really want to Change Status to Approved Of this Query?</span>',
             content: '',
-            type: 'red',
+            type: 'green',
             buttons: {
                 confirm: function () {
                     $.ajax({
@@ -806,6 +919,86 @@
                         url: BASE_URL + "user_dashboard/updateQueryStatus",
                         data: {
                             query_id: query_id
+                        },
+                        cache: false,
+                        success: function (response) {
+                            // alert(response);
+                            var data = JSON.parse(response);
+                            switch (data.status) {
+                                case 'success':
+                                    $('#message').html(data.message);
+                                    break;
+                                case 'error':
+                                    $('#message').html(data.message);
+                                    break;
+                                default:
+                                    $('#message').html('<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.!</strong></div>');
+                                    setTimeout(function () {
+                                        $('.alert_message').fadeOut('fast');
+                                    }, 8000); // <-- time in milliseconds
+                                    break;
+                            }
+                        }
+                    });
+                },
+                cancel: function () {
+                }
+            }
+        });
+    }
+    
+    function approveRequest(request_id) {
+        $.confirm({
+            title: '<h4 class="w3-text-green">Please confirm the action!</h4><span class="w3-medium">Do you really want to Change Status to Approved Of this Request?</span>',
+            content: '',
+            type: 'green',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "GET",
+                        url: BASE_URL + "user_dashboard/approveRequest",
+                        data: {
+                            request_id: request_id
+                        },
+                        cache: false,
+                        success: function (response) {
+                            // alert(response);
+                            var data = JSON.parse(response);
+                            switch (data.status) {
+                                case 'success':
+                                    $('#message').html(data.message);
+                                    break;
+                                case 'error':
+                                    $('#message').html(data.message);
+                                    break;
+                                default:
+                                    $('#message').html('<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.!</strong></div>');
+                                    setTimeout(function () {
+                                        $('.alert_message').fadeOut('fast');
+                                    }, 8000); // <-- time in milliseconds
+                                    break;
+                            }
+                        }
+                    });
+                },
+                cancel: function () {
+                }
+            }
+        });
+    }
+    
+    function rejectRequest(request_id) {
+        $.confirm({
+            title: '<h4 class="w3-text-green">Please confirm the action!</h4><span class="w3-medium">Do you really want to Change Status to Approved Of this Request?</span>',
+            content: '',
+            type: 'green',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "GET",
+                        url: BASE_URL + "user_dashboard/rejectRequest",
+                        data: {
+                            request_id: request_id
                         },
                         cache: false,
                         success: function (response) {
