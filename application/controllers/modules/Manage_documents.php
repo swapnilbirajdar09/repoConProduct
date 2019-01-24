@@ -87,6 +87,120 @@ class Manage_documents extends CI_Controller {
         return $response;
     }
 
+    // fun for upload requested Document
+    public function uploadRequestedDocument() {
+        extract($_POST);
+// print_r($_FILES);
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+
+        $data = $_POST;
+
+        $data['project_id'] = $project_id;
+        $session_name = $this->session->userdata('usersession_name');
+
+        $session_role = $this->session->userdata('role');
+        if ($session_role == 'company_admin') {
+
+            $data['author'] = 'Administrator';
+        } else {
+            $user_name = $this->session->userdata('user_name');
+
+            $data['author'] = $user_name;
+        }
+// validate fields
+        if ($document_type == '0') {
+            $response = array(
+                'status' => 'validation',
+                'message' => '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Document Type First !</div>',
+                'field' => 'document_type'
+            );
+            echo json_encode($response);
+            die();
+        }
+        if ($shared_with == '0') {
+            $response = array(
+                'status' => 'validation',
+                'message' => '<div class="alert alert-warning alert-dismissible fade in alert-fixed w3-round"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong> Choose Role First !</div>',
+                'field' => 'shared_with'
+            );
+            echo json_encode($response);
+            die();
+        }
+
+        $imageArr = array();
+        for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
+            $count = $i + 1;
+            $imagePath = '';
+            $product_image = $_FILES['file']['name'][$i];
+            if (!empty(($_FILES['file']['name'][$i]))) {
+                $extension = pathinfo($_FILES['file']['name'][$i], PATHINFO_EXTENSION);
+                $_FILES['userFile']['name'] = $document_title . '-' . $document_type . '_' . $project_id . '.' . $extension;
+                $_FILES['userFile']['type'] = $_FILES['file']['type'][$i];
+                $_FILES['userFile']['tmp_name'] = $_FILES['file']['tmp_name'][$i];
+                $_FILES['userFile']['error'] = $_FILES['file']['error'][$i];
+                $_FILES['userFile']['size'] = $_FILES['file']['size'][$i];
+
+                $uploadPath = 'assets/modules/documents/';
+                $config['upload_path'] = $uploadPath;
+                $config['allowed_types'] = '*';
+//allowed types of images           
+                $config['overwrite'] = FALSE;
+                $this->load->library('upload', $config);
+//load upload file config.
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('userFile')) {
+                    $fileData = $this->upload->data();
+                    $imagePath = 'assets/modules/documents/' . $fileData['file_name'];
+                } else {
+                    $response = array(
+                        'status' => 'validation',
+                        'message' => $this->upload->display_errors('<div class="alert alert-warning alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Warning-</strong>', '</div>'),
+                        'field' => 'file_drop'
+                    );
+                    echo json_encode($response);
+                    die();
+                }
+            }
+            $imageArr[] = $imagePath;
+        }
+        $data['images'] = json_encode($imageArr);
+        $data['shared_with'] = json_encode($shared_with);
+        //print_r($data);die();
+        $path = base_url();
+        $url = $path . 'api/modules/document_api/uploadRequestedDocument';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+// authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+//close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        //print_r($output);die();
+        if ($response) {
+            $response = array(
+                'status' => 'success',
+                'message' => '<div class="alert alert-success alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Success-</strong> Documents uploaded successfully.</div>'
+            );
+            echo json_encode($response);
+            die();
+        } else {
+            $response = array(
+                'status' => 'error',
+                'message' => '<div class="alert alert-danger alert-dismissible fade in alert-fixed"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error-</strong> Documents were not uploaded.</div>'
+            );
+            echo json_encode($response);
+            die();
+        }
+    }
+
+//  fun for upload document
     public function upload() {
         extract($_POST);
 // print_r($_FILES);

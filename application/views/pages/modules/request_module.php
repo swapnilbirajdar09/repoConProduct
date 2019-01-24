@@ -84,7 +84,7 @@
         <div class="w3-col l12 w3-padding-small w3-margin-top page_title">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2><i class="fa fa-list"></i> All Approved Request</h2>
+                    <h2><i class="fa fa-list"></i> All Pending Request</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
@@ -126,6 +126,13 @@
                                             $rolename = $author[1];
                                             $author = $user_name;
                                         }
+                                         if ($val['status'] == '0') {
+                                            $status = 'Pending';
+                                            $color = 'w3-blue';
+                                        } else {
+                                            $status = 'Uploaded';
+                                            $color = 'w3-green'; 
+                                        }
                                         if ($author = $val['requested_by'] || $role == 'company_admin') {
                                             
                                             ?>
@@ -136,7 +143,7 @@
                                                 <td style=" vertical-align: middle;"><p><?php echo $val['requested_from']; ?></p></td>  
                                                 <td style=" vertical-align: middle;"><p><?php echo $val['created_date']; ?></p></td>                                    
                                                 <td style=" vertical-align: middle;"><?php echo $val['estimated_date'] ?></td>                                    
-                                                <td style=" vertical-align: middle;"><span class="badge">uploaded</span></td>                                    
+                                                <td style=" vertical-align: middle;"><span class="badge <?php echo $color; ?>"><?php echo $status; ?></span></td>                                    
                                                 <td style=" vertical-align: middle;">
                                                     <div class="btn-group">
                                                         <button data-toggle="dropdown" id="actionBtn_<?php echo $val['request_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>

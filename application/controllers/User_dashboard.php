@@ -64,7 +64,7 @@ class User_dashboard extends CI_Controller {
         $this->load->view('pages/dashboard', $data);
         $this->load->view('includes/footer');
     }
-    
+
     // get last revision number for current project
     public function getlastRevision() {
         $projSession = $this->session->userdata('project_id');
@@ -316,6 +316,99 @@ class User_dashboard extends CI_Controller {
         redirect('user_dashboard');
     }
 
+// fun uplode document module for request module
+    public function uploadDocument($param = '') {
+        extract($_GET);
+        $arr = base64_decode($param);
+        $value = explode('/', $arr);
+        //print_r($value);die();
+        $request_id = $value[0];
+        $document_name = $value[1];
+        $requested_by = $value[2];
+        //echo base64_decode($param);die();
+        $role = $this->session->userdata('role');
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+
+        if ($role == 'company_admin') {
+            $admin_name = $this->session->userdata('usersession_name');
+            if ($admin_name == '') {
+//     //check session variable set or not, otherwise logout
+                redirect('login');
+            }
+        } else {
+            $user_name = $this->session->userdata('user_name');
+            $user_id = $this->session->userdata('user_id');
+            //$project_id = $this->session->userdata('project_id');
+            $role = $this->session->userdata('role');
+            $sessionArr = explode('/', $role);
+            $role_id = $sessionArr[0];
+            $role_name = $sessionArr[1];
+
+            if ($user_name == '') {
+//     //check session variable set or not, otherwise logout
+                redirect('login');
+            }
+        }
+
+        //echo $role;die();
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        if ($project_id == '') {
+            //check session variable set or not, otherwise logout
+            redirect('user/create_project');
+        }
+
+        if ($role == 'company_admin') {
+            $data['projects'] = User_dashboard::getAllprojects();
+            $author = 'Administrator';
+            $data['request_id'] = $request_id;
+            $data['document_name'] = $document_name;
+            $data['requested_by'] = $requested_by;
+        } else {
+            $user_id = $this->session->userdata('user_id');
+            $user_name = $this->session->userdata('user_name');
+            $role = $this->session->userdata('role');
+            $sessionArr = explode('/', $role);
+            $role_id = $sessionArr[0];
+            $role_name = $sessionArr[1];
+            $data['features'] = User_dashboard::getAllFeatuesForUser($user_id, $role_id);
+            $data['request_id'] = $request_id;
+            $data['document_name'] = $document_name;
+            $data['requested_by'] = $requested_by;
+        }
+        $data['roles'] = User_dashboard::getAllRoles();
+        $data['lastRevision_no'] = User_dashboard::getlastRevision();
+        $data['allDocument_types'] = User_dashboard::getDocumentTypes();
+
+        $this->load->view('includes/header', $data);
+        $this->load->view('pages/modules/uploadDocument', $data);
+        $this->load->view('includes/footer');
+    }
+
+    // get document types
+    public function getDocumentTypes() {
+        $path = base_url();
+        $url = $path . 'api/modules/document_api/getDocumentTypes';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+// authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+//close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        return $response;
+    }
+    
+    //--- fun for approve document
     public function approveRequest() {
         extract($_GET);
 

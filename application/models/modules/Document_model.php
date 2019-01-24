@@ -4,6 +4,7 @@ class Document_model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
+        date_default_timezone_set('Asia/kolkata');
     }
 
     // get all document types
@@ -60,7 +61,7 @@ class Document_model extends CI_Model {
         foreach ($result_arr->result_array() as $row) {
             $currentFiles = json_decode($row['document_file'], TRUE);
         }
-        
+
         $sql = "DELETE FROM document_tab WHERE document_id='$document_id'";
         $result = $this->db->query($sql);
         if ($this->db->affected_rows() == 1) {
@@ -154,6 +155,51 @@ class Document_model extends CI_Model {
         );
         // print_r($insert_data);die();
         $this->db->insert('document_tab', $insert_data);
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function uploadRequestedDocument($data) {
+        extract($data);
+//        print_r($data);
+//        die();
+        $acc_date = '';
+        $insert_data = array(
+            'document_title' => $document_title,
+            'document_type' => $document_type,
+            'project_id' => $project_id,
+            'revision_no' => $revision_number,
+            'shared_with' => $shared_with,
+            'document_file' => $images,
+            'created_by' => $author,
+            'status' => '1',
+            'created_date' => date('Y-m-d H:i:s')
+        );
+        // print_r($insert_data);die();
+        $this->db->insert('document_tab', $insert_data);
+        if ($this->db->affected_rows() > 0) {
+            Document_model::updateRequestForDocumentUploaded($request_id, $author);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // fun for upadte the request for document upload successfully.
+    public function updateRequestForDocumentUploaded($request_id, $author) {
+        $update_data = array(
+            'status' => '1',
+            'accepted_date' => date('Y-m-d H:i:s'),
+            'modified_by' => $author,
+            'modified_date' => date('Y-m-d H:i:s')
+        );
+        // print_r($insert_data);die();
+        $this->db->where('request_id', $request_id);
+        $this->db->update('request_tab', $update_data);
         if ($this->db->affected_rows() > 0) {
             return true;
         } else {

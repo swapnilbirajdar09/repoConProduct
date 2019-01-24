@@ -52,8 +52,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'homepage';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-$route['modules/manage_documents/edit_document/(:any)'] = "modules/manage_documents/edit_document/$1";
+//$route['modules/manage_documents/edit_document/(:any)'] = "modules/manage_documents/edit_document/$1";
 $route['modules/raisequery_rfi/edit_query/(:any)'] = "modules/raisequery_rfi/edit_query/$1";
 $route['modules/raisequery_checklist/edit_queryChecklist/(:any)'] = "modules/raisequery_checklist/edit_queryChecklist/$1";
 $route['modules/site_inspection/edit_checklist/(:any)'] = "modules/site_inspection/edit_checklist/$1";
 $route['modules/site_inspection/view_checklist/(:any)'] = "modules/site_inspection/view_checklist/$1";
+// fun for upload document for request module
+$route['user_dashboard/uploadDocument/(:any)'] = "user_dashboard/uploadDocument/$1";
