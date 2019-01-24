@@ -36,7 +36,7 @@ class Request_model extends CI_Model {
     }
 
     public function getApprovedRequests($project_id) {
-        $sql = "SELECT * FROM request_tab where status='1' AND project_id = '$project_id'";
+        $sql = "SELECT * FROM request_tab WHERE project_id = '$project_id' ORDER BY request_id DESC";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(
@@ -51,7 +51,7 @@ class Request_model extends CI_Model {
     }
 
     public function getAllRequests($project_id) {
-        $sql = "SELECT * FROM request_tab where status='0' AND project_id = '$project_id'";
+        $sql = "SELECT * FROM request_tab WHERE status='0' AND project_id = '$project_id' ORDER BY request_id DESC";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(

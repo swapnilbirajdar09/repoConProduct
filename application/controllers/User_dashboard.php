@@ -57,13 +57,38 @@ class User_dashboard extends CI_Controller {
         $data['checklistQueries'] = User_dashboard::getAllChecklistQueries();
         $data['roles'] = User_dashboard::getAllRoles();
         $data['requests'] = User_dashboard::getAllRequests();
+        $data['lastRevision_no'] = User_dashboard::getlastRevision();
+
 
         $this->load->view('includes/header', $data);
         $this->load->view('pages/dashboard', $data);
         $this->load->view('includes/footer');
     }
     
-        public function getAllRequests() {
+    // get last revision number for current project
+    public function getlastRevision() {
+        $projSession = $this->session->userdata('project_id');
+        $projArr = explode('|', base64_decode($projSession));
+        $project_id = $projArr[0];
+        $path = base_url();
+        $url = $path . 'api/modules/document_api/getlastRevision?project_id=' . $project_id;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+// authenticate API
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPGET, 1);
+        $output = curl_exec($ch);
+//close cURL resource
+        curl_close($ch);
+        $response = json_decode($output, true);
+        return $response;
+    }
+
+    public function getAllRequests() {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
@@ -348,8 +373,6 @@ class User_dashboard extends CI_Controller {
         echo json_encode($response);
     }
 
-    
-    
     public function updateQueryStatus() {
         extract($_GET);
 

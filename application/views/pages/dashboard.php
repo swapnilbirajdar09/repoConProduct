@@ -7,11 +7,11 @@
     <div class="row tile_count">
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Total Documents</span>
-            <div class="count"><?php echo $countofDocuments['status_message'][0]['COUNT(document_id)']; ?></div>
+            <div class="count green"><?php echo $countofDocuments['status_message'][0]['COUNT(document_id)']; ?></div>
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-clock-o"></i> Total Queries</span>
-            <div class="count "><?php echo $countofQuery['status_message'][0]['COUNT(query_id)']; ?></div>
+            <div class="count green"><?php echo $countofQuery['status_message'][0]['COUNT(query_id)']; ?></div>
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Pending Queries</span>
@@ -20,7 +20,7 @@
 
         <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> Total Working Users</span>
-            <div class="count"><?php echo $countoFUser['status_message'][0]['COUNT(user_id)']; ?></div>
+            <div class="count green"><?php echo $countoFUser['status_message'][0]['COUNT(user_id)']; ?></div>
         </div>
     </div> 
     <!-- /top tiles -->
@@ -349,106 +349,175 @@
                                 $i = 1;
                                 if ($requests['status'] != 500) {
                                     foreach ($requests['status_message'] as $val) {
-                                        ?>
-                                        <tr class="w3-center">
-                                            <td style=" vertical-align: middle;"><?php echo $i; ?></td>
-                                            <td style=" vertical-align: middle;"><?php echo $val['document_name']; ?></td>
-                                            <td style=" vertical-align: middle;"><?php echo $val['requested_by']; ?></td>
-                                            <td style=" vertical-align: middle;"><p><?php echo $val['requested_from']; ?></p></td>  
-                                            <td style=" vertical-align: middle;"><p><?php echo $val['created_date']; ?></p></td>                                    
-                                            <td style=" vertical-align: middle;"><?php echo $val['estimated_date'] ?></td>                                    
-                                            <td style=" vertical-align: middle;"><span class="badge">Pending</span></td>                                    
-                                            <td style=" vertical-align: middle;">
-                                                <div class="btn-group">
-                                                    <button data-toggle="dropdown" id="actionBtn_<?php echo $val['request_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
-                                                    </button>
-                                                    <ul role="menu" class="dropdown-menu pull-right">              
-                                                        <li>
-                                                            <a title="View Query" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['request_id']; ?>" onclick="openHelp('<?php echo $val['request_id']; ?>')">View Query</a>
-                                                        </li>
+                                        $session_role = $this->session->userdata('role');
+                                        if ($session_role == 'company_admin') {
+                                            $author = 'Administrator';
+                                        } else {
+                                            $role = $this->session->userdata('role');
+                                            $user_name = $this->session->userdata('user_name');
+                                            $author_new = explode('/', $role);
+                                            $roleid = $author_new[0];
+                                            $rolename = $author_new[1];
+                                            $author = $user_name;
+                                        }
+                                        if ($rolename = $val['requested_from'] || $role == 'company_admin') {
+                                            ?>
+                                            <tr class="w3-center">
+                                                <td style=" vertical-align: middle;"><?php echo $i; ?></td>
+                                                <td style=" vertical-align: middle;"><?php echo $val['document_name']; ?></td>
+                                                <td style=" vertical-align: middle;"><?php echo $val['requested_by']; ?></td>
+                                                <td style=" vertical-align: middle;"><p><?php echo $val['requested_from']; ?></p></td>  
+                                                <td style=" vertical-align: middle;"><p><?php echo $val['created_date']; ?></p></td>                                    
+                                                <td style=" vertical-align: middle;"><?php echo $val['estimated_date'] ?></td>                                    
+                                                <td style=" vertical-align: middle;"><span class="badge">pending</span></td>                                    
+                                                <td style=" vertical-align: middle;">
+                                                    <div class="btn-group">
+                                                        <button data-toggle="modal" data-target="#RFIModal_<?php echo $val['request_id']; ?>" onclick="openHelp('<?php echo $val['request_id']; ?>');" id="actionBtn_<?php echo $val['request_id']; ?>" class="btn btn-default w3-small w3-blue" type="button" style="padding: 2px 6px">Upload Document</button>
+                                                        <!--                                                        <ul role="menu" class="dropdown-menu pull-right">              
+                                                                                                                    <li>
+                                                                                                                        <a title="View Query" class="btn btn-xs text-left" data-toggle="modal" data-target="#RFIModal_<?php echo $val['request_id']; ?>" onclick="openHelp('<?php echo $val['request_id']; ?>')">View Query</a>
+                                                                                                                    </li>-->
                                                         <?php
-                                                        $user_role = $this->session->userdata('role');
-                                                        if ($user_role == 'company_admin') {
-                                                            $user_name = $this->session->userdata('usersession_name');
-                                                        } else {
-                                                            $user_name = $this->session->userdata('user_name');
-                                                        }
-                                                        if ($user_role == 'company_admin' || $user_name == $val['created_by']) {
-                                                            ?>
-            <!--                                                            <li><a title="Resolved query" class="btn btn-xs text-left" onclick="updateQuery('<?php echo $val['request_id']; ?>');" >Resolved</a>
-                                                                </li>-->
-                                                            <li><a title="Approve Query" class="btn btn-xs text-left" onclick="approveRequest('<?php echo $val['request_id']; ?>');" >Approve Request</a>
-                                                            </li>
-                                                            <li><a title="Reject Query" class="btn btn-xs text-left" onclick="rejectRequest('<?php echo $val['request_id']; ?>');" >Reject Request</a>
-                                                            </li>
-                                                            <!--     <li>
-                                                                     <a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
-                                                                 </li> -->
-                                                            <?php
-                                                        }
+//                                                            $user_role = $this->session->userdata('role');
+//                                                            if ($user_role == 'company_admin') {
+//                                                                $user_name = $this->session->userdata('usersession_name');
+//                                                            } else {
+//                                                                $user_name = $this->session->userdata('user_name');
+//                                                            }
+//                                                            if ($user_role == 'company_admin' || $user_name == $val['created_by']) {
                                                         ?>
-
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>  
-                                        <!-- Modal to View Query -->
-                                    <div class="modal fade bs-example-modal-lg" id="RFIModal_<?php echo $val['request_id']; ?>" role="dialog" aria-hidden="true">
-                                        <div class="modal-dialog modal-md ">
-                                            <!-- Modal content View Query -->
-                                            <div class="modal-content">
-
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                                                    </button>
-                                                    <h4 class="modal-title w3-left w3-margin-left"><b>Query:</b> <?php echo $val['document_name']; ?></h4>
-                                                </div>
-                                                <!-- Modal body starts -->
-                                                <div class="modal-body">
-                                                    <!-- Modal container starts -->
-                                                    <div class="container"> 
-                                                        <div class="col-lg-12">
-                                                            <div class="w3-col l12 w3-padding w3-medium">
-                                                                <label>Description: </label>
-                                                                <p>                                        
-                                                                    <?php echo $val['document_name']; ?>
-                                                                </p>
-                                                            </div>    
-                                                            <div class="w3-col l12 w3-padding w3-medium">
-                                                                <label>Query Raised To : </label>
-                                                                <p>                                        
-                                                                    <?php echo $val['requested_from']; ?>
-                                                                </p>
-                                                            </div>                        
-
-                                                            <!--                                                            <div class="col-lg-12 w3-medium">
-                                                                                                                            <hr>
-                                                                                                                            <label>Comments: </label>
-                                                                                                                            <form id="rfiReply_form_<?php echo $val['request_id']; ?>">
-                                                                                                                                <div class="w3-col l12 w3-round w3-light-grey w3-padding w3-margin-bottom">
-                                                                                                                                    <textarea name="comment_posted" id="comment_posted_<?php echo $val['request_id']; ?>" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
-                                                                                                                                    <input type="hidden" id="request_id" name="request_id" value="<?php echo $val['request_id']; ?>">
-                                                                                                                                    <div class="comment_msg"></div>
-                                                                                                                                    <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" onclick="savecomment('<?php echo $val['request_id']; ?>');" type="button"><i class="fa fa-reply"></i> Post Comment</button>
-                                                                                                                                </div>
-                                                                                                                            </form>
-                                                            
-                                                                                                                            <div class="w3-col l12 w3-small comment_list" id="comment_list_<?php echo $val['request_id']; ?>">
-                                                            
-                                                                                                                            </div>
-                                                                                                                        </div>-->
-                                                        </div>
+                                                        <!--                                                                <li><a title="Resolved query" class="btn btn-xs text-left" onclick="updateQuery('<?php echo $val['request_id']; ?>');" >Resolved</a>
+                                                                                                                        </li>-->
+                                                        <!--     <li>
+                                                                 <a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
+                                                             </li> -->
+                                                        <?php
+//                                                            }
+                                                        ?>
+                                                        <!--                                                        </ul>-->
                                                     </div>
-                                                    <!-- Modal container ends -->
+                                                </td>
+                                            </tr>  
+                                            <!-- Modal to View Query -->
+                                        <div class="modal fade bs-example-modal-lg" id="RFIModal_<?php echo $val['request_id']; ?>" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg ">
+                                                <!-- Modal content View Query -->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">
+                                                            <span aria-hidden="true">×</span>
+                                                        </button>
+                                                        <h4 class="modal-title w3-left w3-margin-left">
+                                                            <label>Document name:</label> <?php echo $val['document_name']; ?><br>
+                                                            <label>Requested From:</label> <?php echo $val['requested_from']; ?><br>
+                                                            <label>Requested By:</label> <?php echo $val['requested_by']; ?>
+
+                                                        </h4>
+                                                    </div>
+                                                    <!-- Modal body starts -->
+                                                    <div class="modal-body">
+                                                        <!-- Modal container starts -->
+                                                        <div class="container"> 
+                                                            <div class="col-lg-12">                                                                   
+                                                                <!-- upload document div -->
+                                                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                    <div class="x_panel">
+                                                                        <div class="x_title">
+                                                                            <h2><i class="fa fa-file"></i> Upload documents</h2>
+                                                                            <ul class="nav navbar-right panel_toolbox">
+                                                                                <li class="pull-right"><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                                                            </ul>
+                                                                            <div class="clearfix"></div>
+                                                                        </div>
+                                                                        <?php //print_r($roles);
+                                                                        ?>
+                                                                        <div class="container x_content">
+                                                                            <form id="document_uploadForm">
+                                                                                <div class="w3-col l12">
+                                                                                    <div class="w3-col l12">
+                                                                                        <div class="col-md-4 col-xs-12 w3-margin-bottom">
+                                                                                            <label>Document Title: </label>
+                                                                                            <input type="text" class="w3-input" name="document_title" id="document_title" placeholder="Enter Document title" style="border-bottom-color: #CCCCCC" required>
+                                                                                            <div class="w3-col l12 w3-margin-top w3-small" >
+                                                                                                <label> Shared With: </label><br>
+                                                                                                <?php
+                                                                                                if ($roles['status'] == 200) {
+                                                                                                    foreach ($roles['status_message'] as $key) {
+                                                                                                        ?>
+                                                                                                        <input type="checkbox" checked id="shared_with" name="shared_with[]" value="<?php echo $key['role_id']; ?>"> <?php echo $key['role_name']; ?><br>
+                                                                                                        <?php
+                                                                                                    }
+                                                                                                } else {
+                                                                                                    echo '<span class="w3-light-grey">No Roles Are Available</span>';
+                                                                                                }
+                                                                                                ?>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-4 col-xs-12 w3-margin-bottom">
+                                                                                            <label>Document Type: </label>
+                                                                                            <select class="w3-input" name="document_type" id="document_type" style="border-bottom-color: #CCCCCC">
+                                                                                                <option value="0" class="w3-light-grey">Choose document type</option>
+                                                                                                <?php
+                                                                                                if ($allDocument_types) {
+                                                                                                    foreach ($allDocument_types as $key) {
+                                                                                                        ?>
+                                                                                                        <option value="<?php echo $key['document_type']; ?>"><?php echo $key['document_type']; ?></option>
+                                                                                                        <?php
+                                                                                                    }
+                                                                                                }
+                                                                                                ?>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <?php //if($lastRevision_no){ ?>
+                                                                                        <div class="col-md-4 col-xs-12 w3-margin-bottom">
+                                                                                            <label>Revision Number(#): </label>
+                                                                                            <input type="number" class="w3-input" name="revision_number" id="revision_number" placeholder="Enter Revision number" min="1" style="border-bottom-color: #CCCCCC" required>
+                                                                                            <div class="w3-col l12 w3-margin-top w3-small" >
+                                                                                                <i><span>Last Document Revision Number : </span>
+                                                                                                    <label class="w3-medium">
+                                                                                                        <?php
+                                                                                                        if ($lastRevision_no) {
+                                                                                                            echo '#' . $lastRevision_no;
+                                                                                                        } else {
+                                                                                                            echo 'No Documents uploaded yet!';
+                                                                                                        }
+                                                                                                        ?>
+                                                                                                    </label>
+                                                                                                </i>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <?php // }  ?>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12 col-xs-12">
+                                                                                    <label>Document Files: </label>
+                                                                                    <div id="file_drop" class="dropzone w3-light-grey" style="border:none;font-size: 25px">
+                                                                                        <div class="dropzone-previews"></div> 
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-12 w3-center w3-margin-top w3-margin-bottom">
+                                                                                    <button type="submit" id="uploadDocBtn" class="btn theme_bg w3-hover-text-grey btn-large"><i class="fa fa-upload"></i> Click here to Upload Documents</button>
+                                                                                    <div id="response_msg"></div>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- upload document div ends -->    
+
+                                                            </div>
+                                                        </div>
+                                                        <!-- Modal container ends -->
+                                                    </div>
+                                                    <!-- Modal Body ends -->
                                                 </div>
-                                                <!-- Modal Body ends -->
+                                                <!-- Modal contenet ends -->
                                             </div>
-                                            <!-- Modal contenet ends -->
-                                        </div>
-                                    </div>                               
-                                    <!-- Modal ends here -->                              
-                                    <?php
-                                    $i++;
+                                        </div>                               
+                                        <!-- Modal ends here -->                              
+                                        <?php
+                                        $i++;
+                                    }
                                 }
                             } else {
                                 ?>
@@ -476,7 +545,7 @@
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-                <?php //print_r($allDocuments);    ?>
+                <?php //print_r($allDocuments);     ?>
                 <div class="container x_content">
                     <div id="table_msg"></div>
                     <div class="w3-col l12 w3-padding w3-small" id="">
@@ -670,7 +739,7 @@
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-                <?php //print_r($allDocuments);    ?>
+                <?php //print_r($allDocuments);     ?>
                 <div class="container x_content">
                     <div id="table_msg"></div>
                     <div class="w3-col l12 w3-padding w3-small" id="">
@@ -681,7 +750,6 @@
                                     <th class="text-center">Doc Title</th>
                                     <th class="text-center">Type</th>
                                     <th class="text-center">Revision No</th>
-                                    <th class="text-center">Reason</th>
                                     <th class="text-center">Added by</th>
                                     <th class="text-center">Added date</th>
                                     <th class="text-center">Action</th>
@@ -710,7 +778,6 @@
                                             <td><?php echo $top['document_title']; ?></td>
                                             <td><?php echo $top['document_type']; ?></td>
                                             <td>#<?php echo $top['revision_no']; ?></td>
-                                            <td width="250px"><?php echo $top['delete_reason']; ?></td>
                                             <td><?php echo $top['created_by']; ?></td>
                                             <td><?php
                                                 $dtime = new DateTime($top['created_date']);
@@ -946,7 +1013,7 @@
             }
         });
     }
-    
+
     function approveRequest(request_id) {
         $.confirm({
             title: '<h4 class="w3-text-green">Please confirm the action!</h4><span class="w3-medium">Do you really want to Change Status to Approved Of this Request?</span>',
@@ -986,7 +1053,7 @@
             }
         });
     }
-    
+
     function rejectRequest(request_id) {
         $.confirm({
             title: '<h4 class="w3-text-green">Please confirm the action!</h4><span class="w3-medium">Do you really want to Change Status to Approved Of this Request?</span>',
@@ -1032,7 +1099,7 @@
     function openHelp(modal_id) {
         var modal = $('#RFIModal_' + modal_id);
         modal.addClass('in');
-        getComments(modal_id);
+        //getComments(modal_id);
         $('.comment_msg').html('');
 
     }
@@ -1078,7 +1145,8 @@
             }
         });
     }
-</script>        
+</script>      
+
 <!-- /page content -->
 <!-- script for category -->
 
