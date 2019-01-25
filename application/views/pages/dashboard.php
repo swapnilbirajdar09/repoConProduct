@@ -88,9 +88,9 @@
                                             $bgcolor = "background-color: #ffffff";
                                         }
 
-                                        $session_role = $this->session->userdata('role');
-                                        if ($session_role == 'company_admin') {
-                                            $author = 'Administrator';
+                                        $role = $this->session->userdata('role');
+                                        if ($role == 'company_admin') {
+                                            $rolename = 'Administrator';
                                         } else {
                                             $role = $this->session->userdata('role');
                                             $user_name = $this->session->userdata('user_name');
