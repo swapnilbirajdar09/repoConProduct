@@ -115,8 +115,8 @@
                                 $author = '';
                                 if ($approveRequests['status'] != 500) {
                                     foreach ($approveRequests['status_message'] as $val) {
-                                        $session_role = $this->session->userdata('role');
-                                        if ($session_role == 'company_admin') {
+                                        $role = $this->session->userdata('role');
+                                        if ($role == 'company_admin') {
                                             $author = 'Administrator';
                                         } else {
                                             $role = $this->session->userdata('role');

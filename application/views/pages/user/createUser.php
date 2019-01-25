@@ -102,6 +102,7 @@
         </div>
         <div class="w3-col l12 col-sm-12 col-xs-12 w3-margin-top ">                
             <?php
+                                               // print_r($users);die();
             if ($users['status'] != 500) {
                 foreach ($users['status_message'] as $use) {
                     ?>

@@ -16,7 +16,7 @@ class Request_module extends CI_Controller {
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
         if ($role == 'company_admin') {
-            $data['projects'] = User_dashboard::getAllprojects();
+            $data['projects'] = Request_module::getAllprojects();
             //$project_id = $this->session->userdata('project_id');
             if ($project_id == '') {
                 //check session variable set or not, otherwise logout
@@ -38,6 +38,23 @@ class Request_module extends CI_Controller {
         $this->load->view('pages/modules/request_module', $data);
         $this->load->view('includes/footer');
     }
+    
+        //---------function to get all project
+    public function getAllprojects() {
+        $company_id = $this->session->userdata('company_id');
+        $path = base_url();
+        $url = $path . 'api/user/Role_api/getAllProjects?company_id=' . $company_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        return $response;
+    }
+    
 // fun for delete the request    
     public function deleteRequest(){
         extract($_GET);
