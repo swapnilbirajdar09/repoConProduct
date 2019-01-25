@@ -368,7 +368,6 @@
                                                                 <!-- Div For Images -->
                                                                 <form id="reason_form_<?php echo $doc['document_id']; ?>" name="reason_form_<?php echo $doc['document_id']; ?>">
                                                                     <div class="col-lg-12">
-
                                                                         <div class="w3-col l12 w3-padding">
                                                                             <div class="form-group">
                                                                                 <label>Select Reason For <font color ="red"><span id ="pname_star">*</span></font></label>
@@ -381,11 +380,11 @@
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group">
-                                                                                <label>Select Reason For <font color ="red"><span id ="pname_star">*</span></font></label>
+                                                                                <label>Select Reason For <font color="red"><span id ="pname_star">*</span></font></label>
                                                                                 <textarea class="w3-input w3-border" name="reason_description" id="reason_description_<?php echo $doc['document_id']; ?>" placeholder="Description For the reason."></textarea>
                                                                             </div>
                                                                             <div class="form-group">
-                                                                                <button type="button" class="btn" id="submitBtn" name="submitBtn" onclick="removeDocument('<?php echo base64_encode($doc['document_id']); ?>', '<?php echo $doc['document_id']; ?>')" >Submit</button>
+                                                                                <button type="button" class="btn w3-blue w3-text-white" id="submitBtn" name="submitBtn" onclick="removeDocument('<?php echo base64_encode($doc['document_id']); ?>', '<?php echo $doc['document_id']; ?>')" >Submit</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>

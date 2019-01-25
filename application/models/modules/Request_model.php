@@ -36,7 +36,7 @@ class Request_model extends CI_Model {
     }
 
     public function getApprovedRequests($project_id) {
-        $sql = "SELECT * FROM request_tab WHERE status = '0' AND project_id = '$project_id' ORDER BY request_id DESC";
+        $sql = "SELECT * FROM request_tab WHERE status !='2' AND project_id = '$project_id' ORDER BY request_id DESC";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(
@@ -51,7 +51,7 @@ class Request_model extends CI_Model {
     }
 
     public function getAllRequests($project_id) {
-        $sql = "SELECT * FROM request_tab WHERE project_id = '$project_id' ORDER BY request_id DESC";
+        $sql = "SELECT * FROM request_tab WHERE status !='2' AND project_id = '$project_id' ORDER BY request_id DESC";
         $result = $this->db->query($sql);
         if ($result->num_rows() <= 0) {
             $response = array(
@@ -63,6 +63,20 @@ class Request_model extends CI_Model {
                 'status_message' => $result->result_array());
         }
         return $response;
+    }
+
+    public function deleteRequest($request_id) {
+        $update_data = array(           
+            'status' => '2'
+        );
+        // print_r($insert_data);die();
+        $this->db->where('request_id', $request_id);
+        $this->db->update('request_tab', $update_data);
+        if ($this->db->affected_rows() > 0) {
+            return 200;
+        } else {
+            return 500;
+        }
     }
 
 }

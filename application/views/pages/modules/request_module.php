@@ -126,15 +126,15 @@
                                             $rolename = $author[1];
                                             $author = $user_name;
                                         }
-                                         if ($val['status'] == '0') {
+                                        if ($val['status'] == '0') {
                                             $status = 'Pending';
                                             $color = 'w3-blue';
                                         } else {
                                             $status = 'Uploaded';
-                                            $color = 'w3-green'; 
+                                            $color = 'w3-green';
                                         }
-                                        if ($author = $val['requested_by'] || $role == 'company_admin') {
-                                            
+                                        //echo $author.' // '.$val['requested_by'].'<br>';
+                                        if ($author == $val['requested_by'] || $role == 'company_admin') {
                                             ?>
                                             <tr class="w3-center">
                                                 <td style=" vertical-align: middle;"><?php echo $i; ?></td>
@@ -160,13 +160,15 @@
                                                                 $user_name = $this->session->userdata('user_name');
                                                             }
                                                             if ($user_role == 'company_admin' || $user_name == $val['created_by']) {
-                                                                ?>
-                                                                <li><a title="Resolved query" class="btn btn-xs text-left" onclick="updateQuery('<?php echo $val['request_id']; ?>');" >Resolved</a>
-                                                                </li>
-                                                                <!--     <li>
-                                                                         <a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
-                                                                     </li> -->
-                                                                <?php
+                                                                if ($val['status'] == '1') {
+                                                                    ?>
+                                                                    <li><a title="Resolved query" class="btn btn-xs text-left" onclick="deleteRequest('<?php echo $val['request_id']; ?>');" >Resolved</a>
+                                                                    </li>
+                                                                    <!--     <li>
+                                                                             <a class="btn btn-xs text-left" onclick="removeQuery('<?php echo $val['query_id']; ?>')" title="Delete document">Delete Query</a>
+                                                                         </li> -->
+                                                                    <?php
+                                                                }
                                                             }
                                                             ?>
                                                         </ul>
@@ -182,43 +184,61 @@
                                                     <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                                                         </button>
-                                                        <h4 class="modal-title w3-left w3-margin-left"><b>Query:</b> <?php echo $val['document_title']; ?></h4>
+                                                        <div class="col-lg-6">
+                                                            <h4 class="modal-title w3-padding-left"><b>Query:</b> <?php echo $val['document_name']; ?></h4>
+                                                        </div>
                                                     </div>
                                                     <!-- Modal body starts -->
                                                     <div class="modal-body">
                                                         <!-- Modal container starts -->
                                                         <div class="container"> 
-                                                            <div class="col-lg-12">
-                                                                <div class="w3-col l12 w3-padding w3-medium">
-                                                                    <label>Description: </label>
-                                                                    <p>                                        
-                                                                        <?php echo $val['document_title']; ?>
-                                                                    </p>
-                                                                </div>    
-                                                                <div class="w3-col l12 w3-padding w3-medium">
+                                                            <div class="w3-col l12 w3-padding w3-medium">
+                                                                <div class="col-lg-6">
                                                                     <label>Query Raised To : </label>
                                                                     <p>                                        
                                                                         <?php echo $val['requested_from']; ?>
                                                                     </p>
-                                                                </div>                        
-
-                                                                <div class="col-lg-12 w3-medium">
-                                                                    <hr>
-                                                                    <label>Comments: </label>
-                                                                    <form id="rfiReply_form_<?php echo $val['request_id']; ?>">
-                                                                        <div class="w3-col l12 w3-round w3-light-grey w3-padding w3-margin-bottom">
-                                                                            <textarea name="comment_posted" id="comment_posted_<?php echo $val['request_id']; ?>" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
-                                                                            <input type="hidden" id="request_id" name="request_id" value="<?php echo $val['request_id']; ?>">
-                                                                            <div class="comment_msg"></div>
-                                                                            <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" onclick="savecomment('<?php echo $val['request_id']; ?>');" type="button"><i class="fa fa-reply"></i> Post Comment</button>
-                                                                        </div>
-                                                                    </form>
-
-                                                                    <div class="w3-col l12 w3-small comment_list" id="comment_list_<?php echo $val['request_id']; ?>">
-
-                                                                    </div>
-                                                                </div>
+                                                                </div> 
+                                                                <div class="col-lg-6">
+                                                                    <label>Estimated date : </label>
+                                                                    <p>                                        
+                                                                        <?php echo $val['estimated_date']; ?>
+                                                                    </p>
+                                                                </div> 
                                                             </div>
+                                                            <div class="w3-col l12 w3-padding w3-medium">
+                                                                <div class="col-lg-6">
+                                                                    <label>Created Date : </label>
+                                                                    <p>                                        
+                                                                        <?php echo $val['created_date']; ?>
+                                                                    </p>
+                                                                </div> 
+                                                                <?php if ($val['accepted_date'] != '0000-00-00 00:00:00') { ?>
+                                                                    <div class="col-lg-6">
+                                                                        <label>Uploaded Date : </label>
+                                                                        <p>                                        
+                                                                            <?php echo $val['accepted_date']; ?>
+                                                                        </p>
+                                                                    </div>
+                                                                <?php } ?>
+                                                            </div>
+
+                                                            <!--                                                                <div class="col-lg-12 w3-medium">
+                                                                                                                                <hr>
+                                                                                                                                <label>Comments: </label>
+                                                                                                                                <form id="rfiReply_form_<?php echo $val['request_id']; ?>">
+                                                                                                                                    <div class="w3-col l12 w3-round w3-light-grey w3-padding w3-margin-bottom">
+                                                                                                                                        <textarea name="comment_posted" id="comment_posted_<?php echo $val['request_id']; ?>" class="w3-input w3-margin-bottom" rows="2" placeholder="Type here to reply..." required></textarea>
+                                                                                                                                        <input type="hidden" id="request_id" name="request_id" value="<?php echo $val['request_id']; ?>">
+                                                                                                                                        <div class="comment_msg"></div>
+                                                                                                                                        <button id="commentBtn" class="btn theme_bg btn-small w3-small pull-right" onclick="savecomment('<?php echo $val['request_id']; ?>');" type="button"><i class="fa fa-reply"></i> Post Comment</button>
+                                                                                                                                    </div>
+                                                                                                                                </form>
+                                                            
+                                                                                                                                <div class="w3-col l12 w3-small comment_list" id="comment_list_<?php echo $val['request_id']; ?>">
+                                                            
+                                                                                                                                </div>
+                                                                                                                            </div>-->
                                                         </div>
                                                         <!-- Modal container ends -->
                                                     </div>
@@ -293,4 +313,54 @@
     });
 
 </script>
+<script>
+// ----function to open modal product------//
+    function openHelp(modal_id) {
+        var modal = $('#RFIModal_' + modal_id);
+        modal.addClass('in');
+        //getComments(modal_id);
+        $('.comment_msg').html('');
 
+    }
+
+    //--------Reject query
+    function deleteRequest(request_id) {
+        $.confirm({
+            title: '<h4 class="w3-text-red">Please confirm the action!</h4><span class="w3-medium">Do you really want to Delete this Request?</span>',
+            content: '',
+            type: 'red',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: "GET",
+                        url: BASE_URL + "modules/request_module/deleteRequest",
+                        data: {
+                            request_id: request_id
+                        },
+                        cache: false,
+                        success: function (response) {
+                            // alert(response);
+                            var data = JSON.parse(response);
+                            switch (data.status) {
+                                case 'success':
+                                    $('#message').html(data.message);
+                                    break;
+                                case 'error':
+                                    $('#message').html(data.message);
+                                    break;
+                                default:
+                                    $('#message').html('<div class="alert alert-danger alert-dismissible" style="margin-bottom:5px"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong><b>Error:</b> Something went wrong! Try refreshing page and Save again.!</strong></div>');
+                                    setTimeout(function () {
+                                        $('.alert_message').fadeOut('fast');
+                                    }, 8000); // <-- time in milliseconds
+                                    break;
+                            }
+                        }
+                    });
+                },
+                cancel: function () {
+                }
+            }
+        });
+    }
+</script> 

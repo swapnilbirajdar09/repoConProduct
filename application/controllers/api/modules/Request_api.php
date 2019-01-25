@@ -31,4 +31,11 @@ class Request_api extends REST_Controller {
         return $this->response($result);
     }
     
+    // fun for delete request api
+    public function deleteRequest_get(){
+        extract($_GET);
+        $result = $this->request_model->deleteRequest($request_id);
+        return $this->response($result);
+    }
+    
 }
