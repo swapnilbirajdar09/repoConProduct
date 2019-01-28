@@ -158,4 +158,20 @@ class Settings_model extends CI_Model {
         return $response;
     }
 
+//---fun for start the session of project_id
+
+    public function startSesstionByProjectID($project_id) {
+        $sqlSelect = "SELECT * FROM project_tab WHERE project_id = '$project_id'";
+        $resultsel = $this->db->query($sqlSelect);
+        foreach ($resultsel->result_array() as $val) {
+            $project_id = $val['project_id'];
+            $project_name = $val['project_name'];
+        }
+        $response = array(
+            'status' => 200,
+            'project_id' => base64_encode($project_id . '|' . $project_name)
+        );
+        return $response;
+    }
+
 }

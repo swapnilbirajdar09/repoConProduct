@@ -70,15 +70,14 @@ class User_dashboard extends CI_Controller {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
+        
         $path = base_url();
         $url = $path . 'api/modules/document_api/getlastRevision?project_id=' . $project_id;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-
 // authenticate API
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
         curl_setopt($ch, CURLOPT_USERPWD, API_USER . ":" . API_PASSWD);
-
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPGET, 1);
         $output = curl_exec($ch);
@@ -92,6 +91,7 @@ class User_dashboard extends CI_Controller {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
+        
         $path = base_url();
         $url = $path . 'api/modules/Request_api/getAllRequests?project_id=' . $project_id;
         //create a new cURL resource
@@ -110,6 +110,7 @@ class User_dashboard extends CI_Controller {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
+        
         $path = base_url();
         $url = $path . 'api/user/Role_api/getAllRoles?project_id=' . $project_id;
         //create a new cURL resource
@@ -128,6 +129,7 @@ class User_dashboard extends CI_Controller {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
+        
         $path = base_url();
         $url = $path . 'api/Dashboard_api/getAllChecklistQueries?project_id=' . $project_id;
         //create a new cURL resource
@@ -147,6 +149,7 @@ class User_dashboard extends CI_Controller {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
+        
         $path = base_url();
         $url = $path . 'api/Dashboard_api/allDocuments?project_id=' . $project_id;
         //create a new cURL resource
@@ -166,6 +169,7 @@ class User_dashboard extends CI_Controller {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
+        
         $path = base_url();
         $url = $path . 'api/Dashboard_api/topDocuments?project_id=' . $project_id;
         //create a new cURL resource
@@ -185,6 +189,7 @@ class User_dashboard extends CI_Controller {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
+        
         $path = base_url();
         $url = $path . 'api/Dashboard_api/countoFDocuments?project_id=' . $project_id;
         //create a new cURL resource
@@ -204,6 +209,7 @@ class User_dashboard extends CI_Controller {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
+        
         $path = base_url();
         $url = $path . 'api/Dashboard_api/countoFUser?project_id=' . $project_id;
         //create a new cURL resource
@@ -223,6 +229,7 @@ class User_dashboard extends CI_Controller {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
+        
         $path = base_url();
         $url = $path . 'api/Dashboard_api/countoFQuery?project_id=' . $project_id;
         //create a new cURL resource
@@ -242,6 +249,7 @@ class User_dashboard extends CI_Controller {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
+        
         $path = base_url();
         $url = $path . 'api/Dashboard_api/countoFPendingQuery?project_id=' . $project_id;
         //create a new cURL resource
@@ -277,6 +285,7 @@ class User_dashboard extends CI_Controller {
         $projSession = $this->session->userdata('project_id');
         $projArr = explode('|', base64_decode($projSession));
         $project_id = $projArr[0];
+        
         $path = base_url();
         $url = $path . 'api/Dashboard_api/getAllQueriesdashboard?project_id=' . $project_id;
         //create a new cURL resource
@@ -308,10 +317,25 @@ class User_dashboard extends CI_Controller {
 
     public function startSesstionByProjectID() {
         extract($_GET);
-        $session_data = array(
-            'project_id' => $project_id
-        );
+        
+        $projArr = explode('|', base64_decode($project_id));
+        $project_id = $projArr[0];
+        
+        $path = base_url();
+        $url = $path . 'api/user/User_api/startSesstionByProjectID?project_id=' . $project_id;
+        //create a new cURL resource
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array());
+        $response_json = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response_json, true);
+        //print_r($response);die();
         //start session of user if login success
+        $session_data = array(
+            'project_id' => $response['project_id']
+        );
         $this->session->set_userdata($session_data);
         redirect('user_dashboard');
     }

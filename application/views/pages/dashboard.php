@@ -78,14 +78,21 @@
                                         $interval = date_diff($date_a, $date_b);
                                         $diff = $interval->format('%h');
                                         //echo $diff;
-                                        if ($diff >= 3) {
+                                        if ($diff > 3) {
                                             $bgcolor = "background-color: #ff8080";
-                                        } elseif ($diff >= 4) {
+                                           // echo $bgcolor;
+                                        }
+                                        if ($diff > 4) {
                                             $bgcolor = "background-color: #ff3333";
-                                        } elseif ($diff >= 5) {
+                                            //echo $bgcolor;
+                                        }
+                                        if ($diff > 5) {
                                             $bgcolor = "background-color: #cc0000";
-                                        } else {
+                                           // echo $bgcolor;
+                                        }
+                                        if ($diff < 3) {
                                             $bgcolor = "background-color: #ffffff";
+                                            //echo $bgcolor;
                                         }
 
                                         $role = $this->session->userdata('role');
@@ -138,7 +145,7 @@
                                                             ?>
 
                                                         </ul>
-                                                        <?php //echo $user_name; ?>
+                                                        <?php //echo $user_name;    ?>
 
                                                     </div>
                                                 </td>
@@ -322,7 +329,7 @@
                                                         ?>
                                                                                                                         
                                                                                                                         <span><i class="fa fa-check w3-text-green"></i><?php ?></span><br>
-                                                        <?php //}   ?>
+                                                        <?php //}      ?>
                                                                                                                     </p>
                                                                                                                 </div>                        -->
 
@@ -487,7 +494,7 @@
                                         </tr>                                                              
                                         <?php
                                         $i++;
-                                    } 
+                                    }
                                 }
                             } else {
                                 ?>
@@ -515,7 +522,7 @@
                 </ul>
                 <div class="clearfix"></div>
             </div>
-            <?php //print_r($allDocuments);          ?>
+            <?php //print_r($allDocuments);             ?>
             <div class="container x_content">
                 <div id="table_msg"></div>
                 <div class="w3-col l12 w3-padding w3-small" id="">
@@ -709,7 +716,7 @@
                 </ul>
                 <div class="clearfix"></div>
             </div>
-            <?php //print_r($allDocuments);          ?>
+            <?php //print_r($allDocuments);             ?>
             <div class="container x_content">
                 <div id="table_msg"></div>
                 <div class="w3-col l12 w3-padding w3-small" id="">

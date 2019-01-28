@@ -4,6 +4,7 @@ $role = $this->session->userdata('role');
 // get project session
 $projSession = $this->session->userdata('project_id');
 $projArr = explode('|', base64_decode($projSession));
+//print_r($projArr);
 $project_id = $projArr[0];
 $project_name = strtoupper($projArr[1]);
 if ($role == 'company_admin') {
