@@ -69,6 +69,7 @@
                             <tbody>
                                 <?php
                                 $i = 1;
+                                $bgcolor = '';
                                 if ($queries['status'] != 500) {
                                     foreach ($queries['status_message'] as $val) {
                                         $date_a = new DateTime($val['created_date']);
@@ -115,7 +116,7 @@
                                                 <td style=" vertical-align: middle;"><?php echo $val['created_by']; ?></td>
                                                 <td style=" vertical-align: middle;"><?php echo $val['created_date']; ?></td>
                                                 <td style=" vertical-align: middle;"><p><?php echo $val['raised_to']; ?></p></td>                                        
-                                                <td style=" vertical-align: middle; <?php echo $bgcolor; ?>" ></td>                                        
+                                                <td style=" vertical-align: middle; <?php echo $bgcolor; ?>"></td>                                        
                                                 <td style=" vertical-align: middle;">
                                                     <div class="btn-group">
                                                         <button data-toggle="dropdown" id="actionBtn_<?php echo $val['query_id']; ?>" class="btn btn-default w3-small dropdown-toggle" type="button" style="padding: 2px 6px">Action <span class="caret"></span>
