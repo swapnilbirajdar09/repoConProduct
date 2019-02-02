@@ -18,9 +18,9 @@
             <div class="col-lg-6">
                 <div class="contact-address">
                     <h4>Address</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
+                    <p>Plot no 4, ground floor, Swapnamandir housing society Erandwane, near Alankar police station, Maharashtra 411004</p>
                     <ul>
-                        <li>
+<!--                        <li>
                             <div class="contact-address-icon">
                                 <i class="icofont icofont-headphone-alt"></i>
                             </div>
@@ -28,13 +28,13 @@
                                 <a href="callto:#">+8801712435941</a>
                                 <a href="callto:#">+881934180093</a>
                             </div>
-                        </li>
+                        </li>-->
                         <li>
                             <div class="contact-address-icon">
                                 <i class="icofont icofont-envelope"></i>
                             </div>
                             <div class="contact-address-info">
-                                <a href="mailto:#">Jsoftbd87gmail.com</a>
+                                <a href="mailto:#">support@bizmo-tech.com</a>
                             </div>
                         </li>
                         <li>
@@ -42,7 +42,7 @@
                                 <i class="icofont icofont-web"></i>
                             </div>
                             <div class="contact-address-info">
-                                <a href="www.jsoftbd.com">www.jsoftbd.com</a>
+                                <a href="https://bizmo-tech.com">https://bizmo-tech.com</a>
                             </div>
                         </li>
                     </ul>

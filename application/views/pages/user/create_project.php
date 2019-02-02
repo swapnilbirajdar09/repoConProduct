@@ -9,18 +9,16 @@ $project_name = strtoupper($projArr[1]);
 <!-- page content -->
 <div class="right_col" role="main" ng-app="genericApp" ng-cloak ng-controller="genericCtrl">
     <div class="">
-        <div class="page-title">
-            <div class="title_left">
-                <h3>Project Generics</h3>
-            </div>
-        </div>
+<!--        <div class="page-title">
+                <center><h3>Project Generics</h3></center>
+        </div>-->
 
         <div class="clearfix"></div>
 
         <div class="row">
             <!-- create new project div -->
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
+                <div class="x_panel w3-border">
                     <div class="x_title">
                         <h2><i class="fa fa-diamond"></i> Create new Project</h2>
                         <ul class="nav navbar-right panel_toolbox">

@@ -3,34 +3,39 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Homepage extends CI_Controller {
+
     // Addproduct controller
     public function __construct() {
         parent::__construct();
         // load common model
-            $this->load->model('Contact_model');
+        $this->load->model('Contact_model');
     }
 
     // main index function
     public function index() {
+        $admin_name = $this->session->userdata('usersession_name');
+        if ($admin_name != '') {
+            //     //check session variable set or not, otherwise logout
+            redirect('user_dashboard');
+        }
         //print_r($data);        die();
-          $data['info'] = Homepage::admincontact_details();
+        $data['info'] = Homepage::admincontact_details();
         $this->load->view('includes/user/homepage_header');
         $this->load->view('pages/home');
-        $this->load->view('includes/user/homepage_footer',$data);
+        $this->load->view('includes/user/homepage_footer', $data);
     }
 
- public function admincontact_details() {
+    public function admincontact_details() {
         $result = $this->Contact_model->admincontact_details();
         return $result;
     }
 
-
     public function sendContactEmail() {
         extract($_POST);
-       // print_r($_POST);
-     $admin_email = $this->Contact_model->getAdminEmail();
-   //  print_r($admin_email);
-     $adminEmail = $admin_email[0]['admin_email'];
+        // print_r($_POST);
+        $admin_email = $this->Contact_model->getAdminEmail();
+        //  print_r($admin_email);
+        $adminEmail = $admin_email[0]['admin_email'];
         $config = Array(
             'protocol' => 'smtp',
             'smtp_host' => 'mx1.hostinger.in',
@@ -55,7 +60,7 @@ class Homepage extends CI_Controller {
                 . "<p><label><h3><b>Contact Form</label></b></h3></p>"
                 . "<p><label>Contact form has been submitted by: Name:- $name </label></p>"
                 . "<p><label>Email Id:- $email </label></p>"
-                 . "<p><label>For The Purpose Of: $message </label></p>"
+                . "<p><label>For The Purpose Of: $message </label></p>"
                 . "</body>"
                 . "</html>");
         if (!$this->email->send()) {

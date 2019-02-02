@@ -174,29 +174,29 @@
             </div>
         </div>
         <div class="row flexbox-center">
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <div class="single-showcase-box">
-                    <h4>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim nostrud exercitation ullamco laboris nisi ut aliquip </p>
+                    <h4>Create Project</h4>
+                    <p>Create multiple project. By using this product you can create or add different projects and assign the different roles and employee on that project. </p>
                     <a href="#" class="appao-btn appao-btn2">Read More</a>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="single-showcase-box">
-                    <img src="assets/assets/img/showcase.png" alt="showcase">
+                    <img src="assets/assets/img/createProj.png" alt="showcase">
                 </div>
             </div>
         </div>
         <div class="row flexbox-center">
             <div class="col-lg-6">
                 <div class="single-showcase-box">
-                    <img src="assets/assets/img/showcase2.png" alt="showcase">
+                    <img src="assets/assets/img/loginProj.png" alt="showcase">
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="single-showcase-box">
-                    <h4>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim nostrud exercitation ullamco laboris nisi ut aliquip </p>
+                    <h4>Login Page.</h4>
+                    <p> Login page for product login. The Login page for Admin and User / Employee login.</p>
                     <a href="#" class="appao-btn appao-btn2">Read More</a>
                 </div>
             </div>
@@ -204,7 +204,7 @@
     </div>
 </section><!-- showcase section end -->
 <!-- video section start -->
-<section class="video-area ptb-90">
+<!--<section class="video-area ptb-90">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -215,9 +215,9 @@
             </div>
         </div>
     </div>
-</section><!-- video section end -->
+</section> video section end -->
 <!-- screenshots section start -->
-<section class="screenshots-area ptb-90" id="screenshot">
+<!--<section class="screenshots-area ptb-90" id="screenshot">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -249,7 +249,7 @@
             </div>
         </div>
     </div>
-</section><!-- screenshots section end -->
+</section> screenshots section end -->
 <!-- pricing section start -->
 <section class="pricing-area ptb-90" id="pricing">
     <div class="container">
@@ -443,7 +443,7 @@
     </div>
 </section><!-- counter section end -->
 <!-- team section start -->
-<section class="team-area ptb-90" id="team">
+<!--<section class="team-area ptb-90" id="team">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -540,9 +540,9 @@
             </div>
         </div>
     </div>
-</section><!-- team section end -->
+</section> team section end -->
 <!-- download section start -->
-<section class="download-area ptb-90">
+<!--<section class="download-area ptb-90">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -592,7 +592,7 @@
             </div>
         </div>
     </div>
-</section><!-- download section end -->
+</section> download section end -->
 <!-- blog section start -->
 <!--<section class="blog-area ptb-90" id="blog">
     <div class="container">
